@@ -1,0 +1,82 @@
+{
+  lib,
+  config,
+  pkgs,
+  ...
+}:
+
+let
+  cfg = config.ncfg.home-server.komga;
+  hsEnable = config.ncfg.home-server.enable;
+in
+{
+  options = {
+    ncfg.home-server.komga = {
+      enable = lib.mkOption {
+        type = lib.types.bool;
+        default = hsEnable;
+        description = "Whether to enable Komga.";
+      };
+    };
+  };
+
+  config = lib.mkIf cfg.enable {
+    # Extracted from docker-compose.nix
+    virtualisation.oci-containers.containers."komga" = {
+      image = "gotson/komga:1.x";
+      environment = {
+        "TZ" = config.time.timeZone;
+      };
+      volumes = [
+        "/containers/config/komga:/config:rw"
+        "/containers/mediaserver/media:/data:rw"
+      ];
+      ports = [
+        "25600:25600/tcp"
+      ];
+      user = "1000:1000";
+      log-driver = "journald";
+      extraOptions = [
+        "--network-alias=komga"
+        "--network=arr"
+        "--network=exposed"
+        "--network=komga"
+      ];
+    };
+    systemd.services."docker-komga" = {
+      serviceConfig = {
+        Restart = lib.mkOverride 90 "no";
+      };
+      after = [
+        "docker-network-arr.service"
+        "docker-network-exposed.service"
+        "docker-network-komga.service"
+      ];
+      requires = [
+        "docker-network-arr.service"
+        "docker-network-exposed.service"
+        "docker-network-komga.service"
+      ];
+      partOf = [
+        "docker-compose-home-server-root.target"
+      ];
+      wantedBy = [
+        "docker-compose-home-server-root.target"
+      ];
+    };
+
+    systemd.services."docker-network-komga" = {
+      path = [ pkgs.docker ];
+      serviceConfig = {
+        Type = "oneshot";
+        RemainAfterExit = true;
+        ExecStop = "docker network rm -f komga";
+      };
+      script = ''
+        docker network inspect komga || docker network create komga
+      '';
+      partOf = [ "docker-compose-home-server-root.target" ];
+      wantedBy = [ "docker-compose-home-server-root.target" ];
+    };
+  };
+}
