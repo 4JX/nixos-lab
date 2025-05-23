@@ -6,8 +6,8 @@
 }:
 
 let
-  cfg = config.ncfg.home-server.homarr;
-  hsCfg = config.ncfg.home-server;
+  cfg = config.local.home-server.homarr;
+  hsCfg = config.local.home-server;
   hsEnable = hsCfg.enable;
 in
 {
@@ -17,7 +17,7 @@ in
   ];
 
   options = {
-    ncfg.home-server.homarr.enable = lib.mkOption {
+    local.home-server.homarr.enable = lib.mkOption {
       type = lib.types.bool;
       default = hsEnable;
       description = "Whether to enable Homarr.";

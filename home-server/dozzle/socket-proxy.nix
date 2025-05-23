@@ -1,7 +1,7 @@
 { lib, config, ... }:
 
 let
-  cfg = config.ncfg.home-server.dozzle;
+  cfg = config.local.home-server.dozzle;
 
   nobodyUser = builtins.toString config.users.users.nobody.uid;
   dockerGroup = builtins.toString config.users.groups.docker.gid;

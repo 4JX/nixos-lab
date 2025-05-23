@@ -1,15 +1,15 @@
 { lib, config, ... }:
 
 let
-  cfg = config.ncfg.home-server.authentik.server;
-  hsEnable = config.ncfg.home-server.enable;
-  authentikEnable = config.ncfg.home-server.authentik.enable;
+  cfg = config.local.home-server.authentik.server;
+  hsEnable = config.local.home-server.enable;
+  authentikEnable = config.local.home-server.authentik.enable;
 
-  secretsFile.sopsFile = config.ncfg.home-server.secretsFolder + "/home-server.yaml";
+  secretsFile.sopsFile = config.local.home-server.secretsFolder + "/home-server.yaml";
 in
 {
   options = {
-    ncfg.home-server.authentik.server.enable = lib.mkOption {
+    local.home-server.authentik.server.enable = lib.mkOption {
       type = lib.types.bool;
       default = authentikEnable && hsEnable;
       description = "Whether to enable the Authentik server.";

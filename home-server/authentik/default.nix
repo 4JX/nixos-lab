@@ -6,8 +6,8 @@
 }:
 
 let
-  hsEnable = config.ncfg.home-server.enable;
-  cfg = config.ncfg.home-server.authentik;
+  hsEnable = config.local.home-server.enable;
+  cfg = config.local.home-server.authentik;
 in
 {
   imports = [
@@ -19,7 +19,7 @@ in
   ];
 
   options = {
-    ncfg.home-server.authentik.enable = lib.mkOption {
+    local.home-server.authentik.enable = lib.mkOption {
       type = lib.types.bool;
       default = hsEnable;
       description = "Whether to enable Authentik.";

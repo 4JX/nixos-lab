@@ -1,8 +1,8 @@
 { lib, config, ... }:
 
 let
-  cfg = config.ncfg.home-server.jellyseerr;
-  hsEnable = config.ncfg.home-server.enable;
+  cfg = config.local.home-server.jellyseerr;
+  hsEnable = config.local.home-server.enable;
 
   openFirewall = cfg.firewall.open && cfg.firewall.port != null;
   port = cfg.firewall.port;
@@ -10,7 +10,7 @@ let
 in
 {
   options = {
-    ncfg.home-server.jellyseerr = {
+    local.home-server.jellyseerr = {
       enable = lib.mkOption {
         type = lib.types.bool;
         default = hsEnable;

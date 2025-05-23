@@ -1,11 +1,11 @@
 { lib, config, ... }:
 
 let
-  cfg = config.ncfg.home-server.thelounge;
-  hsEnable = config.ncfg.home-server.enable;
+  cfg = config.local.home-server.thelounge;
+  hsEnable = config.local.home-server.enable;
 in
 {
-  options.ncfg.home-server.thelounge = {
+  options.local.home-server.thelounge = {
     enable = lib.mkOption {
       type = lib.types.bool;
       default = hsEnable;

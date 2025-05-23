@@ -1,11 +1,11 @@
 { lib, config, ... }:
 
 let
-  cfg = config.ncfg.home-server.flaresolverr;
-  hsEnable = config.ncfg.home-server.enable;
+  cfg = config.local.home-server.flaresolverr;
+  hsEnable = config.local.home-server.enable;
 in
 {
-  options.ncfg.home-server.flaresolverr = {
+  options.local.home-server.flaresolverr = {
     enable = lib.mkOption {
       type = lib.types.bool;
       default = hsEnable;

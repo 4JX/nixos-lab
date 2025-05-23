@@ -1,9 +1,9 @@
 { lib, config, ... }:
 
 let
-  cfg = config.ncfg.home-server.jellyfin;
-  hsEnable = config.ncfg.home-server.enable;
-  containerToolkitEnable = config.ncfg.home-server.nvidia-container-toolkit.enable;
+  cfg = config.local.home-server.jellyfin;
+  hsEnable = config.local.home-server.enable;
+  containerToolkitEnable = config.local.home-server.nvidia-container-toolkit.enable;
 
   openFirewall = cfg.firewall.open && cfg.firewall.port != null;
   port = cfg.firewall.port;
@@ -11,7 +11,7 @@ let
 in
 {
   options = {
-    ncfg.home-server.jellyfin = {
+    local.home-server.jellyfin = {
       enable = lib.mkOption {
         type = lib.types.bool;
         default = hsEnable;

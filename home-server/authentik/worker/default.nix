@@ -6,9 +6,9 @@
 }:
 
 let
-  cfg = config.ncfg.home-server.authentik.worker;
-  hsEnable = config.ncfg.home-server.enable;
-  authentikEnable = config.ncfg.home-server.authentik.enable;
+  cfg = config.local.home-server.authentik.worker;
+  hsEnable = config.local.home-server.enable;
+  authentikEnable = config.local.home-server.authentik.enable;
 in
 {
   imports = [
@@ -17,7 +17,7 @@ in
   ];
 
   options = {
-    ncfg.home-server.authentik.worker.enable = lib.mkOption {
+    local.home-server.authentik.worker.enable = lib.mkOption {
       type = lib.types.bool;
       default = authentikEnable && hsEnable;
       description = "Whether to enable the Authentik worker.";

@@ -7,7 +7,7 @@ let
   # https://recyclarr.dev/wiki/guide-configs/
   recyclarrYaml = ./recyclarr.yml;
 
-  hsCfg = config.ncfg.home-server;
+  hsCfg = config.local.home-server;
   cfg = hsCfg.recyclarr;
 
   sonarrEnabled = hsCfg.sonarr.tv-hd.enable || hsCfg.sonarr.anime.enable;
@@ -19,7 +19,7 @@ let
   nogroupGroupString = builtins.toString nogroupGroup;
 in
 {
-  options.ncfg.home-server.recyclarr = {
+  options.local.home-server.recyclarr = {
     enable = lib.mkOption {
       type = lib.types.bool;
       default = sonarrEnabled || radarrEnabled;

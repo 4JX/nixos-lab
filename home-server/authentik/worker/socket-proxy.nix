@@ -1,7 +1,7 @@
 { lib, config, ... }:
 
 let
-  cfg = config.ncfg.home-server.authentik.worker;
+  cfg = config.local.home-server.authentik.worker;
 
   nobodyUser = builtins.toString config.users.users.nobody.uid;
   dockerGroup = builtins.toString config.users.groups.docker.gid;

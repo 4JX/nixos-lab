@@ -1,8 +1,8 @@
 { lib, config, ... }:
 
 let
-  cfg = config.ncfg.home-server.komf;
-  hsEnable = config.ncfg.home-server.enable;
+  cfg = config.local.home-server.komf;
+  hsEnable = config.local.home-server.enable;
 
   nobodyUser = config.users.users.nobody.uid;
   nobodyGroup = config.users.groups.nogroup.gid;
@@ -11,7 +11,7 @@ let
 in
 {
   options = {
-    ncfg.home-server.komf = {
+    local.home-server.komf = {
       enable = lib.mkOption {
         type = lib.types.bool;
         default = hsEnable;
@@ -22,7 +22,7 @@ in
 
   config = lib.mkIf cfg.enable {
     sops.secrets.komf = {
-      sopsFile = config.ncfg.home-server.secretsFolder + "/komf-application.yml";
+      sopsFile = config.local.home-server.secretsFolder + "/komf-application.yml";
       # Serve the whole YAML file
       key = "";
       uid = nobodyUser;

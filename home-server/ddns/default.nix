@@ -6,13 +6,13 @@
 }:
 
 let
-  cfg = config.ncfg.home-server.ddns;
-  hsEnable = config.ncfg.home-server.enable;
+  cfg = config.local.home-server.ddns;
+  hsEnable = config.local.home-server.enable;
 
-  sopsFile = config.ncfg.home-server.secretsFolder + "/home-server.yaml";
+  sopsFile = config.local.home-server.secretsFolder + "/home-server.yaml";
 in
 {
-  options.ncfg.home-server.ddns = {
+  options.local.home-server.ddns = {
     enable = lib.mkOption {
       type = lib.types.bool;
       default = hsEnable;

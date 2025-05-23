@@ -1,12 +1,12 @@
 { lib, config, ... }:
 
 let
-  cfg = config.ncfg.home-server.readarr;
-  hsEnable = config.ncfg.home-server.enable;
+  cfg = config.local.home-server.readarr;
+  hsEnable = config.local.home-server.enable;
 in
 {
   options = {
-    ncfg.home-server.readarr.enable = lib.mkOption {
+    local.home-server.readarr.enable = lib.mkOption {
       type = lib.types.bool;
       default = hsEnable;
       description = "Whether to enable Readarr.";

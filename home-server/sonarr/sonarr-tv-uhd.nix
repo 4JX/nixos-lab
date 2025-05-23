@@ -1,12 +1,12 @@
 { lib, config, ... }:
 
 let
-  cfg = config.ncfg.home-server.sonarr.tv-uhd;
-  hsEnable = config.ncfg.home-server.enable;
+  cfg = config.local.home-server.sonarr.tv-uhd;
+  hsEnable = config.local.home-server.enable;
 in
 {
   options = {
-    ncfg.home-server.sonarr.tv-uhd.enable = lib.mkOption {
+    local.home-server.sonarr.tv-uhd.enable = lib.mkOption {
       type = lib.types.bool;
       default = hsEnable;
       description = "Whether to enable Sonarr (tv-uhd).";

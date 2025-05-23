@@ -1,13 +1,13 @@
 { lib, config, ... }:
 
 let
-  cfg = config.ncfg.home-server.authentik.redis;
-  hsEnable = config.ncfg.home-server.enable;
-  authentikEnable = config.ncfg.home-server.authentik.enable;
+  cfg = config.local.home-server.authentik.redis;
+  hsEnable = config.local.home-server.enable;
+  authentikEnable = config.local.home-server.authentik.enable;
 in
 {
   options = {
-    ncfg.home-server.authentik.redis.enable = lib.mkOption {
+    local.home-server.authentik.redis.enable = lib.mkOption {
       type = lib.types.bool;
       default = authentikEnable && hsEnable;
       description = "Whether to enable the Authentik redis database.";

@@ -1,14 +1,14 @@
 { lib, config, ... }:
 
 let
-  cfg = config.ncfg.home-server.cloudflared;
-  hsEnable = config.ncfg.home-server.enable;
+  cfg = config.local.home-server.cloudflared;
+  hsEnable = config.local.home-server.enable;
 
-  secretsFile.sopsFile = config.ncfg.home-server.secretsFolder + "/home-server.yaml";
+  secretsFile.sopsFile = config.local.home-server.secretsFolder + "/home-server.yaml";
 in
 {
   options = {
-    ncfg.home-server.cloudflared.enable = lib.mkOption {
+    local.home-server.cloudflared.enable = lib.mkOption {
       type = lib.types.bool;
       default = hsEnable;
       description = "Whether to enable CloudFlared.";

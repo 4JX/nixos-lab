@@ -6,12 +6,12 @@
 }:
 
 let
-  cfg = config.ncfg.home-server.komga;
-  hsEnable = config.ncfg.home-server.enable;
+  cfg = config.local.home-server.komga;
+  hsEnable = config.local.home-server.enable;
 in
 {
   options = {
-    ncfg.home-server.komga = {
+    local.home-server.komga = {
       enable = lib.mkOption {
         type = lib.types.bool;
         default = hsEnable;

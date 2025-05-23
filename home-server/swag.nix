@@ -1,13 +1,13 @@
 { lib, config, ... }:
 
 let
-  cfg = config.ncfg.home-server.swag;
-  hsEnable = config.ncfg.home-server.enable;
+  cfg = config.local.home-server.swag;
+  hsEnable = config.local.home-server.enable;
 
-  secretsFile.sopsFile = config.ncfg.home-server.secretsFolder + "/home-server.yaml";
+  secretsFile.sopsFile = config.local.home-server.secretsFolder + "/home-server.yaml";
 in
 {
-  options.ncfg.home-server.swag = {
+  options.local.home-server.swag = {
     enable = lib.mkOption {
       type = lib.types.bool;
       default = hsEnable;
