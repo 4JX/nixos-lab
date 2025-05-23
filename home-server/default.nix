@@ -14,7 +14,7 @@
 }:
 
 let
-  cfg = config.ncfg.home-server;
+  cfg = config.local.home-server;
   # systemUsers = lib.attrNames config.users.users;
 in
 {
@@ -52,7 +52,7 @@ in
     ./tor.nix
   ];
 
-  options.ncfg.home-server = {
+  options.local.home-server = {
     enable = lib.mkEnableOption "the home-server module";
     secretsFolder = lib.mkOption {
       type = lib.types.path;

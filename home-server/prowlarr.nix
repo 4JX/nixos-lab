@@ -1,12 +1,12 @@
 { lib, config, ... }:
 
 let
-  cfg = config.ncfg.home-server.prowlarr;
-  hsEnable = config.ncfg.home-server.enable;
+  cfg = config.local.home-server.prowlarr;
+  hsEnable = config.local.home-server.enable;
 in
 {
   options = {
-    ncfg.home-server.prowlarr = {
+    local.home-server.prowlarr = {
       enable = lib.mkOption {
         type = lib.types.bool;
         default = hsEnable;

@@ -1,13 +1,13 @@
 { lib, config, ... }:
 
 let
-  cfg = config.ncfg.home-server.cross-seed;
-  hsEnable = config.ncfg.home-server.enable;
+  cfg = config.local.home-server.cross-seed;
+  hsEnable = config.local.home-server.enable;
 
-  qbitCfg = config.ncfg.home-server.qbittorrent;
+  qbitCfg = config.local.home-server.qbittorrent;
 in
 {
-  options.ncfg.home-server.cross-seed = {
+  options.local.home-server.cross-seed = {
     enable = lib.mkOption {
       type = lib.types.bool;
       default = hsEnable;
@@ -22,7 +22,7 @@ in
 
   config = lib.mkIf cfg.enable {
     sops.secrets.cross-seed-config = {
-      sopsFile = config.ncfg.home-server.secretsFolder + "/cross-seed-config.js";
+      sopsFile = config.local.home-server.secretsFolder + "/cross-seed-config.js";
       format = "binary";
       # This isn't that pretty of a solution, but it works
       # TODO: Dedicated docker user+group?

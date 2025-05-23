@@ -6,8 +6,8 @@
 }:
 
 let
-  cfg = config.ncfg.home-server.dozzle;
-  hsEnable = config.ncfg.home-server.enable;
+  cfg = config.local.home-server.dozzle;
+  hsEnable = config.local.home-server.enable;
 in
 {
   imports = [
@@ -16,7 +16,7 @@ in
   ];
 
   options = {
-    ncfg.home-server.dozzle.enable = lib.mkOption {
+    local.home-server.dozzle.enable = lib.mkOption {
       type = lib.types.bool;
       default = hsEnable;
       description = "Whether to enable Dozzle.";

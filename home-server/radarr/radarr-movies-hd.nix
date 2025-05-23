@@ -1,12 +1,12 @@
 { lib, config, ... }:
 
 let
-  cfg = config.ncfg.home-server.radarr.movies-hd;
-  hsEnable = config.ncfg.home-server.enable;
+  cfg = config.local.home-server.radarr.movies-hd;
+  hsEnable = config.local.home-server.enable;
 in
 {
   options = {
-    ncfg.home-server.radarr.movies-hd.enable = lib.mkOption {
+    local.home-server.radarr.movies-hd.enable = lib.mkOption {
       type = lib.types.bool;
       default = hsEnable;
       description = "Whether to enable Radarr (movies-hd).";

@@ -1,13 +1,13 @@
 { config, lib, ... }:
 
 let
-  cfg = config.ncfg.home-server.gluetun;
-  hsCfg = config.ncfg.home-server;
+  cfg = config.local.home-server.gluetun;
+  hsCfg = config.local.home-server;
   hsEnable = hsCfg.enable;
   secretsFile.sopsFile = hsCfg.secretsFolder + "/home-server.yaml";
 in
 {
-  options.ncfg.home-server.gluetun.enable = lib.mkOption {
+  options.local.home-server.gluetun.enable = lib.mkOption {
     type = lib.types.bool;
     default = hsEnable;
     description = "Whether to enable gluetun.";

@@ -1,14 +1,14 @@
 { lib, config, ... }:
 
 let
-  cfg = config.ncfg.home-server.dnsmasq;
-  hsEnable = config.ncfg.home-server.enable;
+  cfg = config.local.home-server.dnsmasq;
+  hsEnable = config.local.home-server.enable;
 
   wgPortString = builtins.toString cfg.wgPort;
 in
 {
   options = {
-    ncfg.home-server.dnsmasq = {
+    local.home-server.dnsmasq = {
       enable = lib.mkOption {
         type = lib.types.bool;
         default = hsEnable;

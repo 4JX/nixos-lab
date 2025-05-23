@@ -1,8 +1,8 @@
 { lib, config, ... }:
 
 let
-  cfg = config.ncfg.home-server.qbittorrent;
-  hsEnable = config.ncfg.home-server.enable;
+  cfg = config.local.home-server.qbittorrent;
+  hsEnable = config.local.home-server.enable;
 
   openFirewall = cfg.firewall.open && cfg.firewall.incomingPort != null;
   incomingPort = cfg.firewall.incomingPort;
@@ -10,7 +10,7 @@ let
 in
 {
   options = {
-    ncfg.home-server.qbittorrent = {
+    local.home-server.qbittorrent = {
       enable = lib.mkOption {
         type = lib.types.bool;
         default = hsEnable;
@@ -39,7 +39,7 @@ in
 
   config = lib.mkIf cfg.enable {
     sops.secrets.qbit-wg0 = {
-      sopsFile = config.ncfg.home-server.secretsFolder + "/qbit-wg0.conf";
+      sopsFile = config.local.home-server.secretsFolder + "/qbit-wg0.conf";
       format = "binary";
     };
 

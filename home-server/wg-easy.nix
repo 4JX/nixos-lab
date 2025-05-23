@@ -2,14 +2,14 @@
 { lib, config, ... }:
 
 let
-  cfg = config.ncfg.home-server.wg-easy;
-  hsEnable = config.ncfg.home-server.enable;
+  cfg = config.local.home-server.wg-easy;
+  hsEnable = config.local.home-server.enable;
 
   # serverPortString = builtins.toString cfg.serverPort;
-  secretsFile.sopsFile = config.ncfg.home-server.secretsFolder + "/home-server.yaml";
+  secretsFile.sopsFile = config.local.home-server.secretsFolder + "/home-server.yaml";
 in
 {
-  options.ncfg.home-server.wg-easy = {
+  options.local.home-server.wg-easy = {
     enable = lib.mkOption {
       type = lib.types.bool;
       default = hsEnable;

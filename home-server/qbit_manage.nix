@@ -1,8 +1,8 @@
 { lib, config, ... }:
 
 let
-  cfg = config.ncfg.home-server.qbit_manage;
-  hsCfg = config.ncfg.home-server;
+  cfg = config.local.home-server.qbit_manage;
+  hsCfg = config.local.home-server;
   hsEnable = hsCfg.enable;
   qbitCfg = hsCfg.qbittorrent;
 
@@ -10,7 +10,7 @@ let
 in
 {
   options = {
-    ncfg.home-server.qbit_manage.enable = lib.mkOption {
+    local.home-server.qbit_manage.enable = lib.mkOption {
       type = lib.types.bool;
       default = hsEnable;
       description = "Whether to enable qbit_manage.";

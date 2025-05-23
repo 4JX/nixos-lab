@@ -1,9 +1,9 @@
 { lib, config, ... }:
 
 let
-  cfg = config.ncfg.home-server.authentik.worker;
+  cfg = config.local.home-server.authentik.worker;
 
-  secretsFile.sopsFile = config.ncfg.home-server.secretsFolder + "/home-server.yaml";
+  secretsFile.sopsFile = config.local.home-server.secretsFolder + "/home-server.yaml";
 in
 {
   config = lib.mkIf cfg.enable {

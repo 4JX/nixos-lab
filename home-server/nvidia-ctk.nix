@@ -7,12 +7,12 @@
 { config, lib, ... }:
 
 let
-  cfg = config.ncfg.home-server.nvidia-container-toolkit;
+  cfg = config.local.home-server.nvidia-container-toolkit;
   hasNvidia = builtins.elem "nvidia" config.services.xserver.videoDrivers;
-  hsEnable = config.ncfg.home-server.enable;
+  hsEnable = config.local.home-server.enable;
 in
 {
-  options.ncfg.home-server.nvidia-container-toolkit = {
+  options.local.home-server.nvidia-container-toolkit = {
     enable = lib.mkOption {
       type = lib.types.bool;
       default = hsEnable && hasNvidia;

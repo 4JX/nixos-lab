@@ -1,8 +1,8 @@
 { lib, config, ... }:
 
 let
-  cfg = config.ncfg.home-server.homarr;
-  hsCfg = config.ncfg.home-server;
+  cfg = config.local.home-server.homarr;
+  hsCfg = config.local.home-server;
 
   sopsFile = hsCfg.secretsFolder + "/home-server.yaml";
   nobodyUser = config.users.users.nobody.uid;

@@ -1,11 +1,11 @@
 { lib, config, ... }:
 
 let
-  cfg = config.ncfg.home-server.tor;
+  cfg = config.local.home-server.tor;
 in
 {
   options = {
-    ncfg.home-server.tor.enable = lib.mkEnableOption "tor";
+    local.home-server.tor.enable = lib.mkEnableOption "tor";
   };
 
   config = lib.mkIf cfg.enable {
