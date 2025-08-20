@@ -23,7 +23,6 @@ in
 
     ./ddns
     ./dozzle
-    ./homarr
     ./nvidia-ctk.nix
 
     ./dnsmasq
