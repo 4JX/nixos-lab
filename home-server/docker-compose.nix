@@ -219,36 +219,6 @@
       "docker-compose-home-server-root.target"
     ];
   };
-  virtualisation.oci-containers.containers."gluetun" = {
-    image = "qmcgaw/gluetun";
-    ports = [
-      "8888:8888/tcp"
-    ];
-    log-driver = "journald";
-    extraOptions = [
-      "--cap-add=NET_ADMIN"
-      "--device=/dev/net/tun:/dev/net/tun:rwm"
-      "--network-alias=gluetun"
-      "--network=arr"
-    ];
-  };
-  systemd.services."docker-gluetun" = {
-    serviceConfig = {
-      Restart = lib.mkOverride 90 "no";
-    };
-    after = [
-      "docker-network-arr.service"
-    ];
-    requires = [
-      "docker-network-arr.service"
-    ];
-    partOf = [
-      "docker-compose-home-server-root.target"
-    ];
-    wantedBy = [
-      "docker-compose-home-server-root.target"
-    ];
-  };
   virtualisation.oci-containers.containers."jellyfin" = {
     image = "ghcr.io/hotio/jellyfin";
     environment = {
