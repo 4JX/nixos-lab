@@ -5,6 +5,11 @@ let
   hsEnable = config.local.home-server.enable;
 
   qbitCfg = config.local.home-server.qbittorrent;
+
+  mediaUser = config.users.users.dockermedia.uid;
+  mediaGroup = config.users.groups.dockermedia.gid;
+  mediaUserString = builtins.toString mediaUser;
+  mediaGroupString = builtins.toString mediaGroup;
 in
 {
   options.local.home-server.cross-seed = {
@@ -24,11 +29,10 @@ in
     sops.secrets.cross-seed-config = {
       sopsFile = config.local.home-server.secretsFolder + "/cross-seed-config.js";
       format = "binary";
-      # This isn't that pretty of a solution, but it works
-      # TODO: Dedicated docker user+group?
-      uid = 1000;
-      gid = 1000;
+      uid = mediaUser;
+      gid = mediaGroup;
     };
+
     # Extracted from docker-compose.nix
     virtualisation.oci-containers.containers."cross-seed" = {
       image = "ghcr.io/cross-seed/cross-seed:6";
@@ -43,7 +47,7 @@ in
         "2468:2468/tcp"
       ];
       cmd = [ "daemon" ];
-      user = "1000:1000";
+      user = "${mediaUserString}:${mediaGroupString}";
       log-driver = "journald";
       extraOptions = [
         "--network-alias=cross-seed"

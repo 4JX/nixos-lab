@@ -153,7 +153,7 @@
       "authentik-postgresql"
       "authentik-redis"
     ];
-    user = "root";
+    user = "10150:10150";
     log-driver = "journald";
     extraOptions = [
       "--network-alias=worker"
@@ -189,7 +189,7 @@
       "/var/run/docker.sock:/var/run/docker.sock:ro"
     ];
     cmd = [ "-loglevel=info" "-allowfrom=authentik-worker" "-listenip=0.0.0.0" "-allowGET=/(version|v1\\.[0-9]{1,2}/(info|containers/(json|[^/]+/json)|images/.*))" "-allowPOST=/v1\\.[0-9]{1,2}/(images/create|containers/(create|([a-f0-9]{12}|[a-f0-9]{64})/(start|kill)))" "-allowDELETE=/v1\\.[0-9]{1,2}/containers/([a-f0-9]{12}|[a-f0-9]{64})" "-watchdoginterval=300" "-stoponwatchdog" "-shutdowngracetime=10" ];
-    user = "nobody:docker";
+    user = "10140:docker";
     log-driver = "journald";
     extraOptions = [
       "--cap-drop=ALL"

@@ -7,6 +7,9 @@ let
   openFirewall = cfg.firewall.open && cfg.firewall.port != null;
   port = cfg.firewall.port;
   portString = builtins.toString port;
+
+  mediaUserString = builtins.toString config.users.users.dockermedia.uid;
+  mediaGroupString = builtins.toString config.users.groups.dockermedia.gid;
 in
 {
   options = {
@@ -49,6 +52,7 @@ in
       ports = [
         "${portString}:5055/tcp"
       ];
+      user = "${mediaUserString}:${mediaGroupString}";
       log-driver = "journald";
       extraOptions = [
         "--network-alias=jellyseerr"

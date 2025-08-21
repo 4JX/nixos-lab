@@ -4,6 +4,9 @@ let
   cfg = config.local.home-server.authentik.worker;
 
   secretsFile.sopsFile = config.local.home-server.secretsFolder + "/home-server.yaml";
+
+  authUserString = builtins.toString config.users.users.dockerauth.uid;
+  authGroupString = builtins.toString config.users.groups.dockerauth.gid;
 in
 {
   config = lib.mkIf cfg.enable {
@@ -32,7 +35,7 @@ in
         "authentik-postgresql"
         "authentik-redis"
       ];
-      user = "root";
+      user = "${authUserString}:${authGroupString}";
       log-driver = "journald";
       extraOptions = [
         "--network-alias=worker"

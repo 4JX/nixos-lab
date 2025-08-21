@@ -3,6 +3,9 @@
 let
   cfg = config.local.home-server.thelounge;
   hsEnable = config.local.home-server.enable;
+
+  generalUserString = builtins.toString config.users.users.dockergeneral.uid;
+  generalGroupString = builtins.toString config.users.groups.dockergeneral.gid;
 in
 {
   options.local.home-server.thelounge = {
@@ -29,7 +32,7 @@ in
       ports = [
         "9010:9000/tcp"
       ];
-      user = "1000:1000";
+      user = "${generalUserString}:${generalGroupString}";
       log-driver = "journald";
       extraOptions = [
         "--network-alias=thelounge"

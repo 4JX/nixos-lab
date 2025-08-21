@@ -4,7 +4,10 @@ let
   cfg = config.local.home-server.suwayomi;
   hsEnable = config.local.home-server.enable;
 
-  secretsFile.sopsFile = config.local.home-server.secretsFolder + "/home-server.yaml";
+  mediaUser = config.users.users.dockermedia.uid;
+  mediaGroup = config.users.groups.dockermedia.gid;
+  mediaUserString = builtins.toString mediaUser;
+  mediaGroupString = builtins.toString mediaGroup;
 in
 
 {
@@ -17,7 +20,11 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    sops.secrets.suwayomi-env = secretsFile;
+    sops.secrets.suwayomi-env = {
+      sopsFile = config.local.home-server.secretsFolder + "/home-server.yaml";
+      uid = mediaUser;
+      gid = mediaGroup;
+    };
 
     # Extracted from docker-compose.nix
     virtualisation.oci-containers.containers."suwayomi" = {
@@ -36,7 +43,7 @@ in
       ports = [
         "4567:4567/tcp"
       ];
-      user = "1000:1000";
+      user = "${mediaUserString}:${mediaGroupString}";
       log-driver = "journald";
       extraOptions = [
         "--network-alias=suwayomi"

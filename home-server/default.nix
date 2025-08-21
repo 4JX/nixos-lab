@@ -19,6 +19,8 @@ let
 in
 {
   imports = [
+    ./permissions.nix
+
     ./authentik
 
     ./ddns

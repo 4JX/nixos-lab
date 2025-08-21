@@ -3,6 +3,9 @@
 let
   cfg = config.local.home-server.prowlarr;
   hsEnable = config.local.home-server.enable;
+
+  mediaUserString = builtins.toString config.users.users.dockermedia.uid;
+  mediaGroupString = builtins.toString config.users.groups.dockermedia.gid;
 in
 {
   options = {
@@ -26,8 +29,8 @@ in
       image = "ghcr.io/hotio/prowlarr";
       inherit (cfg) autoStart;
       environment = {
-        "PGID" = "1000";
-        "PUID" = "1000";
+        "PGID" = mediaGroupString;
+        "PUID" = mediaUserString;
         "TZ" = config.time.timeZone;
         "UMASK" = "002";
       };

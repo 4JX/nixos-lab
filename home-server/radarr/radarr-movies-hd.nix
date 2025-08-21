@@ -3,6 +3,9 @@
 let
   cfg = config.local.home-server.radarr.movies-hd;
   hsEnable = config.local.home-server.enable;
+
+  mediaUserString = builtins.toString config.users.users.dockermedia.uid;
+  mediaGroupString = builtins.toString config.users.groups.dockermedia.gid;
 in
 {
   options = {
@@ -26,8 +29,8 @@ in
     virtualisation.oci-containers.containers."radarr-movies-hd" = {
       image = "ghcr.io/hotio/radarr";
       environment = {
-        "PGID" = "1000";
-        "PUID" = "1000";
+        "PGID" = mediaGroupString;
+        "PUID" = mediaUserString;
         "TZ" = config.time.timeZone;
         "UMASK" = "002";
       };

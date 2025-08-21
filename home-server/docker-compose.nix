@@ -16,6 +16,7 @@
       "TUNNEL_TOKEN" = "<token>";
     };
     cmd = [ "tunnel" "run" ];
+    user = "10130:10130";
     log-driver = "journald";
     extraOptions = [
       "--network-alias=cloudflared-tunnel"
@@ -51,7 +52,7 @@
       "2468:2468/tcp"
     ];
     cmd = [ "daemon" ];
-    user = "1000:1000";
+    user = "10120:10120";
     log-driver = "journald";
     extraOptions = [
       "--network-alias=cross-seed"
@@ -116,7 +117,7 @@
       "/var/run/docker.sock:/var/run/docker.sock:ro"
     ];
     cmd = [ "-loglevel=info" "-allowfrom=dozzle" "-listenip=0.0.0.0" "-allowGET=/v1\\.[0-9]{1,2}/(_ping|info|events|containers/(json|([a-f0-9]{12}|[a-f0-9]{64})/(json|stats|logs)))" "-allowHEAD=/_ping" "-watchdoginterval=300" "-stoponwatchdog" "-shutdowngracetime=10" ];
-    user = "nobody:docker";
+    user = "10140:docker";
     log-driver = "journald";
     extraOptions = [
       "--cap-drop=ALL"
@@ -156,7 +157,7 @@
     dependsOn = [
       "dockerproxy-dozzle"
     ];
-    user = "nobody:nogroup";
+    user = "10110:10110";
     log-driver = "journald";
     extraOptions = [
       "--cap-drop=ALL"
@@ -196,6 +197,7 @@
     ports = [
       "8191:8191/tcp"
     ];
+    user = "10120:10120";
     log-driver = "journald";
     extraOptions = [
       "--network-alias=flaresolverr"
@@ -222,8 +224,8 @@
   virtualisation.oci-containers.containers."jellyfin" = {
     image = "ghcr.io/hotio/jellyfin";
     environment = {
-      "PGID" = "1000";
-      "PUID" = "1000";
+      "PGID" = "10120";
+      "PUID" = "10120";
       "TZ" = "Etc/UTC";
       "UMASK" = "002";
     };
@@ -275,6 +277,7 @@
     ports = [
       "5055:5055/tcp"
     ];
+    user = "10120:10120";
     log-driver = "journald";
     extraOptions = [
       "--network-alias=jellyseerr"
@@ -312,7 +315,7 @@
     ports = [
       "8085:8085/tcp"
     ];
-    user = "1000:1000";
+    user = "10120:10120";
     log-driver = "journald";
     extraOptions = [
       "--network-alias=komf"
@@ -351,7 +354,7 @@
     ports = [
       "25600:25600/tcp"
     ];
-    user = "1000:1000";
+    user = "10120:10120";
     log-driver = "journald";
     extraOptions = [
       "--network-alias=komga"
@@ -384,8 +387,8 @@
   virtualisation.oci-containers.containers."prowlarr" = {
     image = "ghcr.io/hotio/prowlarr";
     environment = {
-      "PGID" = "1000";
-      "PUID" = "1000";
+      "PGID" = "10120";
+      "PUID" = "10120";
       "TZ" = "Etc/UTC";
       "UMASK" = "002";
     };
@@ -449,6 +452,7 @@
     dependsOn = [
       "qbittorrent"
     ];
+    user = "10120:10120";
     log-driver = "journald";
     extraOptions = [
       "--network-alias=qbit_manage"
@@ -475,9 +479,9 @@
   virtualisation.oci-containers.containers."qbittorrent" = {
     image = "ghcr.io/hotio/qbittorrent:release-4.6.7";
     environment = {
-      "PGID" = "1000";
+      "PGID" = "10120";
       "PRIVOXY_ENABLED" = "true";
-      "PUID" = "1000";
+      "PUID" = "10120";
       "TZ" = "Etc/UTC";
       "UMASK" = "002";
       "UNBOUND_ENABLED" = "false";
@@ -534,8 +538,8 @@
   virtualisation.oci-containers.containers."radarr-movies-hd" = {
     image = "ghcr.io/hotio/radarr";
     environment = {
-      "PGID" = "1000";
-      "PUID" = "1000";
+      "PGID" = "10120";
+      "PUID" = "10120";
       "TZ" = "Etc/UTC";
       "UMASK" = "002";
     };
@@ -572,8 +576,8 @@
   virtualisation.oci-containers.containers."radarr-movies-uhd" = {
     image = "ghcr.io/hotio/radarr";
     environment = {
-      "PGID" = "1000";
-      "PUID" = "1000";
+      "PGID" = "10120";
+      "PUID" = "10120";
       "TZ" = "Etc/UTC";
       "UMASK" = "002";
     };
@@ -610,8 +614,8 @@
   virtualisation.oci-containers.containers."readarr" = {
     image = "ghcr.io/hotio/readarr";
     environment = {
-      "PGID" = "1000";
-      "PUID" = "1000";
+      "PGID" = "10120";
+      "PUID" = "10120";
       "TZ" = "Etc/UTC";
       "UMASK" = "002";
     };
@@ -660,7 +664,7 @@
       "sonarr-anime"
       "sonarr-tv-hd"
     ];
-    user = "nobody:nogroup";
+    user = "10120:10120";
     log-driver = "journald";
     extraOptions = [
       "--network-alias=recyclarr"
@@ -687,8 +691,8 @@
   virtualisation.oci-containers.containers."sonarr-anime" = {
     image = "ghcr.io/hotio/sonarr";
     environment = {
-      "PGID" = "1000";
-      "PUID" = "1000";
+      "PGID" = "10120";
+      "PUID" = "10120";
       "TZ" = "Etc/UTC";
       "UMASK" = "002";
     };
@@ -725,8 +729,8 @@
   virtualisation.oci-containers.containers."sonarr-tv-hd" = {
     image = "ghcr.io/hotio/sonarr";
     environment = {
-      "PGID" = "1000";
-      "PUID" = "1000";
+      "PGID" = "10120";
+      "PUID" = "10120";
       "TZ" = "Etc/UTC";
       "UMASK" = "002";
     };
@@ -763,8 +767,8 @@
   virtualisation.oci-containers.containers."sonarr-tv-uhd" = {
     image = "ghcr.io/hotio/sonarr";
     environment = {
-      "PGID" = "1000";
-      "PUID" = "1000";
+      "PGID" = "10120";
+      "PUID" = "10120";
       "TZ" = "Etc/UTC";
       "UMASK" = "002";
     };
@@ -811,7 +815,7 @@
     ports = [
       "4567:4567/tcp"
     ];
-    user = "nobody:nogroup";
+    user = "10120:10120";
     log-driver = "journald";
     extraOptions = [
       "--network-alias=suwayomi"
@@ -843,8 +847,8 @@
       "DOCKER_MODS" = "linuxserver/mods:swag-cloudflare-real-ip";
       "EXTRA_DOMAINS" = "";
       "ONLY_SUBDOMAINS" = "false";
-      "PGID" = "1000";
-      "PUID" = "1000";
+      "PGID" = "10130";
+      "PUID" = "10130";
       "STAGING" = "false";
       "SUBDOMAINS" = "wildcard";
       "SWAG_AUTORELOAD" = "true";
@@ -892,8 +896,8 @@
       "DOCKER_MODS" = "";
       "EXTRA_DOMAINS" = "";
       "ONLY_SUBDOMAINS" = "false";
-      "PGID" = "1000";
-      "PUID" = "1000";
+      "PGID" = "10130";
+      "PUID" = "10130";
       "STAGING" = "false";
       "SUBDOMAINS" = "wildcard";
       "SWAG_AUTORELOAD" = "true";
@@ -956,7 +960,7 @@
     ports = [
       "9010:9000/tcp"
     ];
-    user = "1000:1000";
+    user = "10110:10110";
     log-driver = "journald";
     extraOptions = [
       "--network-alias=thelounge"

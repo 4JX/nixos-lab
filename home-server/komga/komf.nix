@@ -4,10 +4,10 @@ let
   cfg = config.local.home-server.komf;
   hsEnable = config.local.home-server.enable;
 
-  nobodyUser = config.users.users.nobody.uid;
-  nobodyGroup = config.users.groups.nogroup.gid;
-  nobodyUserString = builtins.toString nobodyUser;
-  nobodyGroupString = builtins.toString nobodyGroup;
+  mediaUser = config.users.users.dockermedia.uid;
+  mediaGroup = config.users.groups.dockermedia.gid;
+  mediaUserString = builtins.toString mediaUser;
+  mediaGroupString = builtins.toString mediaGroup;
 in
 {
   options = {
@@ -25,8 +25,8 @@ in
       sopsFile = config.local.home-server.secretsFolder + "/komf-application.yml";
       # Serve the whole YAML file
       key = "";
-      uid = nobodyUser;
-      gid = nobodyGroup;
+      uid = mediaUser;
+      gid = mediaGroup;
     };
 
     # Extracted from docker-compose.nix
@@ -43,7 +43,7 @@ in
       ports = [
         "8085:8085/tcp"
       ];
-      user = "${nobodyUserString}:${nobodyGroupString}";
+      user = "${mediaUserString}:${mediaGroupString}";
       log-driver = "journald";
       extraOptions = [
         "--network-alias=komf"

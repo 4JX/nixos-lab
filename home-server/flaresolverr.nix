@@ -3,6 +3,9 @@
 let
   cfg = config.local.home-server.flaresolverr;
   hsEnable = config.local.home-server.enable;
+
+  mediaUserString = builtins.toString config.users.users.dockermedia.uid;
+  mediaGroupString = builtins.toString config.users.groups.dockermedia.gid;
 in
 {
   options.local.home-server.flaresolverr = {
@@ -23,6 +26,7 @@ in
         "LOG_LEVEL" = "info";
         "TZ" = config.time.timeZone;
       };
+      user = "${mediaUserString}:${mediaGroupString}";
       ports = [
         "8191:8191/tcp"
       ];
