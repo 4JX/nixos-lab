@@ -3,6 +3,9 @@
 let
   cfg = config.local.home-server.readarr;
   hsEnable = config.local.home-server.enable;
+
+  mediaUserString = builtins.toString config.users.users.dockermedia.uid;
+  mediaGroupString = builtins.toString config.users.groups.dockermedia.gid;
 in
 {
   options = {
@@ -18,8 +21,8 @@ in
     virtualisation.oci-containers.containers."readarr" = {
       image = "ghcr.io/hotio/readarr";
       environment = {
-        "PGID" = "1000";
-        "PUID" = "1000";
+        "PGID" = mediaGroupString;
+        "PUID" = mediaUserString;
         "TZ" = "Etc/UTC";
         "UMASK" = "002";
       };

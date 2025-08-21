@@ -6,7 +6,10 @@ let
   hsEnable = hsCfg.enable;
   qbitCfg = hsCfg.qbittorrent;
 
-  manageYaml = config.sops.secrets.qbit_manage.path;
+  mediaUser = config.users.users.dockermedia.uid;
+  mediaGroup = config.users.groups.dockermedia.gid;
+  mediaUserString = builtins.toString mediaUser;
+  mediaGroupString = builtins.toString mediaGroup;
 in
 {
   options = {
@@ -22,6 +25,8 @@ in
       sopsFile = hsCfg.secretsFolder + "/qbit_manage.yml";
       # Serve the whole YAML file
       key = "";
+      uid = mediaUser;
+      gid = mediaGroup;
     };
 
     # Extracted from docker-compose.nix
@@ -49,7 +54,7 @@ in
         "QBT_WIDTH" = "100";
       };
       volumes = [
-        "${manageYaml}:/config/config.yml:rw"
+        "${config.sops.secrets.qbit_manage.path}:/config/config.yml:rw"
         "/containers/config/qbit_manage/:/config:rw"
         "/containers/config/qbittorrent:/qbittorrent:ro"
         "/containers/mediaserver/torrents/:/data/torrents:rw"
@@ -57,6 +62,7 @@ in
       dependsOn = [
         "qbittorrent"
       ];
+      user = "${mediaUserString}:${mediaGroupString}";
       log-driver = "journald";
       extraOptions = [
         "--network-alias=qbit_manage"

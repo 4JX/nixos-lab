@@ -7,6 +7,11 @@ let
   openFirewall = cfg.firewall.open && cfg.firewall.incomingPort != null;
   incomingPort = cfg.firewall.incomingPort;
   incomingPortString = builtins.toString incomingPort;
+
+  mediaUser = config.users.users.dockermedia.uid;
+  mediaGroup = config.users.groups.dockermedia.gid;
+  mediaUserString = builtins.toString mediaUser;
+  mediaGroupString = builtins.toString mediaGroup;
 in
 {
   options = {
@@ -41,6 +46,8 @@ in
     sops.secrets.qbit-wg0 = {
       sopsFile = config.local.home-server.secretsFolder + "/qbit-wg0.conf";
       format = "binary";
+      uid = mediaUser;
+      gid = mediaGroup;
     };
 
     # Open up a port for qbittorrent
@@ -55,9 +62,9 @@ in
       image = "ghcr.io/hotio/qbittorrent:release-4.6.7";
       inherit (cfg) autoStart;
       environment = {
-        "PGID" = "1000";
+        "PGID" = mediaGroupString;
         "PRIVOXY_ENABLED" = "true";
-        "PUID" = "1000";
+        "PUID" = mediaUserString;
         "TZ" = config.time.timeZone;
         "UMASK" = "002";
         "UNBOUND_ENABLED" = "false";
@@ -79,14 +86,13 @@ in
         "/containers/config/qbittorrent:/config:rw"
         "/containers/mediaserver/torrents:/data/torrents:rw"
       ];
-      ports =
-        [
-          "8080:8080/tcp"
-          "8118:8118/tcp"
-        ]
-        ++ lib.optionals openFirewall [
-          "${incomingPortString}:${incomingPortString}/tcp"
-        ];
+      ports = [
+        "8080:8080/tcp"
+        "8118:8118/tcp"
+      ]
+      ++ lib.optionals openFirewall [
+        "${incomingPortString}:${incomingPortString}/tcp"
+      ];
       log-driver = "journald";
       extraOptions = [
         "--cap-add=NET_ADMIN"

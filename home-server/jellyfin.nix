@@ -8,6 +8,9 @@ let
   openFirewall = cfg.firewall.open && cfg.firewall.port != null;
   port = cfg.firewall.port;
   portString = builtins.toString port;
+
+  mediaUserString = builtins.toString config.users.users.dockermedia.uid;
+  mediaGroupString = builtins.toString config.users.groups.dockermedia.gid;
 in
 {
   options = {
@@ -41,8 +44,8 @@ in
     virtualisation.oci-containers.containers."jellyfin" = {
       image = "ghcr.io/hotio/jellyfin";
       environment = {
-        "PGID" = "1000";
-        "PUID" = "1000";
+        "PGID" = mediaGroupString;
+        "PUID" = mediaUserString;
         "TZ" = config.time.timeZone;
         "UMASK" = "002";
       };
@@ -54,17 +57,16 @@ in
         "${portString}:8096/tcp"
       ];
       log-driver = "journald";
-      extraOptions =
-        [
-          "--device=/dev/dri:/dev/dri:rwm"
-          "--network-alias=jellyfin"
-          "--network=arr"
-          "--network=exposed"
-          "--network=ldap"
-        ]
-        ++ lib.optionals containerToolkitEnable [
-          "--device=nvidia.com/gpu=all"
-        ];
+      extraOptions = [
+        "--device=/dev/dri:/dev/dri:rwm"
+        "--network-alias=jellyfin"
+        "--network=arr"
+        "--network=exposed"
+        "--network=ldap"
+      ]
+      ++ lib.optionals containerToolkitEnable [
+        "--device=nvidia.com/gpu=all"
+      ];
     };
     systemd.services."docker-jellyfin" = {
       serviceConfig = {

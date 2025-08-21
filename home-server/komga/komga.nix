@@ -8,6 +8,9 @@
 let
   cfg = config.local.home-server.komga;
   hsEnable = config.local.home-server.enable;
+
+  mediaUserString = builtins.toString config.users.users.dockermedia.uid;
+  mediaGroupString = builtins.toString config.users.groups.dockermedia.gid;
 in
 {
   options = {
@@ -34,7 +37,7 @@ in
       ports = [
         "25600:25600/tcp"
       ];
-      user = "1000:1000";
+      user = "${mediaUserString}:${mediaGroupString}";
       log-driver = "journald";
       extraOptions = [
         "--network-alias=komga"

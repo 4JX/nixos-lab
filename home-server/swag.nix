@@ -4,7 +4,10 @@ let
   cfg = config.local.home-server.swag;
   hsEnable = config.local.home-server.enable;
 
-  secretsFile.sopsFile = config.local.home-server.secretsFolder + "/home-server.yaml";
+  proxyUser = config.users.users.dockerproxy.uid;
+  proxyGroup = config.users.groups.dockerproxy.gid;
+  proxyUserString = builtins.toString proxyUser;
+  proxyGroupString = builtins.toString proxyGroup;
 in
 {
   options.local.home-server.swag = {
@@ -16,7 +19,11 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    sops.secrets.swag-env = secretsFile;
+    sops.secrets.swag-env = {
+      sopsFile = config.local.home-server.secretsFolder + "/home-server.yaml";
+      uid = proxyUser;
+      gid = proxyGroup;
+    };
 
     # Extracted from docker-compose.nix
     virtualisation.oci-containers.containers."swag" = {
@@ -27,8 +34,8 @@ in
         "DOCKER_MODS" = "linuxserver/mods:swag-cloudflare-real-ip";
         "EXTRA_DOMAINS" = "";
         "ONLY_SUBDOMAINS" = "false";
-        "PGID" = "1000";
-        "PUID" = "1000";
+        "PGID" = proxyGroupString;
+        "PUID" = proxyUserString;
         "STAGING" = "false";
         "SUBDOMAINS" = "wildcard";
         "SWAG_AUTORELOAD" = "true";

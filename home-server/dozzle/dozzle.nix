@@ -3,8 +3,8 @@
 let
   cfg = config.local.home-server.dozzle;
 
-  nobodyUser = builtins.toString config.users.users.nobody.uid;
-  nogroupGroup = builtins.toString config.users.groups.nogroup.gid;
+  generalUserString = builtins.toString config.users.users.dockergeneral.uid;
+  generalGroupString = builtins.toString config.users.groups.dockergeneral.gid;
 in
 {
   config = lib.mkIf cfg.enable {
@@ -20,7 +20,7 @@ in
       dependsOn = [
         "dockerproxy-dozzle"
       ];
-      user = "${nobodyUser}:${nogroupGroup}";
+      user = "${generalUserString}:${generalGroupString}";
       log-driver = "journald";
       extraOptions = [
         "--cap-drop=ALL"

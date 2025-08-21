@@ -13,10 +13,10 @@ let
   sonarrEnabled = hsCfg.sonarr.tv-hd.enable || hsCfg.sonarr.anime.enable;
   radarrEnabled = hsCfg.radarr.movies-hd.enable || hsCfg.radarr.movies-uhd.enable;
 
-  nobodyUser = config.users.users.nobody.uid;
-  nogroupGroup = config.users.groups.nogroup.gid;
-  nobodyUserString = builtins.toString nobodyUser;
-  nogroupGroupString = builtins.toString nogroupGroup;
+  mediaUser = config.users.users.dockermedia.uid;
+  mediaGroup = config.users.groups.dockermedia.gid;
+  mediaUserString = builtins.toString mediaUser;
+  mediaGroupString = builtins.toString mediaGroup;
 in
 {
   options.local.home-server.recyclarr = {
@@ -33,8 +33,8 @@ in
       # Serve the whole YAML file
       key = "";
       # The container will also run as the same user/group
-      uid = nobodyUser;
-      gid = nogroupGroup;
+      uid = mediaUser;
+      gid = mediaGroup;
     };
 
     # Extracted from docker-compose.nix
@@ -53,7 +53,7 @@ in
         "sonarr-tv-hd"
         "sonarr-anime"
       ];
-      user = "${nobodyUserString}:${nogroupGroupString}";
+      user = "${mediaUserString}:${mediaGroupString}";
       log-driver = "journald";
       extraOptions = [
         "--network-alias=recyclarr"

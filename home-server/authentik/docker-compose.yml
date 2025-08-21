@@ -103,7 +103,7 @@ services:
       - ALL
     security_opt:
       - no-new-privileges
-    user: nobody:docker
+    user: '${SOCKET_UID}:docker'
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
     networks:
@@ -130,7 +130,7 @@ services:
     # (1000:1000 by default)
     # env_file:
     #   - ${config.sops.secrets.authentik-env.path}
-    user: root
+    user: '${AUTH_UID}:${AUTH_GID}'
     volumes:
       # - /var/run/docker.sock:/var/run/docker.sock
       # - /run/podman/podman.sock:/var/run/docker.sock

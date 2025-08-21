@@ -92,7 +92,7 @@ services:
       - ALL
     security_opt:
       - no-new-privileges
-    user: nobody:docker
+    user: '${SOCKET_UID}:docker'
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
     networks:
@@ -103,7 +103,7 @@ services:
   dozzle:
     container_name: dozzle
     image: amir20/dozzle:v8
-    user: nobody:nogroup
+    user: '${GENERAL_UID}:${GENERAL_GID}'
     read_only: true
     cap_drop:
       - ALL
@@ -123,6 +123,7 @@ services:
   cloudflared-tunnel:
     container_name: cloudflared
     image: cloudflare/cloudflared
+    user: '${PROXY_UID}:${PROXY_GID}'
     # restart: unless-stopped
     command: tunnel run
     environment:
@@ -141,8 +142,8 @@ services:
     cap_add:
       - NET_ADMIN
     environment:
-      - PUID=1000
-      - PGID=1000
+      - PUID=${PROXY_UID}
+      - PGID=${PROXY_GID}
       # Set as config.time.timeZone
       - TZ=Etc/UTC
       # - URL=
@@ -182,8 +183,8 @@ services:
     cap_add:
       - NET_ADMIN
     environment:
-      - PUID=1000
-      - PGID=1000
+      - PUID=${PROXY_UID}
+      - PGID=${PROXY_GID}
       # Set as config.time.timeZone
       - TZ=Etc/UTC
       # - URL=
@@ -226,8 +227,8 @@ services:
     ports:
       - '8096:8096'
     environment:
-      - PUID=1000
-      - PGID=1000
+      - PUID=${MEDIA_UID}
+      - PGID=${MEDIA_GID}
       - UMASK=002
       # Set as config.time.timeZone
       - TZ=Etc/UTC
@@ -247,6 +248,7 @@ services:
   jellyseerr:
     container_name: jellyseerr
     image: fallenbagel/jellyseerr:latest
+    user: '${MEDIA_UID}:${MEDIA_GID}'
     environment:
       - LOG_LEVEL=debug
       # Set as config.time.timeZone
@@ -271,7 +273,7 @@ services:
       - ${PATH_MEDIASERVER_DATA_BASE}/media:/data
     ports:
       - 25600:25600
-    user: '1000:1000'
+    user: '${MEDIA_UID}:${MEDIA_GID}'
     environment:
       # Set as config.time.timeZone
       - TZ=Etc/UTC
@@ -290,7 +292,7 @@ services:
     container_name: komf
     ports:
       - '8085:8085'
-    user: '1000:1000'
+    user: '${MEDIA_UID}:${MEDIA_GID}'
     environment:
       - KOMF_LOG_LEVEL=INFO
       # optional jvm options. Example config for low memory usage. Runs guaranteed cleanup up every 3600000ms(1hour)
@@ -315,8 +317,8 @@ services:
       - '8080:8080'
       - '8118:8118'
     environment:
-      - PUID=1000
-      - PGID=1000
+      - PUID=${MEDIA_UID}
+      - PGID=${MEDIA_GID}
       - UMASK=002
       # Set as config.time.timeZone
       - TZ=Etc/UTC
@@ -355,6 +357,7 @@ services:
   qbit_manage:
     container_name: qbit_manage
     image: ghcr.io/stuffanthings/qbit_manage:latest
+    user: '${MEDIA_UID}:${MEDIA_GID}'
     volumes:
       - ${PATH_CONFIG_BASE}/qbit_manage/:/config:rw
       - /CHANGEME:/config/config.yml
@@ -389,7 +392,7 @@ services:
   cross-seed:
     image: ghcr.io/cross-seed/cross-seed:6
     container_name: cross-seed
-    user: 1000:1000
+    user: '${MEDIA_UID}:${MEDIA_GID}'
     ports:
       - '2468:2468'
     volumes:
@@ -409,8 +412,8 @@ services:
     ports:
       - '8989:8989'
     environment:
-      - PUID=1000
-      - PGID=1000
+      - PUID=${MEDIA_UID}
+      - PGID=${MEDIA_GID}
       - UMASK=002
       # Set as config.time.timeZone
       - TZ=Etc/UTC
@@ -437,7 +440,7 @@ services:
       - ${PATH_CONFIG_BASE}/suwayomi:/home/suwayomi/.local/share/Tachidesk
     ports:
       - '4567:4567'
-    user: nobody:nogroup
+    user: '${MEDIA_UID}:${MEDIA_GID}'
     # restart: on-failure:3
     networks:
       - arr
@@ -448,8 +451,8 @@ services:
     ports:
       - '8990:8989'
     environment:
-      - PUID=1000
-      - PGID=1000
+      - PUID=${MEDIA_UID}
+      - PGID=${MEDIA_GID}
       - UMASK=002
       # Set as config.time.timeZone
       - TZ=Etc/UTC
@@ -465,8 +468,8 @@ services:
     ports:
       - '8991:8989'
     environment:
-      - PUID=1000
-      - PGID=1000
+      - PUID=${MEDIA_UID}
+      - PGID=${MEDIA_GID}
       - UMASK=002
       # Set as config.time.timeZone
       - TZ=Etc/UTC
@@ -483,8 +486,8 @@ services:
     ports:
       - '7878:7878'
     environment:
-      - PUID=1000
-      - PGID=1000
+      - PUID=${MEDIA_UID}
+      - PGID=${MEDIA_GID}
       - UMASK=002
       - TZ=Etc/UTC
     volumes:
@@ -500,8 +503,8 @@ services:
     ports:
       - '7879:7878'
     environment:
-      - PUID=1000
-      - PGID=1000
+      - PUID=${MEDIA_UID}
+      - PGID=${MEDIA_GID}
       - UMASK=002
       - TZ=Etc/UTC
     volumes:
@@ -517,8 +520,8 @@ services:
     ports:
       - '8787:8787'
     environment:
-      - PUID=1000
-      - PGID=1000
+      - PUID=${MEDIA_UID}
+      - PGID=${MEDIA_GID}
       - UMASK=002
       # Set as config.time.timeZone
       - TZ=Etc/UTC
@@ -535,8 +538,8 @@ services:
     ports:
       - '9696:9696'
     environment:
-      - PUID=1000
-      - PGID=1000
+      - PUID=${MEDIA_UID}
+      - PGID=${MEDIA_GID}
       - UMASK=002
       # Set as config.time.timeZone
       - TZ=Etc/UTC
@@ -549,6 +552,7 @@ services:
     container_name: flaresolverr
     # DockerHub mirror flaresolverr/flaresolverr:latest
     image: ghcr.io/flaresolverr/flaresolverr:latest
+    user: '${MEDIA_UID}:${MEDIA_GID}'
     environment:
       - LOG_LEVEL=info
       - LOG_HTML=false
@@ -567,7 +571,7 @@ services:
     image: ghcr.io/recyclarr/recyclarr
     # Change this to use config.nix.users.*
     # This is ok as recyclarr is a rootless container
-    user: nobody:nogroup
+    user: '${MEDIA_UID}:${MEDIA_GID}'
     volumes:
       - ${PATH_CONFIG_BASE}/recyclarr:/config
       - /CHANGEME:/config/recyclarr.yml
@@ -591,7 +595,7 @@ services:
     ports:
       - '9010:9000'
     # restart: always
-    user: '1000:1000'
+    user: '${GENERAL_UID}:${GENERAL_GID}'
     volumes:
       - ${PATH_CONFIG_BASE}/thelounge:/var/opt/thelounge
     networks:

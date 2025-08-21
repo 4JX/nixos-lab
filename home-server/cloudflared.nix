@@ -4,7 +4,10 @@ let
   cfg = config.local.home-server.cloudflared;
   hsEnable = config.local.home-server.enable;
 
-  secretsFile.sopsFile = config.local.home-server.secretsFolder + "/home-server.yaml";
+  proxyUser = config.users.users.dockerproxy.uid;
+  proxyGroup = config.users.groups.dockerproxy.gid;
+  proxyUserString = builtins.toString proxyUser;
+  proxyGroupString = builtins.toString proxyGroup;
 in
 {
   options = {
@@ -16,7 +19,11 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    sops.secrets.cloudflared-env = secretsFile;
+    sops.secrets.cloudflared-env = {
+      sopsFile = config.local.home-server.secretsFolder + "/home-server.yaml";
+      uid = proxyUser;
+      gid = proxyGroup;
+    };
 
     # Extracted from docker-compose.nix
     virtualisation.oci-containers.containers."cloudflared" = {
@@ -28,6 +35,7 @@ in
         "tunnel"
         "run"
       ];
+      user = "${proxyUserString}:${proxyGroupString}";
       log-driver = "journald";
       extraOptions = [
         "--network-alias=cloudflared-tunnel"

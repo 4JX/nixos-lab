@@ -3,8 +3,8 @@
 let
   cfg = config.local.home-server.authentik.worker;
 
-  nobodyUser = builtins.toString config.users.users.nobody.uid;
-  dockerGroup = builtins.toString config.users.groups.docker.gid;
+  socketUserString = builtins.toString config.users.users.dockersocket.uid;
+  dockerGroupString = builtins.toString config.users.groups.docker.gid;
 in
 {
   config = lib.mkIf cfg.enable {
@@ -25,7 +25,7 @@ in
         "-stoponwatchdog"
         "-shutdowngracetime=10"
       ];
-      user = "${nobodyUser}:${dockerGroup}";
+      user = "${socketUserString}:${dockerGroupString}";
       log-driver = "journald";
       extraOptions = [
         "--cap-drop=ALL"
