@@ -197,7 +197,6 @@
     ports = [
       "8191:8191/tcp"
     ];
-    user = "10120:10120";
     log-driver = "journald";
     extraOptions = [
       "--network-alias=flaresolverr"

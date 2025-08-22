@@ -551,7 +551,7 @@ services:
     container_name: flaresolverr
     # DockerHub mirror flaresolverr/flaresolverr:latest
     image: ghcr.io/flaresolverr/flaresolverr:latest
-    user: '${MEDIA_UID}:${MEDIA_GID}'
+    # user: '${MEDIA_UID}:${MEDIA_GID}'
     environment:
       - LOG_LEVEL=info
       - LOG_HTML=false
