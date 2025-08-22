@@ -426,8 +426,7 @@ services:
   # https://github.com/Suwayomi/Suwayomi-Server
   # https://github.com/suwayomi/Suwayomi-Server-docker
   suwayomi:
-    # For some reason "preview" == "latest"
-    image: ghcr.io/suwayomi/suwayomi-server:preview
+    image: ghcr.io/suwayomi/suwayomi-server:stable
     container_name: suwayomi
     environment:
       - DEBUG=false
