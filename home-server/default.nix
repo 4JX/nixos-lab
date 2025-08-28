@@ -39,6 +39,7 @@ in
     ./cross-seed.nix
     ./flaresolverr.nix
     ./recyclarr
+    ./gluetun.nix
     ./jellyfin.nix
     ./jellyseerr.nix
     ./prowlarr.nix
