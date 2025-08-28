@@ -71,6 +71,22 @@ services:
     depends_on:
       - dnsmasq
 
+  # https://github.com/qdm12/gluetun
+  # https://github.com/qdm12/gluetun-wiki?tab=readme-ov-file#table-of-contents
+  gluetun:
+    container_name: gluetun
+    image: qmcgaw/gluetun
+    cap_add:
+      - NET_ADMIN
+    devices:
+      - /dev/net/tun
+    ports:
+      - 8888:8888
+    # env_file:
+    #   - ${config.sops.secrets.gluetun-env.path}
+    networks:
+      - arr
+
   # https://github.com/wollomatic/socket-proxy
   # More generic permissions: https://github.com/linuxserver/docker-socket-proxy
   dockerproxy-dozzle:
