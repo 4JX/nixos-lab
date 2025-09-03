@@ -25,8 +25,11 @@ in
       sopsFile = hsCfg.secretsFolder + "/qbit_manage.yml";
       # Serve the whole YAML file
       key = "";
+
       uid = mediaUser;
       gid = mediaGroup;
+      # Read+Write needed by qbit_manage
+      mode = "0600";
     };
 
     # Extracted from docker-compose.nix
