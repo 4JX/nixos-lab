@@ -14,9 +14,6 @@
             enable = true;
             jellyfin.firewall.open = false;
             jellyseerr.firewall.open = false;
-            prowlarr.autoStart = true;
-            qbittorrent.autoStart = true;
-            thelounge.autoStart = true;
           };
         };
     };

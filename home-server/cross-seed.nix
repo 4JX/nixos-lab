@@ -4,8 +4,6 @@ let
   cfg = config.local.home-server.cross-seed;
   hsEnable = config.local.home-server.enable;
 
-  qbitCfg = config.local.home-server.qbittorrent;
-
   mediaUser = config.users.users.dockermedia.uid;
   mediaGroup = config.users.groups.dockermedia.gid;
   mediaUserString = builtins.toString mediaUser;
@@ -17,11 +15,6 @@ in
       type = lib.types.bool;
       default = hsEnable;
       description = "Whether to enable cross-seed.";
-    };
-    autoStart = lib.mkOption {
-      type = lib.types.bool;
-      default = false;
-      description = "Whether to start cross-seed automatically.";
     };
   };
 
@@ -36,7 +29,6 @@ in
     # Extracted from docker-compose.nix
     virtualisation.oci-containers.containers."cross-seed" = {
       image = "ghcr.io/cross-seed/cross-seed:6";
-      inherit (qbitCfg) autoStart;
       volumes = [
         "/containers/config/cross-seed:/config:rw"
         "${config.sops.secrets.cross-seed-config.path}:/config/config.js:ro"
@@ -67,16 +59,11 @@ in
       partOf = [
         "docker-compose-home-server-root.target"
       ];
-      # Do not start cross-seed if qbittorrent is not set to autoStart as well
+      # Do not start cross-seed if qbittorrent is not set to  as well
       # This avoids qbittorrent being started by proxy due to cross-seed's wantedBy+dependsOn
-      wantedBy = lib.mkForce (
-        if qbitCfg.autoStart then
-          [
-            "docker-compose-home-server-root.target"
-          ]
-        else
-          [ ]
-      );
+      wantedBy = [
+        "docker-compose-home-server-root.target"
+      ];
     };
   };
 }
