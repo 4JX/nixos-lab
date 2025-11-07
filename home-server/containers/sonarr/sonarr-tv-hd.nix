@@ -42,9 +42,8 @@ in
         "8989:8989/tcp"
       ];
       log-driver = "journald";
-      extraOptions = [
-        "--network-alias=sonarr-tv-hd"
-        "--network=arr"
+      networks = [
+        "arr"
       ];
     };
     systemd.services."docker-sonarr-tv-hd" = {

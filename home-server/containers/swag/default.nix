@@ -67,10 +67,11 @@ in
         "80:80/tcp"
       ];
       log-driver = "journald";
-      extraOptions = [
-        "--cap-add=NET_ADMIN"
-        "--network-alias=swag"
-        "--network=exposed"
+      capabilities = {
+        NET_ADMIN = true;
+      };
+      networks = [
+        "exposed"
       ];
     };
     systemd.services."docker-swag" = {

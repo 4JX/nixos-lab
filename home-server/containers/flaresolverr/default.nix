@@ -27,9 +27,8 @@ in
         "8191:8191/tcp"
       ];
       log-driver = "journald";
-      extraOptions = [
-        "--network-alias=flaresolverr"
-        "--network=arr"
+      networks = [
+        "arr"
       ];
     };
     systemd.services."docker-flaresolverr" = {

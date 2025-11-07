@@ -35,8 +35,9 @@ in
         "--health-retries=5"
         "--health-start-period=20s"
         "--health-timeout=3s"
-        "--network-alias=redis"
-        "--network=authentik"
+      ];
+      networks = [
+        "authentik"
       ];
     };
     systemd.services."docker-authentik-redis" = {

@@ -38,10 +38,11 @@ in
         "54001:51821/tcp"
       ];
       log-driver = "journald";
-      extraOptions = [
-        "--cap-add=NET_ADMIN"
-        "--network-alias=dnsmasq"
-        "--network=0wireguard"
+      capabilities = {
+        NET_ADMIN = true;
+      };
+      networks = [
+        "0wireguard"
       ];
     };
     systemd.services."docker-dnsmasq" = {

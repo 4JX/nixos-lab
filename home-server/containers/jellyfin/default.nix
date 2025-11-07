@@ -62,19 +62,18 @@ in
         "${portString}:8096/tcp"
       ];
       log-driver = "journald";
-      extraOptions = [
-        # https://jellyfin.org/docs/general/installation/container#with-hardware-acceleration
-        # Needed for hardware acceleration/transcoding
-        "--device=/dev/dri:/dev/dri:rwm"
-        "--network-alias=jellyfin"
-        "--network=arr"
-        "--network=exposed"
-        "--network=ldap"
+      networks = [
+        "arr"
+        "exposed"
+        "ldap"
+      ];
+      # https://jellyfin.org/docs/general/installation/container#with-hardware-acceleration
+      # Needed for hardware acceleration/transcoding
+      devices = [
+        "/dev/dri:/dev/dri:rwm"
       ]
       ++ lib.optionals containerToolkitEnable [
-        # https://jellyfin.org/docs/general/installation/container#with-hardware-acceleration
-        # Needed for hardware acceleration/transcoding
-        "--device=nvidia.com/gpu=all"
+        "nvidia.com/gpu=all"
       ];
     };
     systemd.services."docker-jellyfin" = {

@@ -43,9 +43,8 @@ in
         "7879:7878/tcp"
       ];
       log-driver = "journald";
-      extraOptions = [
-        "--network-alias=radarr-movies-uhd"
-        "--network=arr"
+      networks = [
+        "arr"
       ];
     };
     systemd.services."docker-radarr-movies-uhd" = {

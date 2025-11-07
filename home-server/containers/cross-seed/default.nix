@@ -42,9 +42,8 @@ in
       cmd = [ "daemon" ];
       user = "${mediaUserString}:${mediaGroupString}";
       log-driver = "journald";
-      extraOptions = [
-        "--network-alias=cross-seed"
-        "--network=arr"
+      networks = [
+        "arr"
       ];
     };
     systemd.services."docker-cross-seed" = {

@@ -27,11 +27,14 @@ in
       ];
       user = "${socketUserString}:${dockerGroupString}";
       log-driver = "journald";
+      capabilities = {
+        ALL = false;
+      };
       extraOptions = [
-        "--cap-drop=ALL"
-        "--network-alias=dockerproxy-dozzle"
-        "--network=socket-proxy-dozzle"
         "--security-opt=no-new-privileges"
+      ];
+      networks = [
+        "socket-proxy-dozzle"
       ];
     };
     systemd.services."docker-dockerproxy-dozzle" = {

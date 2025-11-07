@@ -56,17 +56,16 @@ in
         "800:80/tcp"
       ];
       log-driver = "journald";
-      extraOptions = [
-        "--cap-add=NET_ADMIN"
-        "--network-alias=swag-internal"
-        "--network=0wireguard"
-        "--network=arr"
-        "--network=authentik"
-        "--network=dozzle"
-        "--network=exposed"
-        "--network=komga"
-        "--network=ldap"
-        "--network=thelounge"
+      capabilities = {
+        NET_ADMIN = true;
+      };
+      networks = [
+        "0wireguard"
+        "arr"
+        "dozzle"
+        "exposed"
+        "komga"
+        "thelounge"
       ];
     };
     systemd.services."docker-swag-internal" = {

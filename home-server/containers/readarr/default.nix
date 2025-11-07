@@ -35,9 +35,8 @@ in
         "8787:8787/tcp"
       ];
       log-driver = "journald";
-      extraOptions = [
-        "--network-alias=readarr"
-        "--network=arr"
+      networks = [
+        "arr"
       ];
     };
     systemd.services."docker-readarr" = {
