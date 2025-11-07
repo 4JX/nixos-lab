@@ -7,8 +7,8 @@
 
 {
   lib,
+  lib',
   config,
-  inputs,
   pkgs,
   ...
 }:
@@ -19,6 +19,9 @@ let
 in
 {
   imports = [
+    ./lib
+    ./nets.nix
+
     ./containers
 
     ./ddns
@@ -29,98 +32,88 @@ in
   ];
 
   options.local.home-server = {
-    enable = lib.mkEnableOption "the home-server module";
+    enable = lib.mkEnableOption "the home-server module" // {
+      enable = true;
+    };
     secretsFolder = lib.mkOption {
       type = lib.types.path;
-      # TODO: Move lib out of config, as this makes it dependant on the config lib of the machine that is using the flake
-      # default = config.lib.sops.mkSecretsPath "/hs";
       default = ../secrets/hs;
       description = "The path to the home-server secrets folder.";
     };
-    # users = lib.mkOption {
-    #   type = lib.types.listOf (lib.types.enum systemUsers);
-    #   default = [ ];
-    #   description = "The users to add to the home-server and docker groups.";
-    # };
+    rootTargetName = lib.mkOption {
+      type = lib.types.str;
+      default = "home-server";
+      description = "The name of the root target.";
+    };
+    backend = lib.mkOption {
+      type = lib.types.enum [
+        "podman"
+        "docker"
+      ];
+      default = "docker";
+      description = "The underlying Docker implementation to use.";
+    };
+    containers = {
+      networks = lib.mkOption {
+        type = lib.types.listOf (
+          lib.types.submodule {
+            options = {
+              name = lib.mkOption {
+                type = lib.types.str;
+                description = "Name of the network used by containers.";
+                example = "mynetwork";
+              };
+              subnet = lib.mkOption {
+                type = lib.types.str;
+                description = "Subnet of the network user by containers.";
+                example = "172.30.0.0/16";
+              };
+              internal = lib.mkOption {
+                type = lib.types.bool;
+                default = false;
+                description = "Whether the network is internal.";
+              };
+            };
+          }
+        );
+        default = [ ];
+        example = [
+          {
+            name = "mynetwork";
+            subnet = "172.30.0.0/16";
+            hostIP = "172.30.0.1";
+          }
+        ];
+        description = "List of extra networks created for docker.";
+      };
+    };
   };
 
   config = lib.mkIf cfg.enable {
     environment.systemPackages = [
-      inputs.compose2nix.packages.${pkgs.system}.default
       pkgs.docker-compose
     ];
 
-    # users.groups.docker.members = cfg.users;
-    # users.groups.home-server.members = cfg.users;
+    virtualisation.oci-containers.backend = cfg.backend;
 
     # Runtime
+    # TODO: Select backend
     virtualisation.docker = {
       enable = true;
       autoPrune.enable = true;
     };
 
-    virtualisation.oci-containers.backend = "docker";
-
-    # Networks
-    systemd.services."docker-network-0wireguard" = {
-      path = [ pkgs.docker ];
-      serviceConfig = {
-        Type = "oneshot";
-        RemainAfterExit = true;
-        ExecStop = "docker network rm -f 0wireguard";
-      };
-      script = ''
-        docker network inspect 0wireguard || docker network create 0wireguard
-      '';
-      partOf = [ "docker-compose-home-server-root.target" ];
-      wantedBy = [ "docker-compose-home-server-root.target" ];
-    };
-    systemd.services."docker-network-arr" = {
-      path = [ pkgs.docker ];
-      serviceConfig = {
-        Type = "oneshot";
-        RemainAfterExit = true;
-        ExecStop = "docker network rm -f arr";
-      };
-      script = ''
-        docker network inspect arr || docker network create arr
-      '';
-      partOf = [ "docker-compose-home-server-root.target" ];
-      wantedBy = [ "docker-compose-home-server-root.target" ];
-    };
-    systemd.services."docker-network-exposed" = {
-      path = [ pkgs.docker ];
-      serviceConfig = {
-        Type = "oneshot";
-        RemainAfterExit = true;
-        ExecStop = "docker network rm -f exposed";
-      };
-      script = ''
-        docker network inspect exposed || docker network create exposed
-      '';
-      partOf = [ "docker-compose-home-server-root.target" ];
-      wantedBy = [ "docker-compose-home-server-root.target" ];
-    };
-    systemd.services."docker-network-thelounge" = {
-      path = [ pkgs.docker ];
-      serviceConfig = {
-        Type = "oneshot";
-        RemainAfterExit = true;
-        ExecStop = "docker network rm -f thelounge";
-      };
-      script = ''
-        docker network inspect thelounge || docker network create thelounge
-      '';
-      partOf = [ "docker-compose-home-server-root.target" ];
-      wantedBy = [ "docker-compose-home-server-root.target" ];
-    };
+    system.services = lib.pipe [
+      (builtins.map (network: lib'.mkNetworkService network))
+      lib.mergeAttrsList
+    ] cfg.networks;
 
     # Root service
     # When started, this will automatically create all resources and start
     # the containers. When stopped, this will teardown all resources.
-    systemd.targets."docker-compose-home-server-root" = {
+    systemd.targets."${cfg.backend}-${cfg.rootTargetName}-root" = {
       unitConfig = {
-        Description = "Root target generated by compose2nix.";
+        Description = "Root target for all ${cfg.rootTargetName} resources.";
       };
       wantedBy = [ "multi-user.target" ];
     };
