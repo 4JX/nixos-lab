@@ -29,9 +29,8 @@ in
       ];
       user = "${generalUserString}:${generalGroupString}";
       log-driver = "journald";
-      extraOptions = [
-        "--network-alias=thelounge"
-        "--network=thelounge"
+      networks = [
+        "thelounge"
       ];
     };
     systemd.services."docker-thelounge" = {

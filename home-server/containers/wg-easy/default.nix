@@ -48,12 +48,16 @@ in
         "dnsmasq"
       ];
       log-driver = "journald";
+      capabilities = {
+        NET_ADMIN = true;
+        SYS_MODULE = true;
+      };
       extraOptions = [
-        "--cap-add=NET_ADMIN"
-        "--cap-add=SYS_MODULE"
-        "--network=container:dnsmasq"
         "--sysctl=net.ipv4.conf.all.src_valid_mark=1"
         "--sysctl=net.ipv4.ip_forward=1"
+      ];
+      networks = [
+        "container:dnsmasq"
       ];
     };
     systemd.services."docker-wg-easy" = {

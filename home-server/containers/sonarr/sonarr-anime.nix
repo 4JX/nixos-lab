@@ -43,9 +43,8 @@ in
         "8991:8989/tcp"
       ];
       log-driver = "journald";
-      extraOptions = [
-        "--network-alias=sonarr-anime"
-        "--network=arr"
+      networks = [
+        "arr"
       ];
     };
     systemd.services."docker-sonarr-anime" = {

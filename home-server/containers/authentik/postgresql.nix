@@ -35,8 +35,9 @@ in
         "--health-retries=5"
         "--health-start-period=20s"
         "--health-timeout=5s"
-        "--network-alias=postgresql"
-        "--network=authentik"
+      ];
+      networks = [
+        "authentik"
       ];
     };
     systemd.services."docker-authentik-postgresql" = {

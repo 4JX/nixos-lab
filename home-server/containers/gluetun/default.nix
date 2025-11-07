@@ -28,11 +28,14 @@ in
         "8888:8888/tcp"
       ];
       log-driver = "journald";
-      extraOptions = [
-        "--cap-add=NET_ADMIN"
-        "--device=/dev/net/tun:/dev/net/tun:rwm"
-        "--network-alias=gluetun"
-        "--network=arr"
+      capabilities = {
+        NET_ADMIN = true;
+      };
+      networks = [
+        "arr"
+      ];
+      devices = [
+        "/dev/net/tun:/dev/net/tun:rwm"
       ];
     };
     systemd.services."docker-gluetun" = {

@@ -95,14 +95,17 @@ in
         "${incomingPortString}:${incomingPortString}/tcp"
       ];
       log-driver = "journald";
+      capabilities = {
+        NET_ADMIN = true;
+      };
       extraOptions = [
-        "--cap-add=NET_ADMIN"
         "--dns=1.1.1.1"
         "--dns=9.9.9.9"
-        "--network-alias=qbittorrent"
-        "--network=arr"
         "--sysctl=net.ipv4.conf.all.src_valid_mark=1"
         "--sysctl=net.ipv6.conf.all.disable_ipv6=1"
+      ];
+      networks = [
+        "arr"
       ];
     };
 

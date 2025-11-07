@@ -55,10 +55,9 @@ in
       ];
       user = "${mediaUserString}:${mediaGroupString}";
       log-driver = "journald";
-      extraOptions = [
-        "--network-alias=jellyseerr"
-        "--network=arr"
-        "--network=exposed"
+      networks = [
+        "arr"
+        "exposed"
       ];
     };
     systemd.services."docker-jellyseerr" = {

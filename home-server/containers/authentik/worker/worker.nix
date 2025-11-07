@@ -17,8 +17,8 @@ in
       image = "ghcr.io/goauthentik/server:2024.10.5";
       environment = {
         "DOCKER_HOST" = "tcp://dockerproxy-authentik-worker:2375";
-        "AUTHENTIK_REDIS__HOST" = "redis";
-        "AUTHENTIK_POSTGRESQL__HOST" = "postgresql";
+        "AUTHENTIK_REDIS__HOST" = "authentik-redis";
+        "AUTHENTIK_POSTGRESQL__HOST" = "authentik-postgresql";
         "AUTHENTIK_ERROR_REPORTING__ENABLED" = "false";
         # Disable some analytics
         "AUTHENTIK_DISABLE_STARTUP_ANALYTICS" = "true";
@@ -39,10 +39,9 @@ in
       ];
       user = "${authUserString}:${authGroupString}";
       log-driver = "journald";
-      extraOptions = [
-        "--network-alias=worker"
-        "--network=authentik"
-        "--network=socket-proxy-authentik-worker"
+      networks = [
+        "authentik"
+        "socket-proxy-authentik-worker"
       ];
     };
     systemd.services."docker-authentik-worker" = {

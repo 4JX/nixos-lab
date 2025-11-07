@@ -33,11 +33,14 @@ in
       ];
       user = "${socketUserString}:${dockerGroupString}";
       log-driver = "journald";
+      capabilities = {
+        ALL = false;
+      };
       extraOptions = [
-        "--cap-drop=ALL"
-        "--network-alias=dockerproxy-authentik-worker"
-        "--network=socket-proxy-authentik-worker"
         "--security-opt=no-new-privileges"
+      ];
+      networks = [
+        "socket-proxy-authentik-worker"
       ];
     };
     systemd.services."docker-dockerproxy-authentik-worker" = {

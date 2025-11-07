@@ -23,8 +23,8 @@ in
     virtualisation.oci-containers.containers."authentik-server" = {
       image = "ghcr.io/goauthentik/server:2024.10.5";
       environment = {
-        "AUTHENTIK_REDIS__HOST" = "redis";
-        "AUTHENTIK_POSTGRESQL__HOST" = "postgresql";
+        "AUTHENTIK_REDIS__HOST" = "authentik-redis";
+        "AUTHENTIK_POSTGRESQL__HOST" = "authentik-postgresql";
         "AUTHENTIK_ERROR_REPORTING__ENABLED" = "false";
         # Disable some analytics
         "AUTHENTIK_DISABLE_STARTUP_ANALYTICS" = "true";
@@ -47,11 +47,10 @@ in
         "authentik-redis"
       ];
       log-driver = "journald";
-      extraOptions = [
-        "--network-alias=server"
-        "--network=authentik"
-        "--network=exposed"
-        "--network=ldap"
+      networks = [
+        "authentik"
+        "exposed"
+        "ldap"
       ];
     };
     systemd.services."docker-authentik-server" = {

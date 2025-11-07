@@ -55,9 +55,8 @@ in
       ];
       user = "${mediaUserString}:${mediaGroupString}";
       log-driver = "journald";
-      extraOptions = [
-        "--network-alias=recyclarr"
-        "--network=arr"
+      networks = [
+        "arr"
       ];
     };
     systemd.services."docker-recyclarr" = {

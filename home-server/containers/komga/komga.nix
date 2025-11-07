@@ -44,11 +44,10 @@ in
       ];
       user = "${mediaUserString}:${mediaGroupString}";
       log-driver = "journald";
-      extraOptions = [
-        "--network-alias=komga"
-        "--network=arr"
-        "--network=exposed"
-        "--network=komga"
+      networks = [
+        "arr"
+        "exposed"
+        "komga"
       ];
     };
     systemd.services."docker-komga" = {

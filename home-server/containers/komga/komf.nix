@@ -49,9 +49,8 @@ in
       ];
       user = "${mediaUserString}:${mediaGroupString}";
       log-driver = "journald";
-      extraOptions = [
-        "--network-alias=komf"
-        "--network=komga"
+      networks = [
+        "komga"
       ];
     };
     systemd.services."docker-komf" = {

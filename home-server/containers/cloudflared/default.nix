@@ -37,9 +37,8 @@ in
       ];
       user = "${proxyUserString}:${proxyGroupString}";
       log-driver = "journald";
-      extraOptions = [
-        "--network-alias=cloudflared-tunnel"
-        "--network=exposed"
+      networks = [
+        "exposed"
       ];
     };
     systemd.services."docker-cloudflared" = {
