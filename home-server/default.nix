@@ -19,37 +19,12 @@ let
 in
 {
   imports = [
-    ./permissions.nix
-
-    ./authentik
+    ./containers
 
     ./ddns
-    ./dozzle
+
     ./nvidia-ctk.nix
-
-    ./dnsmasq
-    ./wg-easy.nix
-
-    ./radarr
-    ./sonarr
-
-    ./komga
-
-    ./cloudflared.nix
-    ./cross-seed.nix
-    ./flaresolverr.nix
-    ./recyclarr
-    ./gluetun.nix
-    ./jellyfin.nix
-    ./jellyseerr.nix
-    ./prowlarr.nix
-    ./qbit_manage.nix
-    ./qbittorrent.nix
-    ./readarr.nix
-    ./suwayomi.nix
-    ./swag-internal.nix
-    ./swag.nix
-    ./thelounge.nix
+    ./permissions.nix
     ./tor.nix
   ];
 
