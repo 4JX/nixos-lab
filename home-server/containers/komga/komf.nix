@@ -1,3 +1,5 @@
+# https://github.com/Snd-R/komf
+# https://github.com/Snd-R/komf-userscript
 { lib, config, ... }:
 
 let
@@ -34,6 +36,8 @@ in
       image = "sndxr/komf:latest";
       environment = {
         "KOMF_LOG_LEVEL" = "INFO";
+        # optional jvm options. Example config for low memory usage. Runs guaranteed cleanup up every 3600000ms(1hour)
+        # - JAVA_TOOL_OPTIONS=-XX:+UnlockExperimentalVMOptions -XX:+UseShenandoahGC -XX:ShenandoahGCHeuristics=compact -XX:ShenandoahGuaranteedGCInterval=3600000 -XX:TrimNativeHeapInterval=3600000
       };
       volumes = [
         # https://github.com/Snd-R/komf?tab=readme-ov-file#example-applicationyml-config

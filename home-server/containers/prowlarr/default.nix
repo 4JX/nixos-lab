@@ -1,3 +1,4 @@
+# https://hotio.dev/containers/prowlarr/#starting-the-container
 { lib, config, ... }:
 
 let
@@ -23,10 +24,10 @@ in
     virtualisation.oci-containers.containers."prowlarr" = {
       image = "ghcr.io/hotio/prowlarr";
       environment = {
-        "PGID" = mediaGroupString;
         "PUID" = mediaUserString;
-        "TZ" = config.time.timeZone;
+        "PGID" = mediaGroupString;
         "UMASK" = "002";
+        "TZ" = config.time.timeZone;
       };
       volumes = [
         "/containers/config/prowlarr:/config:rw"

@@ -1,3 +1,4 @@
+# https://readarr.com/
 { lib, config, ... }:
 
 let
@@ -21,10 +22,10 @@ in
     virtualisation.oci-containers.containers."readarr" = {
       image = "ghcr.io/hotio/readarr";
       environment = {
-        "PGID" = mediaGroupString;
         "PUID" = mediaUserString;
-        "TZ" = "Etc/UTC";
+        "PGID" = mediaGroupString;
         "UMASK" = "002";
+        "TZ" = "Etc/UTC";
       };
       volumes = [
         "/containers/config/readarr:/config:rw"

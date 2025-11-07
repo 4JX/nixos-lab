@@ -1,3 +1,4 @@
+# https://hotio.dev/containers/qbittorrent/#starting-the-container
 { lib, config, ... }:
 
 let
@@ -56,28 +57,34 @@ in
       # image = "ghcr.io/hotio/qbittorrent:release-5.0.2";
       image = "ghcr.io/hotio/qbittorrent:release-4.6.7";
       environment = {
-        "PGID" = mediaGroupString;
-        "PRIVOXY_ENABLED" = "true";
         "PUID" = mediaUserString;
-        "TZ" = config.time.timeZone;
+        "PGID" = mediaGroupString;
         "UMASK" = "002";
-        "UNBOUND_ENABLED" = "false";
-        "VPN_AUTO_PORT_FORWARD" = "true";
-        "VPN_AUTO_PORT_FORWARD_TO_PORTS" = "";
+
+        "TZ" = config.time.timeZone;
+        "WEBUI_PORTS" = "8080/tcp,8080/udp"; # Expose WebUI
+
+        # VPN Config
+        # https://hotio.dev/containers/qbittorrent/#wireguard
         "VPN_CONF" = "wg0";
         "VPN_ENABLED" = "true";
+        # https://protonvpn.com/vpn-servers
+        "VPN_PROVIDER" = "proton";
+        "VPN_LAN_NETWORK" = "192.168.1.0/24";
+        "VPN_LAN_LEAK_ENABLED" = "false";
         "VPN_EXPOSE_PORTS_ON_LAN" = "8080/tcp";
+        "VPN_AUTO_PORT_FORWARD" = "true";
+        "VPN_AUTO_PORT_FORWARD_TO_PORTS" = "";
+        "VPN_KEEP_LOCAL_DNS" = "false";
         "VPN_FIREWALL_TYPE" = "auto";
         "VPN_HEALTHCHECK_ENABLED" = "false";
-        "VPN_KEEP_LOCAL_DNS" = "false";
-        "VPN_LAN_LEAK_ENABLED" = "false";
-        "VPN_LAN_NETWORK" = "192.168.1.0/24";
-        "VPN_PROVIDER" = "proton";
-        "WEBUI_PORTS" = "8080/tcp,8080/udp";
+
+        "PRIVOXY_ENABLED" = "true";
+        "UNBOUND_ENABLED" = "false";
       };
       volumes = [
-        "${config.sops.secrets.qbit-wg0.path}:/config/wireguard/wg0.conf:rw"
         "/containers/config/qbittorrent:/config:rw"
+        "${config.sops.secrets.qbit-wg0.path}:/config/wireguard/wg0.conf:rw"
         "/containers/mediaserver/torrents:/data/torrents:rw"
       ];
       ports = [

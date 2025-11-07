@@ -1,3 +1,4 @@
+# https://hotio.dev/containers/radarr/#starting-the-container
 { lib, config, ... }:
 
 let
@@ -29,10 +30,10 @@ in
     virtualisation.oci-containers.containers."radarr-movies-uhd" = {
       image = "ghcr.io/hotio/radarr";
       environment = {
-        "PGID" = mediaGroupString;
         "PUID" = mediaUserString;
-        "TZ" = config.time.timeZone;
+        "PGID" = mediaGroupString;
         "UMASK" = "002";
+        "TZ" = config.time.timeZone;
       };
       volumes = [
         "/containers/config/radarr-movies-uhd:/config:rw"

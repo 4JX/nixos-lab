@@ -1,3 +1,5 @@
+# https://github.com/wg-easy/wg-easy
+# sudo docker run --rm -it ghcr.io/wg-easy/wg-easy wgpw 'password'
 # Ports are handled in dnsmasq
 { lib, config, ... }:
 

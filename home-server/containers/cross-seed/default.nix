@@ -1,3 +1,4 @@
+# https://www.cross-seed.org/docs
 { lib, config, ... }:
 
 let

@@ -1,3 +1,5 @@
+# https://github.com/gotson/komga
+# https://komga.org/docs/category/installation
 {
   lib,
   config,
@@ -26,9 +28,12 @@ in
   config = lib.mkIf cfg.enable {
     # Extracted from docker-compose.nix
     virtualisation.oci-containers.containers."komga" = {
+      # https://komga.org/docs/installation/docker#version-tags
       image = "gotson/komga:1.x";
       environment = {
         "TZ" = config.time.timeZone;
+        # https://komga.org/docs/installation/docker#increase-memory-limit
+        # - JAVA_TOOL_OPTIONS=-Xmx4g
       };
       volumes = [
         "/containers/config/komga:/config:rw"

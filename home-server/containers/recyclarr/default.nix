@@ -1,8 +1,6 @@
+# https://recyclarr.dev/wiki/installation/docker/
 { config, lib, ... }:
 
-# TODO: More granular profile management with https://recyclarr.dev/wiki/yaml/config-reference/ and https://github.com/MasterMidi/nixos-config/blob/d26bd35bfb328bab2c5dc2733bc1c7de5e2c4faa/hosts/servers/david/recyclarr/
-# Written via pkgs.writers.writeYAML "recyclarr.yaml" { settings = "foo"; } since it gives more flexibility
-# Or at least with includes https://recyclarr.dev/wiki/yaml/config-reference/include/
 let
   # https://recyclarr.dev/wiki/guide-configs/
   recyclarrYaml = ./recyclarr.yml;
@@ -42,11 +40,13 @@ in
       image = "ghcr.io/recyclarr/recyclarr";
       environment = {
         "TZ" = config.time.timeZone;
+        # This is a default
+        # - CRON_SCHEDULE=@daily
       };
       volumes = [
+        "/containers/config/recyclarr:/config:rw"
         "${recyclarrYaml}:/config/recyclarr.yml:rw"
         "${config.sops.secrets.recyclarr.path}:/config/secrets.yml:rw"
-        "/containers/config/recyclarr:/config:rw"
       ];
       dependsOn = [
         "radarr-movies-hd"

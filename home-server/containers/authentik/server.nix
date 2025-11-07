@@ -23,17 +23,19 @@ in
     virtualisation.oci-containers.containers."authentik-server" = {
       image = "ghcr.io/goauthentik/server:2024.10.5";
       environment = {
-        "AUTHENTIK_DISABLE_STARTUP_ANALYTICS" = "true";
-        "AUTHENTIK_ERROR_REPORTING__ENABLED" = "false";
-        "AUTHENTIK_POSTGRESQL__HOST" = "postgresql";
         "AUTHENTIK_REDIS__HOST" = "redis";
+        "AUTHENTIK_POSTGRESQL__HOST" = "postgresql";
+        "AUTHENTIK_ERROR_REPORTING__ENABLED" = "false";
+        # Disable some analytics
+        "AUTHENTIK_DISABLE_STARTUP_ANALYTICS" = "true";
+        # AUTHENTIK_DISABLE_UPDATE_CHECK: true
       };
       environmentFiles = [
         config.sops.secrets.authentik-env.path
       ];
       volumes = [
-        "/containers/authentik/authentik/custom-templates:/templates:rw"
         "/containers/authentik/authentik/media:/media:rw"
+        "/containers/authentik/authentik/custom-templates:/templates:rw"
       ];
       ports = [
         "9000:9000/tcp"
