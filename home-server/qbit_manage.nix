@@ -4,7 +4,6 @@ let
   cfg = config.local.home-server.qbit_manage;
   hsCfg = config.local.home-server;
   hsEnable = hsCfg.enable;
-  qbitCfg = hsCfg.qbittorrent;
 
   mediaUser = config.users.users.dockermedia.uid;
   mediaGroup = config.users.groups.dockermedia.gid;
@@ -35,7 +34,6 @@ in
     # Extracted from docker-compose.nix
     virtualisation.oci-containers.containers."qbit_manage" = {
       image = "ghcr.io/stuffanthings/qbit_manage:latest";
-      inherit (qbitCfg) autoStart;
       environment = {
         "QBT_CAT_UPDATE" = "false";
         "QBT_CONFIG" = "config.yml";
@@ -85,16 +83,9 @@ in
       partOf = [
         "docker-compose-home-server-root.target"
       ];
-      # Do not start qbit_manage if qbittorrent is not set to autoStart as well
-      # This avoids qbittorrent being started by proxy due to qbit_manage's wantedBy+dependsOn
-      wantedBy = lib.mkForce (
-        if qbitCfg.autoStart then
-          [
-            "docker-compose-home-server-root.target"
-          ]
-        else
-          [ ]
-      );
+      wantedBy = [
+        "docker-compose-home-server-root.target"
+      ];
     };
   };
 }

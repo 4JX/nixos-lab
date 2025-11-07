@@ -14,18 +14,12 @@ in
       default = hsEnable;
       description = "Whether to enable thelounge.";
     };
-    autoStart = lib.mkOption {
-      type = lib.types.bool;
-      default = false;
-      description = "Whether to start thelounge automatically.";
-    };
   };
 
   config = lib.mkIf cfg.enable {
     # Extracted from docker-compose.nix
     virtualisation.oci-containers.containers."thelounge" = {
       image = "ghcr.io/thelounge/thelounge:latest";
-      inherit (cfg) autoStart;
       volumes = [
         "/containers/config/thelounge:/var/opt/thelounge:rw"
       ];
@@ -52,14 +46,9 @@ in
       partOf = [
         "docker-compose-home-server-root.target"
       ];
-      wantedBy = lib.mkForce (
-        if cfg.autoStart then
-          [
-            "docker-compose-home-server-root.target"
-          ]
-        else
-          [ ]
-      );
+      wantedBy = [
+        "docker-compose-home-server-root.target"
+      ];
     };
   };
 }

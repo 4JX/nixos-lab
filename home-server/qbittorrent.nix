@@ -21,11 +21,6 @@ in
         default = hsEnable;
         description = "Whether to enable QBit.";
       };
-      autoStart = lib.mkOption {
-        type = lib.types.bool;
-        default = false;
-        description = "Whether to start the container service automatically.";
-      };
       firewall = {
         open = lib.mkOption {
           type = lib.types.bool;
@@ -60,7 +55,6 @@ in
     virtualisation.oci-containers.containers."qbittorrent" = {
       # image = "ghcr.io/hotio/qbittorrent:release-5.0.2";
       image = "ghcr.io/hotio/qbittorrent:release-4.6.7";
-      inherit (cfg) autoStart;
       environment = {
         "PGID" = mediaGroupString;
         "PRIVOXY_ENABLED" = "true";
@@ -118,18 +112,9 @@ in
       partOf = [
         "docker-compose-home-server-root.target"
       ];
-      # Avoid starting the service automatically unless explicitly requested
-      # Override "virtualisation.oci-containers.containers.<name>.autoStart" which adds multi-user.target if true
-      # TODO: lib.home-server.mkAutoStart (container-name)? Override container and service setting
-      # https://github.com/NixOS/nixpkgs/blob/a3f9ad65a0bf298ed5847629a57808b97e6e8077/nixos/modules/virtualisation/oci-containers.nix#L246-L272
-      wantedBy = lib.mkForce (
-        if cfg.autoStart then
-          [
-            "docker-compose-home-server-root.target"
-          ]
-        else
-          [ ]
-      );
+      wantedBy = [
+        "docker-compose-home-server-root.target"
+      ];
     };
   };
 }
