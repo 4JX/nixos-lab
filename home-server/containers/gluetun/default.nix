@@ -1,3 +1,5 @@
+# https://github.com/qdm12/gluetun
+# https://github.com/qdm12/gluetun-wiki?tab=readme-ov-file#table-of-contents
 { config, lib, ... }:
 
 let

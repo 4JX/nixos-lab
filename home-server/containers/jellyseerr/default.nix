@@ -1,3 +1,4 @@
+# https://docs.jellyseerr.dev/
 { lib, config, ... }:
 
 let

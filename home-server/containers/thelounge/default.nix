@@ -1,3 +1,4 @@
+# https://thelounge.chat/docs
 { lib, config, ... }:
 
 let

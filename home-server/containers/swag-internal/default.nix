@@ -1,3 +1,4 @@
+# https://docs.linuxserver.io/general/swag/#swag
 { lib, config, ... }:
 
 let
@@ -29,18 +30,20 @@ in
     virtualisation.oci-containers.containers."swag-internal" = {
       image = "lscr.io/linuxserver/swag";
       environment = {
+        "PUID" = proxyUserString;
+        "PGID" = proxyGroupString;
+        "TZ" = config.time.timeZone;
+        # - URL=
+        "SUBDOMAINS" = "wildcard";
+        "VALIDATION" = "dns";
         "CERTPROVIDER" = "";
         "DNSPLUGIN" = "cloudflare";
-        "DOCKER_MODS" = "";
-        "EXTRA_DOMAINS" = "";
+        # - EMAIL=
         "ONLY_SUBDOMAINS" = "false";
-        "PGID" = proxyGroupString;
-        "PUID" = proxyUserString;
+        "EXTRA_DOMAINS" = "";
         "STAGING" = "false";
-        "SUBDOMAINS" = "wildcard";
         "SWAG_AUTORELOAD" = "true";
-        "TZ" = config.time.timeZone;
-        "VALIDATION" = "dns";
+        "DOCKER_MODS" = "";
       };
       environmentFiles = [
         config.sops.secrets.swag-internal-env.path

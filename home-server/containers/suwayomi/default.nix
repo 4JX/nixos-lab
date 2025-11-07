@@ -1,3 +1,5 @@
+# https://github.com/Suwayomi/Suwayomi-Server
+# https://github.com/suwayomi/Suwayomi-Server-docker
 { lib, config, ... }:
 
 let
@@ -37,6 +39,8 @@ in
         config.sops.secrets.suwayomi-env.path
       ];
       volumes = [
+        # The save path is hardcoded
+        # https://github.com/Suwayomi/Suwayomi-Server-docker?tab=readme-ov-file#downloads-folder
         "/containers/config/suwayomi:/home/suwayomi/.local/share/Tachidesk:rw"
         "/containers/mediaserver/media/comics/suwayomi/downloads:/home/suwayomi/.local/share/Tachidesk/downloads:rw"
       ];

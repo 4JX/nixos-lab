@@ -1,3 +1,6 @@
+# https://docs.linuxserver.io/general/swag/#swag
+# https://github.com/linuxserver/reverse-proxy-confs?tab=readme-ov-file#how-to-use-these-reverse-proxy-configs
+# https://www.linuxserver.io/blog/zero-trust-hosting-and-reverse-proxy-via-cloudflare-swag-and-authelia
 { lib, config, ... }:
 
 let
@@ -29,26 +32,35 @@ in
     virtualisation.oci-containers.containers."swag" = {
       image = "lscr.io/linuxserver/swag";
       environment = {
-        "CERTPROVIDER" = "";
-        "DNSPLUGIN" = "cloudflare";
-        "DOCKER_MODS" = "linuxserver/mods:swag-cloudflare-real-ip";
-        "EXTRA_DOMAINS" = "";
-        "ONLY_SUBDOMAINS" = "false";
-        "PGID" = proxyGroupString;
         "PUID" = proxyUserString;
-        "STAGING" = "false";
-        "SUBDOMAINS" = "wildcard";
-        "SWAG_AUTORELOAD" = "true";
+        "PGID" = proxyGroupString;
         "TZ" = config.time.timeZone;
+        # - URL=
+        "SUBDOMAINS" = "wildcard";
+        "CERTPROVIDER" = "";
         "VALIDATION" = "dns";
+        "DNSPLUGIN" = "cloudflare";
+        # - EMAIL=
+        "ONLY_SUBDOMAINS" = "false";
+        "EXTRA_DOMAINS" = "";
+        "STAGING" = "false";
+        "SWAG_AUTORELOAD" = "true";
+        # https://github.com/linuxserver/docker-mods/tree/swag-cloudflare-real-ip
+        # Real IP works with a separate container, no need for the cloudflared mod
+        "DOCKER_MODS" = "linuxserver/mods:swag-cloudflare-real-ip";
       };
       environmentFiles = [
         config.sops.secrets.swag-env.path
       ];
       volumes = [
-        "/containers/config/jellyfin/log:/jellyfin:ro"
-        "/containers/config/jellyseerr/logs:/jellyseerr:ro"
         "/containers/config/swag:/config:rw"
+        # https://jellyfin.org/docs/general/networking/fail2ban/
+        "/containers/config/jellyseerr/logs:/jellyseerr:ro"
+        # https://docs.overseerr.dev/extending-overseerr/fail2ban
+        # This blog provides a pre-made hybrid filter for fail2ban that works with both overseerr and jellyseerr
+        # Pretty easy to arrive at it, but it's convenient
+        # https://zzuo123.github.io/blog/securing-server/
+        "/containers/config/jellyfin/log:/jellyfin:ro"
       ];
       ports = [
         "443:443/tcp"

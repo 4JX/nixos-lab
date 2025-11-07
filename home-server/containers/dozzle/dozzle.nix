@@ -1,3 +1,5 @@
+# https://dozzle.dev/guide/getting-started
+# PODMAN: https://github.com/amir20/dozzle?tab=readme-ov-file#installation-on-podman
 { lib, config, ... }:
 
 let

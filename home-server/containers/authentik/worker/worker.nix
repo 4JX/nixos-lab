@@ -16,11 +16,13 @@ in
     virtualisation.oci-containers.containers."authentik-worker" = {
       image = "ghcr.io/goauthentik/server:2024.10.5";
       environment = {
-        "AUTHENTIK_DISABLE_STARTUP_ANALYTICS" = "true";
-        "AUTHENTIK_ERROR_REPORTING__ENABLED" = "false";
-        "AUTHENTIK_POSTGRESQL__HOST" = "postgresql";
-        "AUTHENTIK_REDIS__HOST" = "redis";
         "DOCKER_HOST" = "tcp://dockerproxy-authentik-worker:2375";
+        "AUTHENTIK_REDIS__HOST" = "redis";
+        "AUTHENTIK_POSTGRESQL__HOST" = "postgresql";
+        "AUTHENTIK_ERROR_REPORTING__ENABLED" = "false";
+        # Disable some analytics
+        "AUTHENTIK_DISABLE_STARTUP_ANALYTICS" = "true";
+        # AUTHENTIK_DISABLE_UPDATE_CHECK: true
       };
       environmentFiles = [
         config.sops.secrets.authentik-env.path

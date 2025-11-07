@@ -1,3 +1,8 @@
+# https://hotio.dev/containers/jellyfin/
+# Migration: Compare paths in
+# https://jellyfin.org/docs/general/administration/migrate/#migrating-linux-install-to-docker
+# https://hotio.dev/containers/jellyfin/#configuration
+# https://github.com/NixOS/nixpkgs/blob/40916ded4ad5fe4bcc18963217c3a026db505c7f/nixos/modules/services/misc/jellyfin.nix#L27-L63
 { lib, config, ... }:
 
 let
@@ -44,10 +49,10 @@ in
     virtualisation.oci-containers.containers."jellyfin" = {
       image = "ghcr.io/hotio/jellyfin";
       environment = {
-        "PGID" = mediaGroupString;
         "PUID" = mediaUserString;
-        "TZ" = config.time.timeZone;
+        "PGID" = mediaGroupString;
         "UMASK" = "002";
+        "TZ" = config.time.timeZone;
       };
       volumes = [
         "/containers/config/jellyfin:/config:rw"
@@ -58,6 +63,8 @@ in
       ];
       log-driver = "journald";
       extraOptions = [
+        # https://jellyfin.org/docs/general/installation/container#with-hardware-acceleration
+        # Needed for hardware acceleration/transcoding
         "--device=/dev/dri:/dev/dri:rwm"
         "--network-alias=jellyfin"
         "--network=arr"
@@ -65,6 +72,8 @@ in
         "--network=ldap"
       ]
       ++ lib.optionals containerToolkitEnable [
+        # https://jellyfin.org/docs/general/installation/container#with-hardware-acceleration
+        # Needed for hardware acceleration/transcoding
         "--device=nvidia.com/gpu=all"
       ];
     };

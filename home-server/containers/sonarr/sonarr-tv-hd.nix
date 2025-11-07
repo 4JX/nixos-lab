@@ -29,10 +29,10 @@ in
     virtualisation.oci-containers.containers."sonarr-tv-hd" = {
       image = "ghcr.io/hotio/sonarr";
       environment = {
-        "PGID" = mediaGroupString;
         "PUID" = mediaUserString;
-        "TZ" = config.time.timeZone;
+        "PGID" = mediaGroupString;
         "UMASK" = "002";
+        "TZ" = config.time.timeZone;
       };
       volumes = [
         "/containers/config/sonarr-tv-hd:/config:rw"
