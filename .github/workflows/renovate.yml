@@ -23,7 +23,7 @@ name: "Renovate"
     - cron: "0 * * * *"
   push:
     branches:
-      - master
+      - main
     paths:
       - .github/renovate.json
       - .github/renovate/**.json
