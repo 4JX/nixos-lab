@@ -11,7 +11,7 @@ in
   config = lib.mkIf cfg.enable {
     # Extracted from docker-compose.nix
     virtualisation.oci-containers.containers."dockerproxy-authentik-worker" = {
-      image = "wollomatic/socket-proxy:1";
+      image = "wollomatic/socket-proxy:1.10.0";
       volumes = [
         "/var/run/docker.sock:/var/run/docker.sock:ro"
       ];
