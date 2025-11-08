@@ -3,7 +3,6 @@
 {
   lib,
   config,
-  pkgs,
   ...
 }:
 
@@ -70,20 +69,6 @@ in
       wantedBy = [
         "docker-compose-home-server-root.target"
       ];
-    };
-
-    systemd.services."docker-network-komga" = {
-      path = [ pkgs.docker ];
-      serviceConfig = {
-        Type = "oneshot";
-        RemainAfterExit = true;
-        ExecStop = "docker network rm -f komga";
-      };
-      script = ''
-        docker network inspect komga || docker network create komga
-      '';
-      partOf = [ "docker-compose-home-server-root.target" ];
-      wantedBy = [ "docker-compose-home-server-root.target" ];
     };
   };
 }

@@ -8,7 +8,7 @@
 let
   cfg = config.local.home-server;
 
-  rootTargetServiceName = "${cfg.backend}-${cfg.rootTargetName}-root";
+  rootTargetServiceName = "${cfg.backend}-${cfg.rootTargetName}-root.target";
 in
 {
   _module.args.lib' = {
@@ -27,7 +27,9 @@ in
             RemainAfterExit = true;
             ExecStop = "${backendBin} network rm -f ${network.name}";
           };
-          script = "${backendBin} network inspect ${network.name} || ${backendBin} network create ${network.name} ${lib.optionalString (network.subnet) "--subnet ${network.subnet}"} ${lib.optionalString (network.internal) "--internal"} ";
+          script = "${backendBin} network inspect ${network.name} || ${backendBin} network create ${network.name} ${
+            lib.optionalString (network.subnet != null) "--subnet ${network.subnet}"
+          } ${lib.optionalString (network.internal) "--internal"}";
           partOf = [ rootTargetServiceName ];
           wantedBy = [ rootTargetServiceName ];
         };

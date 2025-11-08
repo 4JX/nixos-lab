@@ -25,6 +25,14 @@ in
   config = lib.mkIf cfg.enable {
     networking.firewall.allowedUDPPorts = [ cfg.wgPort ];
 
+    # Configure networks
+    local.home-server.containers.networks = [
+      # HACK: Create a custom network for the wireguard server because for some reason other network subnets
+      # become unreachable if the container is just assigned to the existing networks where containers already exist.
+      # Use "0" as a prefix to have it get chosen as the one to get an IP from by docker.
+      { name = "0wireguard"; }
+    ];
+
     # Extracted from docker-compose.nix
     virtualisation.oci-containers.containers."dnsmasq" = {
       image = "4km3/dnsmasq:2.90-r3@sha256:038fa882bdae13d4a93155df2d865ed744a02f34f09631e140a3b91c5b16c54c";
