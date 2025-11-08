@@ -41,6 +41,9 @@
       "matchStrings": [
         "image *= *\"(?<depName>.*?):(?<currentValue>.*?)(@(?<currentDigest>sha256:[a-f0-9]+))?\""
       ],
+      // Automatically add digests to image strings
+      // See https://github.com/renovatebot/renovate/issues/10993
+      "autoReplaceStringTemplate": "image = \"{{{depName}}}:{{{newValue}}}{{#if newDigest}}@{{{newDigest}}}{{/if}}\"",
       "datasourceTemplate": "docker"
     }
   ],
