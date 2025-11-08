@@ -27,7 +27,7 @@ in
 
     # Extracted from docker-compose.nix
     virtualisation.oci-containers.containers."cloudflared" = {
-      image = "cloudflare/cloudflared:2025.11.1";
+      image = "cloudflare/cloudflared:2025.11.1@sha256:89ee50efb1e9cb2ae30281a8a404fed95eb8f02f0a972617526f8c5b417acae2";
       environmentFiles = [
         config.sops.secrets.cloudflared-env.path
       ];
