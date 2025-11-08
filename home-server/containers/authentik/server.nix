@@ -1,4 +1,9 @@
-{ lib, config, ... }:
+{
+  lib,
+  lib',
+  config,
+  ...
+}:
 
 let
   cfg = config.local.home-server.authentik.server;
@@ -53,26 +58,13 @@ in
         "ldap"
       ];
     };
-    systemd.services."docker-authentik-server" = {
-      serviceConfig = {
-        Restart = lib.mkOverride 90 "always";
-        RestartMaxDelaySec = lib.mkOverride 90 "1m";
-        RestartSec = lib.mkOverride 90 "100ms";
-        RestartSteps = lib.mkOverride 90 9;
-      };
-      after = [
-        "docker-network-authentik.service"
-        "docker-network-ldap.service"
-      ];
-      requires = [
-        "docker-network-authentik.service"
-        "docker-network-ldap.service"
-      ];
-      partOf = [
-        "docker-compose-home-server-root.target"
-      ];
-      wantedBy = [
-        "docker-compose-home-server-root.target"
+    systemd.services = lib'.mkContainerSystemdService {
+      containerName = "authentik-server";
+      tryRestart = true;
+      networks = [
+        "authentik"
+        "exposed"
+        "ldap"
       ];
     };
   };

@@ -1,7 +1,12 @@
 # https://docs.linuxserver.io/general/swag/#swag
 # https://github.com/linuxserver/reverse-proxy-confs?tab=readme-ov-file#how-to-use-these-reverse-proxy-configs
 # https://www.linuxserver.io/blog/zero-trust-hosting-and-reverse-proxy-via-cloudflare-swag-and-authelia
-{ lib, config, ... }:
+{
+  lib,
+  lib',
+  config,
+  ...
+}:
 
 let
   cfg = config.local.home-server.swag;
@@ -74,21 +79,11 @@ in
         "exposed"
       ];
     };
-    systemd.services."docker-swag" = {
-      serviceConfig = {
-        Restart = lib.mkOverride 90 "no";
-      };
-      after = [
-        "docker-network-exposed.service"
-      ];
-      requires = [
-        "docker-network-exposed.service"
-      ];
-      partOf = [
-        "docker-compose-home-server-root.target"
-      ];
-      wantedBy = [
-        "docker-compose-home-server-root.target"
+    systemd.services = lib'.mkContainerSystemdService {
+      containerName = "swag";
+      tryRestart = false;
+      networks = [
+        "exposed"
       ];
     };
   };

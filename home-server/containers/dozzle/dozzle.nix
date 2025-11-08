@@ -1,6 +1,11 @@
 # https://dozzle.dev/guide/getting-started
 # PODMAN: https://github.com/amir20/dozzle?tab=readme-ov-file#installation-on-podman
-{ lib, config, ... }:
+{
+  lib,
+  lib',
+  config,
+  ...
+}:
 
 let
   cfg = config.local.home-server.dozzle;
@@ -35,23 +40,12 @@ in
         "socket-proxy-dozzle"
       ];
     };
-    systemd.services."docker-dozzle" = {
-      serviceConfig = {
-        Restart = lib.mkOverride 90 "no";
-      };
-      after = [
-        "docker-network-dozzle.service"
-        "docker-network-socket-proxy-dozzle.service"
-      ];
-      requires = [
-        "docker-network-dozzle.service"
-        "docker-network-socket-proxy-dozzle.service"
-      ];
-      partOf = [
-        "docker-compose-home-server-root.target"
-      ];
-      wantedBy = [
-        "docker-compose-home-server-root.target"
+    systemd.services = lib'.mkContainerSystemdService {
+      containerName = "dozzle";
+      tryRestart = false;
+      networks = [
+        "dozzle"
+        "socket-proxy-dozzle"
       ];
     };
   };

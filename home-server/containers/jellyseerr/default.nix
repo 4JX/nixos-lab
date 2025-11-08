@@ -1,5 +1,10 @@
 # https://docs.jellyseerr.dev/
-{ lib, config, ... }:
+{
+  lib,
+  lib',
+  config,
+  ...
+}:
 
 let
   cfg = config.local.home-server.jellyseerr;
@@ -60,23 +65,12 @@ in
         "exposed"
       ];
     };
-    systemd.services."docker-jellyseerr" = {
-      serviceConfig = {
-        Restart = lib.mkOverride 90 "no";
-      };
-      after = [
-        "docker-network-arr.service"
-        "docker-network-exposed.service"
-      ];
-      requires = [
-        "docker-network-arr.service"
-        "docker-network-exposed.service"
-      ];
-      partOf = [
-        "docker-compose-home-server-root.target"
-      ];
-      wantedBy = [
-        "docker-compose-home-server-root.target"
+    systemd.services = lib'.mkContainerSystemdService {
+      containerName = "jellyseerr";
+      tryRestart = false;
+      networks = [
+        "arr"
+        "exposed"
       ];
     };
   };

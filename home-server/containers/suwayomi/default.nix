@@ -1,6 +1,11 @@
 # https://github.com/Suwayomi/Suwayomi-Server
 # https://github.com/suwayomi/Suwayomi-Server-docker
-{ lib, config, ... }:
+{
+  lib,
+  lib',
+  config,
+  ...
+}:
 
 let
   cfg = config.local.home-server.suwayomi;
@@ -53,21 +58,11 @@ in
         "arr"
       ];
     };
-    systemd.services."docker-suwayomi" = {
-      serviceConfig = {
-        Restart = lib.mkOverride 90 "no";
-      };
-      after = [
-        "docker-network-arr.service"
-      ];
-      requires = [
-        "docker-network-arr.service"
-      ];
-      partOf = [
-        "docker-compose-home-server-root.target"
-      ];
-      wantedBy = [
-        "docker-compose-home-server-root.target"
+    systemd.services = lib'.mkContainerSystemdService {
+      containerName = "suwayomi";
+      tryRestart = false;
+      networks = [
+        "arr"
       ];
     };
   };

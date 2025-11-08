@@ -1,5 +1,10 @@
 # https://thelounge.chat/docs
-{ lib, config, ... }:
+{
+  lib,
+  lib',
+  config,
+  ...
+}:
 
 let
   cfg = config.local.home-server.thelounge;
@@ -38,21 +43,11 @@ in
         "thelounge"
       ];
     };
-    systemd.services."docker-thelounge" = {
-      serviceConfig = {
-        Restart = lib.mkOverride 90 "no";
-      };
-      after = [
-        "docker-network-thelounge.service"
-      ];
-      requires = [
-        "docker-network-thelounge.service"
-      ];
-      partOf = [
-        "docker-compose-home-server-root.target"
-      ];
-      wantedBy = [
-        "docker-compose-home-server-root.target"
+    systemd.services = lib'.mkContainerSystemdService {
+      containerName = "thelounge";
+      tryRestart = false;
+      networks = [
+        "thelounge"
       ];
     };
   };

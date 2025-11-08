@@ -1,5 +1,10 @@
 # https://github.com/StuffAnThings/qbit_manage/wiki
-{ lib, config, ... }:
+{
+  lib,
+  lib',
+  config,
+  ...
+}:
 
 let
   cfg = config.local.home-server.qbit_manage;
@@ -70,21 +75,11 @@ in
         "arr"
       ];
     };
-    systemd.services."docker-qbit_manage" = {
-      serviceConfig = {
-        Restart = lib.mkOverride 90 "no";
-      };
-      after = [
-        "docker-network-arr.service"
-      ];
-      requires = [
-        "docker-network-arr.service"
-      ];
-      partOf = [
-        "docker-compose-home-server-root.target"
-      ];
-      wantedBy = [
-        "docker-compose-home-server-root.target"
+    systemd.services = lib'.mkContainerSystemdService {
+      containerName = "qbit_manage";
+      tryRestart = false;
+      networks = [
+        "arr"
       ];
     };
   };

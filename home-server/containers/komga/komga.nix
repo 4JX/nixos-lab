@@ -2,6 +2,7 @@
 # https://komga.org/docs/category/installation
 {
   lib,
+  lib',
   config,
   ...
 }:
@@ -49,25 +50,13 @@ in
         "komga"
       ];
     };
-    systemd.services."docker-komga" = {
-      serviceConfig = {
-        Restart = lib.mkOverride 90 "no";
-      };
-      after = [
-        "docker-network-arr.service"
-        "docker-network-exposed.service"
-        "docker-network-komga.service"
-      ];
-      requires = [
-        "docker-network-arr.service"
-        "docker-network-exposed.service"
-        "docker-network-komga.service"
-      ];
-      partOf = [
-        "docker-compose-home-server-root.target"
-      ];
-      wantedBy = [
-        "docker-compose-home-server-root.target"
+    systemd.services = lib'.mkContainerSystemdService {
+      containerName = "komga";
+      tryRestart = false;
+      networks = [
+        "arr"
+        "exposed"
+        "komga"
       ];
     };
   };

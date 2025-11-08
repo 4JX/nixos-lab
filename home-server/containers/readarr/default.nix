@@ -1,5 +1,10 @@
 # https://readarr.com/
-{ lib, config, ... }:
+{
+  lib,
+  lib',
+  config,
+  ...
+}:
 
 let
   cfg = config.local.home-server.readarr;
@@ -39,21 +44,11 @@ in
         "arr"
       ];
     };
-    systemd.services."docker-readarr" = {
-      serviceConfig = {
-        Restart = lib.mkOverride 90 "no";
-      };
-      after = [
-        "docker-network-arr.service"
-      ];
-      requires = [
-        "docker-network-arr.service"
-      ];
-      partOf = [
-        "docker-compose-home-server-root.target"
-      ];
-      wantedBy = [
-        "docker-compose-home-server-root.target"
+    systemd.services = lib'.mkContainerSystemdService {
+      containerName = "readarr";
+      tryRestart = false;
+      networks = [
+        "arr"
       ];
     };
   };

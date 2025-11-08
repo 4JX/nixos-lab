@@ -1,7 +1,12 @@
 # https://github.com/wg-easy/wg-easy
 # sudo docker run --rm -it ghcr.io/wg-easy/wg-easy wgpw 'password'
 # Ports are handled in dnsmasq
-{ lib, config, ... }:
+{
+  lib,
+  lib',
+  config,
+  ...
+}:
 
 let
   cfg = config.local.home-server.wg-easy;
@@ -60,19 +65,10 @@ in
         "container:dnsmasq"
       ];
     };
-    systemd.services."docker-wg-easy" = {
-      serviceConfig = {
-        Restart = lib.mkOverride 90 "always";
-        RestartMaxDelaySec = lib.mkOverride 90 "1m";
-        RestartSec = lib.mkOverride 90 "100ms";
-        RestartSteps = lib.mkOverride 90 9;
-      };
-      partOf = [
-        "docker-compose-home-server-root.target"
-      ];
-      wantedBy = [
-        "docker-compose-home-server-root.target"
-      ];
+    systemd.services = lib'.mkContainerSystemdService {
+      containerName = "wg-easy";
+      tryRestart = true;
+      networks = [ ];
     };
   };
 }

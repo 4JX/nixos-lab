@@ -1,5 +1,10 @@
 # https://hotio.dev/containers/radarr/#starting-the-container
-{ lib, config, ... }:
+{
+  lib,
+  lib',
+  config,
+  ...
+}:
 
 let
   cfg = config.local.home-server.radarr.movies-hd;
@@ -47,21 +52,11 @@ in
         "arr"
       ];
     };
-    systemd.services."docker-radarr-movies-hd" = {
-      serviceConfig = {
-        Restart = lib.mkOverride 90 "no";
-      };
-      after = [
-        "docker-network-arr.service"
-      ];
-      requires = [
-        "docker-network-arr.service"
-      ];
-      partOf = [
-        "docker-compose-home-server-root.target"
-      ];
-      wantedBy = [
-        "docker-compose-home-server-root.target"
+    systemd.services = lib'.mkContainerSystemdService {
+      containerName = "radarr-movies-hd";
+      tryRestart = false;
+      networks = [
+        "arr"
       ];
     };
   };

@@ -1,6 +1,11 @@
 # https://github.com/Snd-R/komf
 # https://github.com/Snd-R/komf-userscript
-{ lib, config, ... }:
+{
+  lib,
+  lib',
+  config,
+  ...
+}:
 
 let
   cfg = config.local.home-server.komf;
@@ -53,24 +58,11 @@ in
         "komga"
       ];
     };
-    systemd.services."docker-komf" = {
-      serviceConfig = {
-        Restart = lib.mkOverride 90 "always";
-        RestartMaxDelaySec = lib.mkOverride 90 "1m";
-        RestartSec = lib.mkOverride 90 "100ms";
-        RestartSteps = lib.mkOverride 90 9;
-      };
-      after = [
-        "docker-network-komga.service"
-      ];
-      requires = [
-        "docker-network-komga.service"
-      ];
-      partOf = [
-        "docker-compose-home-server-root.target"
-      ];
-      wantedBy = [
-        "docker-compose-home-server-root.target"
+    systemd.services = lib'.mkContainerSystemdService {
+      containerName = "komf";
+      tryRestart = true;
+      networks = [
+        "komga"
       ];
     };
   };
