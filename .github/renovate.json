@@ -37,7 +37,7 @@
   "customManagers": [
     {
       "customType": "regex",
-      "fileMatch": ["^home-server/.*\\.nix$"],
+      "managerFilePatterns": ["/^home-server/.*\\.nix$/"],
       "matchStrings": [
         "image *= *\"(?<depName>.*?):(?<currentValue>.*?)(@(?<currentDigest>sha256:[a-f0-9]+))?\""
       ],
