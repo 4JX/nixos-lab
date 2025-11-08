@@ -2,7 +2,6 @@
 {
   lib,
   config,
-  pkgs,
   ...
 }:
 
@@ -29,31 +28,14 @@ in
 
   config = lib.mkIf cfg.enable {
     # Networks
-    systemd.services."docker-network-authentik" = {
-      path = [ pkgs.docker ];
-      serviceConfig = {
-        Type = "oneshot";
-        RemainAfterExit = true;
-        ExecStop = "docker network rm -f authentik";
-      };
-      script = ''
-        docker network inspect authentik || docker network create authentik
-      '';
-      partOf = [ "docker-compose-home-server-root.target" ];
-      wantedBy = [ "docker-compose-home-server-root.target" ];
-    };
-    systemd.services."docker-network-ldap" = {
-      path = [ pkgs.docker ];
-      serviceConfig = {
-        Type = "oneshot";
-        RemainAfterExit = true;
-        ExecStop = "docker network rm -f ldap";
-      };
-      script = ''
-        docker network inspect ldap || docker network create ldap
-      '';
-      partOf = [ "docker-compose-home-server-root.target" ];
-      wantedBy = [ "docker-compose-home-server-root.target" ];
-    };
+    # Configure networks
+    local.home-server.containers.networks = [
+      { name = "authentik"; }
+      {
+        # Used by authentik <> jellyfin
+        name = "ldap";
+        internal = true;
+      }
+    ];
   };
 }

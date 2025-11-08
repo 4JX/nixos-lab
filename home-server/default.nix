@@ -16,11 +16,12 @@
 let
   cfg = config.local.home-server;
   # systemUsers = lib.attrNames config.users.users;
+
+  inherit (lib) mkOption mkEnableOption types;
 in
 {
   imports = [
     ./lib
-    ./nets.nix
 
     ./containers
 
@@ -32,21 +33,21 @@ in
   ];
 
   options.local.home-server = {
-    enable = lib.mkEnableOption "the home-server module" // {
+    enable = mkEnableOption "the home-server module" // {
       enable = true;
     };
-    secretsFolder = lib.mkOption {
-      type = lib.types.path;
+    secretsFolder = mkOption {
+      type = types.path;
       default = ../secrets/hs;
       description = "The path to the home-server secrets folder.";
     };
-    rootTargetName = lib.mkOption {
-      type = lib.types.str;
+    rootTargetName = mkOption {
+      type = types.str;
       default = "home-server";
       description = "The name of the root target.";
     };
-    backend = lib.mkOption {
-      type = lib.types.enum [
+    backend = mkOption {
+      type = types.enum [
         "podman"
         "docker"
       ];
@@ -54,22 +55,23 @@ in
       description = "The underlying Docker implementation to use.";
     };
     containers = {
-      networks = lib.mkOption {
-        type = lib.types.listOf (
-          lib.types.submodule {
+      networks = mkOption {
+        type = types.listOf (
+          types.submodule {
             options = {
-              name = lib.mkOption {
-                type = lib.types.str;
+              name = mkOption {
+                type = types.str;
                 description = "Name of the network used by containers.";
                 example = "mynetwork";
               };
-              subnet = lib.mkOption {
-                type = lib.types.str;
+              subnet = mkOption {
+                type = with types; nullOr str;
+                default = null;
                 description = "Subnet of the network user by containers.";
                 example = "172.30.0.0/16";
               };
-              internal = lib.mkOption {
-                type = lib.types.bool;
+              internal = mkOption {
+                type = types.bool;
                 default = false;
                 description = "Whether the network is internal.";
               };
@@ -103,10 +105,10 @@ in
       autoPrune.enable = true;
     };
 
-    system.services = lib.pipe [
+    systemd.services = lib.pipe cfg.containers.networks [
       (builtins.map (network: lib'.mkNetworkService network))
       lib.mergeAttrsList
-    ] cfg.networks;
+    ];
 
     # Root service
     # When started, this will automatically create all resources and start

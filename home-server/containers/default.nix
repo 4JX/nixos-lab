@@ -2,6 +2,8 @@
 
 {
   imports = [
+    ./nets.nix
+
     ./authentik
 
     ./radarr

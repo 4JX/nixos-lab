@@ -1,7 +1,6 @@
 {
   lib,
   config,
-  pkgs,
   ...
 }:
 
@@ -24,32 +23,13 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    systemd.services."docker-network-dozzle" = {
-      path = [ pkgs.docker ];
-      serviceConfig = {
-        Type = "oneshot";
-        RemainAfterExit = true;
-        ExecStop = "docker network rm -f dozzle";
-      };
-      script = ''
-        docker network inspect dozzle || docker network create dozzle
-      '';
-      partOf = [ "docker-compose-home-server-root.target" ];
-      wantedBy = [ "docker-compose-home-server-root.target" ];
-    };
-
-    systemd.services."docker-network-socket-proxy-dozzle" = {
-      path = [ pkgs.docker ];
-      serviceConfig = {
-        Type = "oneshot";
-        RemainAfterExit = true;
-        ExecStop = "docker network rm -f socket-proxy-dozzle";
-      };
-      script = ''
-        docker network inspect socket-proxy-dozzle || docker network create socket-proxy-dozzle
-      '';
-      partOf = [ "docker-compose-home-server-root.target" ];
-      wantedBy = [ "docker-compose-home-server-root.target" ];
-    };
+    # Configure networks
+    local.home-server.containers.networks = [
+      { name = "dozzle"; }
+      {
+        name = "socket-proxy-dozzle";
+        internal = true;
+      }
+    ];
   };
 }
