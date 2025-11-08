@@ -29,7 +29,7 @@ in
 
     # Extracted from docker-compose.nix
     virtualisation.oci-containers.containers."cross-seed" = {
-      image = "ghcr.io/cross-seed/cross-seed:6.13.6";
+      image = "ghcr.io/cross-seed/cross-seed:6.13.6@sha256:e2bf5b593e4e7d699e6242423ad7966190cd52ba8eefafdfdbb0cb5b0b609b96";
       volumes = [
         "/containers/config/cross-seed:/config:rw"
         "${config.sops.secrets.cross-seed-config.path}:/config/config.js:ro"

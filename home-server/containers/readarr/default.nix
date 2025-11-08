@@ -20,7 +20,7 @@ in
   config = lib.mkIf cfg.enable {
     # Extracted from docker-compose.nix
     virtualisation.oci-containers.containers."readarr" = {
-      image = "ghcr.io/hotio/readarr:testing-0.4.18.2805";
+      image = "ghcr.io/hotio/readarr:testing-0.4.18.2805@sha256:91e3d1c9e0dbc6f4ece5ae9f9f7ed3ca4ed4fdeff241b95c49337ba38c91da72";
       environment = {
         "PUID" = mediaUserString;
         "PGID" = mediaGroupString;

@@ -42,7 +42,7 @@ in
 
     # Extracted from docker-compose.nix
     virtualisation.oci-containers.containers."jellyseerr" = {
-      image = "fallenbagel/jellyseerr:2.7.3";
+      image = "fallenbagel/jellyseerr:2.7.3@sha256:4538137bc5af902dece165f2bf73776d9cf4eafb6dd714670724af8f3eb77764";
       environment = {
         "LOG_LEVEL" = "debug";
         "TZ" = config.time.timeZone;
