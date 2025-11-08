@@ -1,5 +1,10 @@
 # https://www.cross-seed.org/docs
-{ lib, config, ... }:
+{
+  lib,
+  lib',
+  config,
+  ...
+}:
 
 let
   cfg = config.local.home-server.cross-seed;
@@ -46,23 +51,11 @@ in
         "arr"
       ];
     };
-    systemd.services."docker-cross-seed" = {
-      serviceConfig = {
-        Restart = lib.mkOverride 90 "no";
-      };
-      after = [
-        "docker-network-arr.service"
-      ];
-      requires = [
-        "docker-network-arr.service"
-      ];
-      partOf = [
-        "docker-compose-home-server-root.target"
-      ];
-      # Do not start cross-seed if qbittorrent is not set to  as well
-      # This avoids qbittorrent being started by proxy due to cross-seed's wantedBy+dependsOn
-      wantedBy = [
-        "docker-compose-home-server-root.target"
+    systemd.services = lib'.mkContainerSystemdService {
+      containerName = "cross-seed";
+      tryRestart = false;
+      networks = [
+        "arr"
       ];
     };
   };

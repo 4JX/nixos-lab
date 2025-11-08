@@ -1,5 +1,10 @@
 # https://docs.linuxserver.io/general/swag/#swag
-{ lib, config, ... }:
+{
+  lib,
+  lib',
+  config,
+  ...
+}:
 
 let
   cfg = config.local.home-server.swag-internal;
@@ -68,31 +73,16 @@ in
         "thelounge"
       ];
     };
-    systemd.services."docker-swag-internal" = {
-      serviceConfig = {
-        Restart = lib.mkOverride 90 "no";
-      };
-      after = [
-        "docker-network-0wireguard.service"
-        "docker-network-arr.service"
-        "docker-network-dozzle.service"
-        "docker-network-exposed.service"
-        "docker-network-komga.service"
-        "docker-network-thelounge.service"
-      ];
-      requires = [
-        "docker-network-0wireguard.service"
-        "docker-network-arr.service"
-        "docker-network-dozzle.service"
-        "docker-network-exposed.service"
-        "docker-network-komga.service"
-        "docker-network-thelounge.service"
-      ];
-      partOf = [
-        "docker-compose-home-server-root.target"
-      ];
-      wantedBy = [
-        "docker-compose-home-server-root.target"
+    systemd.services = lib'.mkContainerSystemdService {
+      containerName = "swag-internal";
+      tryRestart = false;
+      networks = [
+        "0wireguard"
+        "arr"
+        "dozzle"
+        "exposed"
+        "komga"
+        "thelounge"
       ];
     };
   };

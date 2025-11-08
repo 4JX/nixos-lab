@@ -1,5 +1,10 @@
 # https://github.com/wollomatic/socket-proxy
-{ lib, config, ... }:
+{
+  lib,
+  lib',
+  config,
+  ...
+}:
 
 let
   cfg = config.local.home-server.authentik.worker;
@@ -43,24 +48,11 @@ in
         "socket-proxy-authentik-worker"
       ];
     };
-    systemd.services."docker-dockerproxy-authentik-worker" = {
-      serviceConfig = {
-        Restart = lib.mkOverride 90 "always";
-        RestartMaxDelaySec = lib.mkOverride 90 "1m";
-        RestartSec = lib.mkOverride 90 "100ms";
-        RestartSteps = lib.mkOverride 90 9;
-      };
-      after = [
-        "docker-network-socket-proxy-authentik-worker.service"
-      ];
-      requires = [
-        "docker-network-socket-proxy-authentik-worker.service"
-      ];
-      partOf = [
-        "docker-compose-home-server-root.target"
-      ];
-      wantedBy = [
-        "docker-compose-home-server-root.target"
+    systemd.services = lib'.mkContainerSystemdService {
+      containerName = "dockerproxy-authentik-worker";
+      tryRestart = true;
+      networks = [
+        "socket-proxy-authentik-worker"
       ];
     };
   };

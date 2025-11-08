@@ -1,4 +1,9 @@
-{ lib, config, ... }:
+{
+  lib,
+  lib',
+  config,
+  ...
+}:
 
 let
   cfg = config.local.home-server.cloudflared;
@@ -41,21 +46,11 @@ in
         "exposed"
       ];
     };
-    systemd.services."docker-cloudflared" = {
-      serviceConfig = {
-        Restart = lib.mkOverride 90 "no";
-      };
-      after = [
-        "docker-network-exposed.service"
-      ];
-      requires = [
-        "docker-network-exposed.service"
-      ];
-      partOf = [
-        "docker-compose-home-server-root.target"
-      ];
-      wantedBy = [
-        "docker-compose-home-server-root.target"
+    systemd.services = lib'.mkContainerSystemdService {
+      containerName = "cloudflared";
+      tryRestart = false;
+      networks = [
+        "exposed"
       ];
     };
   };

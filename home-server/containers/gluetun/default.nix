@@ -1,6 +1,11 @@
 # https://github.com/qdm12/gluetun
 # https://github.com/qdm12/gluetun-wiki?tab=readme-ov-file#table-of-contents
-{ config, lib, ... }:
+{
+  config,
+  lib,
+  lib',
+  ...
+}:
 
 let
   cfg = config.local.home-server.gluetun;
@@ -38,21 +43,11 @@ in
         "/dev/net/tun:/dev/net/tun:rwm"
       ];
     };
-    systemd.services."docker-gluetun" = {
-      serviceConfig = {
-        Restart = lib.mkOverride 90 "no";
-      };
-      after = [
-        "docker-network-arr.service"
-      ];
-      requires = [
-        "docker-network-arr.service"
-      ];
-      partOf = [
-        "docker-compose-home-server-root.target"
-      ];
-      wantedBy = [
-        "docker-compose-home-server-root.target"
+    systemd.services = lib'.mkContainerSystemdService {
+      containerName = "gluetun";
+      tryRestart = false;
+      networks = [
+        "arr"
       ];
     };
   };

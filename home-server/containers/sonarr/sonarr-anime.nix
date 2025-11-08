@@ -1,5 +1,10 @@
 # https://hotio.dev/containers/sonarr/#starting-the-container
-{ lib, config, ... }:
+{
+  lib,
+  lib',
+  config,
+  ...
+}:
 
 let
   cfg = config.local.home-server.sonarr.anime;
@@ -47,21 +52,11 @@ in
         "arr"
       ];
     };
-    systemd.services."docker-sonarr-anime" = {
-      serviceConfig = {
-        Restart = lib.mkOverride 90 "no";
-      };
-      after = [
-        "docker-network-arr.service"
-      ];
-      requires = [
-        "docker-network-arr.service"
-      ];
-      partOf = [
-        "docker-compose-home-server-root.target"
-      ];
-      wantedBy = [
-        "docker-compose-home-server-root.target"
+    systemd.services = lib'.mkContainerSystemdService {
+      containerName = "sonarr-anime";
+      tryRestart = false;
+      networks = [
+        "arr"
       ];
     };
   };

@@ -1,4 +1,9 @@
-{ lib, config, ... }:
+{
+  lib,
+  lib',
+  config,
+  ...
+}:
 
 let
   cfg = config.local.home-server.dnsmasq;
@@ -53,21 +58,11 @@ in
         "0wireguard"
       ];
     };
-    systemd.services."docker-dnsmasq" = {
-      serviceConfig = {
-        Restart = lib.mkOverride 90 "no";
-      };
-      after = [
-        "docker-network-0wireguard.service"
-      ];
-      requires = [
-        "docker-network-0wireguard.service"
-      ];
-      partOf = [
-        "docker-compose-home-server-root.target"
-      ];
-      wantedBy = [
-        "docker-compose-home-server-root.target"
+    systemd.services = lib'.mkContainerSystemdService {
+      containerName = "dnsmasq";
+      tryRestart = false;
+      networks = [
+        "0wireguard"
       ];
     };
   };

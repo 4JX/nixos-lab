@@ -1,5 +1,10 @@
 # https://github.com/wollomatic/socket-proxy
-{ lib, config, ... }:
+{
+  lib,
+  lib',
+  config,
+  ...
+}:
 
 let
   cfg = config.local.home-server.dozzle;
@@ -37,24 +42,11 @@ in
         "socket-proxy-dozzle"
       ];
     };
-    systemd.services."docker-dockerproxy-dozzle" = {
-      serviceConfig = {
-        Restart = lib.mkOverride 90 "always";
-        RestartMaxDelaySec = lib.mkOverride 90 "1m";
-        RestartSec = lib.mkOverride 90 "100ms";
-        RestartSteps = lib.mkOverride 90 9;
-      };
-      after = [
-        "docker-network-socket-proxy-dozzle.service"
-      ];
-      requires = [
-        "docker-network-socket-proxy-dozzle.service"
-      ];
-      partOf = [
-        "docker-compose-home-server-root.target"
-      ];
-      wantedBy = [
-        "docker-compose-home-server-root.target"
+    systemd.services = lib'.mkContainerSystemdService {
+      containerName = "dockerproxy-dozzle";
+      tryRestart = true;
+      networks = [
+        "dozzle"
       ];
     };
   };

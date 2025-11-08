@@ -1,4 +1,9 @@
-{ lib, config, ... }:
+{
+  lib,
+  lib',
+  config,
+  ...
+}:
 
 let
   cfg = config.local.home-server.sonarr.tv-hd;
@@ -46,21 +51,11 @@ in
         "arr"
       ];
     };
-    systemd.services."docker-sonarr-tv-hd" = {
-      serviceConfig = {
-        Restart = lib.mkOverride 90 "no";
-      };
-      after = [
-        "docker-network-arr.service"
-      ];
-      requires = [
-        "docker-network-arr.service"
-      ];
-      partOf = [
-        "docker-compose-home-server-root.target"
-      ];
-      wantedBy = [
-        "docker-compose-home-server-root.target"
+    systemd.services = lib'.mkContainerSystemdService {
+      containerName = "sonarr-tv-hd";
+      tryRestart = false;
+      networks = [
+        "arr"
       ];
     };
   };

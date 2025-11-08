@@ -3,7 +3,12 @@
 # https://jellyfin.org/docs/general/administration/migrate/#migrating-linux-install-to-docker
 # https://hotio.dev/containers/jellyfin/#configuration
 # https://github.com/NixOS/nixpkgs/blob/40916ded4ad5fe4bcc18963217c3a026db505c7f/nixos/modules/services/misc/jellyfin.nix#L27-L63
-{ lib, config, ... }:
+{
+  lib,
+  lib',
+  config,
+  ...
+}:
 
 let
   cfg = config.local.home-server.jellyfin;
@@ -76,23 +81,13 @@ in
         "nvidia.com/gpu=all"
       ];
     };
-    systemd.services."docker-jellyfin" = {
-      serviceConfig = {
-        Restart = lib.mkOverride 90 "no";
-      };
-      after = [
-        "docker-network-arr.service"
-        "docker-network-exposed.service"
-      ];
-      requires = [
-        "docker-network-arr.service"
-        "docker-network-exposed.service"
-      ];
-      partOf = [
-        "docker-compose-home-server-root.target"
-      ];
-      wantedBy = [
-        "docker-compose-home-server-root.target"
+    systemd.services = lib'.mkContainerSystemdService {
+      containerName = "jellyfin";
+      tryRestart = false;
+      networks = [
+        "arr"
+        "exposed"
+        "ldap"
       ];
     };
   };
