@@ -20,7 +20,7 @@ in
   config = lib.mkIf cfg.enable {
     # Extracted from docker-compose.nix
     virtualisation.oci-containers.containers."thelounge" = {
-      image = "ghcr.io/thelounge/thelounge:latest";
+      image = "ghcr.io/thelounge/thelounge:4.4.3";
       volumes = [
         "/containers/config/thelounge:/var/opt/thelounge:rw"
       ];

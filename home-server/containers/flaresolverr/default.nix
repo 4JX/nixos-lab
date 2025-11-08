@@ -16,7 +16,7 @@ in
   config = lib.mkIf cfg.enable {
     # Extracted from docker-compose.nix
     virtualisation.oci-containers.containers."flaresolverr" = {
-      image = "ghcr.io/flaresolverr/flaresolverr:latest";
+      image = "ghcr.io/flaresolverr/flaresolverr:v3.4.4";
       environment = {
         "LOG_LEVEL" = "info";
         "LOG_HTML" = "false";

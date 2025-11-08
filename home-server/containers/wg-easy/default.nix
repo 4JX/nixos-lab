@@ -33,7 +33,7 @@ in
 
     # Extracted from docker-compose.nix
     virtualisation.oci-containers.containers."wg-easy" = {
-      image = "ghcr.io/wg-easy/wg-easy";
+      image = "ghcr.io/wg-easy/wg-easy:14";
       environmentFiles = [
         config.sops.secrets.wg-easy-env.path
       ];

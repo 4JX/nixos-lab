@@ -20,7 +20,7 @@ in
 
     # Extracted from docker-compose.nix
     virtualisation.oci-containers.containers."gluetun" = {
-      image = "qmcgaw/gluetun";
+      image = "qmcgaw/gluetun:v3.40.0";
       environmentFiles = [
         config.sops.secrets.gluetun-env.path
       ];

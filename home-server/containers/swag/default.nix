@@ -30,7 +30,7 @@ in
 
     # Extracted from docker-compose.nix
     virtualisation.oci-containers.containers."swag" = {
-      image = "lscr.io/linuxserver/swag";
+      image = "lscr.io/linuxserver/swag:5.1.0";
       environment = {
         "PUID" = proxyUserString;
         "PGID" = proxyGroupString;
