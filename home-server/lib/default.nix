@@ -25,9 +25,11 @@ in
             RemainAfterExit = true;
             ExecStop = "${backendBin} network rm -f ${network.name}";
           };
-          script = "${backendBin} network inspect ${network.name} || ${backendBin} network create ${network.name} ${
-            lib.optionalString (network.subnet != null) "--subnet ${network.subnet}"
-          } ${lib.optionalString (network.internal) "--internal"}";
+          script = builtins.concatStringsSep " \\\n " (
+            [ "${backendBin} network inspect ${network.name} || ${backendBin} network create ${network.name}" ]
+            ++ lib.optional (network.subnet != null) "--subnet ${network.subnet}"
+            ++ lib.optional (network.internal) "--internal"
+          );
           partOf = [ rootTargetServiceName ];
           wantedBy = [ rootTargetServiceName ];
         };
