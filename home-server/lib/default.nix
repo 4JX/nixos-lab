@@ -10,7 +10,7 @@ let
 
   rootTargetServiceName = "${cfg.backend}-${cfg.rootTargetName}-root.target";
 
-  backend = cfg.backend;
+  inherit (cfg) backend;
   backendBin = lib.getExe pkgs.${backend};
 in
 {
@@ -28,7 +28,7 @@ in
           script = builtins.concatStringsSep " \\\n " (
             [ "${backendBin} network inspect ${network.name} || ${backendBin} network create ${network.name}" ]
             ++ lib.optional (network.subnet != null) "--subnet ${network.subnet}"
-            ++ lib.optional (network.internal) "--internal"
+            ++ lib.optional network.internal "--internal"
           );
           partOf = [ rootTargetServiceName ];
           wantedBy = [ rootTargetServiceName ];

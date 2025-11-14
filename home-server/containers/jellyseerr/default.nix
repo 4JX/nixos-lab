@@ -11,7 +11,7 @@ let
   hsEnable = config.local.home-server.enable;
 
   openFirewall = cfg.firewall.open && cfg.firewall.port != null;
-  port = cfg.firewall.port;
+  inherit (cfg.firewall) port;
   portString = builtins.toString port;
 
   mediaUserString = builtins.toString config.users.users.dockermedia.uid;

@@ -12,7 +12,7 @@ in
     # Tor SOCKS5 proxy in port 9050, poor man's VPN
     # https://trash-guides.info/Prowlarr/prowlarr-setup-proxy/
     services.tor = {
-      enable = cfg.enable;
+      inherit (cfg) enable;
       # Actually enable the SOCKS part
       client.enable = true;
       # settings.ControlPort = [ 9051 ];
