@@ -16,7 +16,7 @@ let
   containerToolkitEnable = config.local.home-server.nvidia-container-toolkit.enable;
 
   openFirewall = cfg.firewall.open && cfg.firewall.port != null;
-  port = cfg.firewall.port;
+  inherit (cfg.firewall) port;
   portString = builtins.toString port;
 
   mediaUserString = builtins.toString config.users.users.dockermedia.uid;
