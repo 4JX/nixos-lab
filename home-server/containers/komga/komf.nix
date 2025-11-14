@@ -38,7 +38,7 @@ in
 
     # Extracted from docker-compose.nix
     virtualisation.oci-containers.containers."komf" = {
-      image = "sndxr/komf:1.6.1@sha256:0825bf2e48aa63fb45c2a3f4319fed5d80dee634df3daeae9c0088f605c25f50";
+      image = "sndxr/komf:1.7.0@sha256:2492047ebeecaa6e4d2b3601dbbdce89ed2b23c0a6c415e96deb8ef668f59be6";
       environment = {
         "KOMF_LOG_LEVEL" = "INFO";
         # optional jvm options. Example config for low memory usage. Runs guaranteed cleanup up every 3600000ms(1hour)
