@@ -2,7 +2,7 @@ name: Flake Checker
 
 on:
   push:
-  pull_request:
+  # pull_request:
 
 jobs:
   generate_matrix:
