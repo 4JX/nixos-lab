@@ -12,7 +12,6 @@ let
   hsEnable = config.local.home-server.enable;
 
   # serverPortString = builtins.toString cfg.serverPort;
-  secretsFile.sopsFile = config.local.home-server.secretsFolder + "/home-server.yaml";
 in
 {
   options.local.home-server.wg-easy = {
@@ -29,8 +28,6 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    sops.secrets.wg-easy-env = secretsFile;
-
     # networking.firewall = {
     #   allowedUDPPorts = [ cfg.serverPort ];
     # };
