@@ -1,6 +1,5 @@
 {
   lib,
-  lib',
   config,
   ...
 }:
@@ -48,14 +47,7 @@ in
         "authentik"
         "socket-proxy-authentik-worker"
       ];
-    };
-    systemd.services = lib'.mkContainerSystemdService {
-      containerName = "authentik-worker";
       tryRestart = true;
-      networks = [
-        "authentik"
-        "socket-proxy-authentik-worker"
-      ];
     };
   };
 }

@@ -2,7 +2,6 @@
 # https://github.com/Snd-R/komf-userscript
 {
   lib,
-  lib',
   config,
   ...
 }:
@@ -57,13 +56,7 @@ in
       networks = [
         "komga"
       ];
-    };
-    systemd.services = lib'.mkContainerSystemdService {
-      containerName = "komf";
       tryRestart = true;
-      networks = [
-        "komga"
-      ];
     };
   };
 }

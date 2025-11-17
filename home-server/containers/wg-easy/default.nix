@@ -2,7 +2,6 @@
 # Ports are handled in dnsmasq
 {
   lib,
-  lib',
   config,
   ...
 }:
@@ -81,11 +80,7 @@ in
       networks = [
         "container:dnsmasq"
       ];
-    };
-    systemd.services = lib'.mkContainerSystemdService {
-      containerName = "wg-easy";
       tryRestart = true;
-      networks = [ ];
     };
   };
 }

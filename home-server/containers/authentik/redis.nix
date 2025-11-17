@@ -1,6 +1,5 @@
 {
   lib,
-  lib',
   config,
   ...
 }:
@@ -44,13 +43,7 @@ in
       networks = [
         "authentik"
       ];
-    };
-    systemd.services = lib'.mkContainerSystemdService {
-      containerName = "authentik-redis";
       tryRestart = true;
-      networks = [
-        "authentik"
-      ];
     };
   };
 }

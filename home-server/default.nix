@@ -9,13 +9,25 @@
   lib,
   lib',
   config,
+  options,
   pkgs,
   ...
 }:
 
 let
   cfg = config.local.home-server;
+  ociCfg = config.virtualisation.oci-containers;
   # systemUsers = lib.attrNames config.users.users;
+
+  extraContainerOpts = {
+    options = {
+      tryRestart = mkOption {
+        type = types.bool;
+        default = true;
+        description = "Whether to try to restart the container on failure.";
+      };
+    };
+  };
 
   inherit (lib) mkOption mkEnableOption types;
 in
@@ -32,29 +44,29 @@ in
     ./tor.nix
   ];
 
-  options.local.home-server = {
-    enable = mkEnableOption "the home-server module" // {
-      enable = true;
+  options = {
+    local.home-server = {
+      enable = mkEnableOption "the home-server module" // {
+        enable = true;
+      };
+      secretsFolder = mkOption {
+        type = types.path;
+        default = ../secrets/hs;
+        description = "The path to the home-server secrets folder.";
+      };
+      rootTargetName = mkOption {
+        type = types.str;
+        default = "home-server";
+        description = "The name of the root target.";
+      };
+      backend = options.virtualisation.oci-containers.backend // {
+        default = "docker";
+      };
     };
-    secretsFolder = mkOption {
-      type = types.path;
-      default = ../secrets/hs;
-      description = "The path to the home-server secrets folder.";
-    };
-    rootTargetName = mkOption {
-      type = types.str;
-      default = "home-server";
-      description = "The name of the root target.";
-    };
-    backend = mkOption {
-      type = types.enum [
-        "podman"
-        "docker"
-      ];
-      default = "docker";
-      description = "The underlying Docker implementation to use.";
-    };
-    containers = {
+    virtualisation.oci-containers = {
+      containers = mkOption {
+        type = with types; attrsOf (submodule extraContainerOpts);
+      };
       networks = mkOption {
         type = types.listOf (
           types.submodule {
@@ -105,10 +117,11 @@ in
       autoPrune.enable = true;
     };
 
-    systemd.services = lib.pipe cfg.containers.networks [
-      (builtins.map (network: lib'.mkNetworkService network))
-      lib.mergeAttrsList
-    ];
+    systemd.services =
+      # Container services
+      (lib'.mkContainersSystemdServices ociCfg.containers)
+      # Container networks
+      // (lib'.mkNetworkServices ociCfg.networks);
 
     # Root service
     # When started, this will automatically create all resources and start

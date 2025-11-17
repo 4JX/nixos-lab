@@ -1,7 +1,6 @@
 # https://github.com/StuffAnThings/qbit_manage/wiki
 {
   lib,
-  lib',
   config,
   ...
 }:
@@ -74,13 +73,7 @@ in
       networks = [
         "arr"
       ];
-    };
-    systemd.services = lib'.mkContainerSystemdService {
-      containerName = "qbit_manage";
       tryRestart = false;
-      networks = [
-        "arr"
-      ];
     };
   };
 }

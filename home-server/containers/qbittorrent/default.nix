@@ -1,7 +1,6 @@
 # https://hotio.dev/containers/qbittorrent/#starting-the-container
 {
   lib,
-  lib',
   config,
   ...
 }:
@@ -112,13 +111,7 @@ in
       networks = [
         "arr"
       ];
-    };
-    systemd.services = lib'.mkContainerSystemdService {
-      containerName = "qbittorrent";
       tryRestart = false;
-      networks = [
-        "arr"
-      ];
     };
   };
 }

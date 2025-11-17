@@ -5,7 +5,6 @@
 # https://github.com/NixOS/nixpkgs/blob/40916ded4ad5fe4bcc18963217c3a026db505c7f/nixos/modules/services/misc/jellyfin.nix#L27-L63
 {
   lib,
-  lib',
   config,
   ...
 }:
@@ -80,15 +79,7 @@ in
       ++ lib.optionals containerToolkitEnable [
         "nvidia.com/gpu=all"
       ];
-    };
-    systemd.services = lib'.mkContainerSystemdService {
-      containerName = "jellyfin";
       tryRestart = false;
-      networks = [
-        "arr"
-        "exposed"
-        "ldap"
-      ];
     };
   };
 }

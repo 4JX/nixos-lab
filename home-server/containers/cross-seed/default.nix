@@ -1,7 +1,6 @@
 # https://www.cross-seed.org/docs
 {
   lib,
-  lib',
   config,
   ...
 }:
@@ -50,13 +49,7 @@ in
       networks = [
         "arr"
       ];
-    };
-    systemd.services = lib'.mkContainerSystemdService {
-      containerName = "cross-seed";
       tryRestart = false;
-      networks = [
-        "arr"
-      ];
     };
   };
 }

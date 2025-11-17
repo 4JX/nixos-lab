@@ -1,6 +1,5 @@
 {
   lib,
-  lib',
   config,
   ...
 }:
@@ -50,13 +49,7 @@ in
       networks = [
         "arr"
       ];
-    };
-    systemd.services = lib'.mkContainerSystemdService {
-      containerName = "sonarr-tv-hd";
       tryRestart = false;
-      networks = [
-        "arr"
-      ];
     };
   };
 }

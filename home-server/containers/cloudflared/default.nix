@@ -1,6 +1,5 @@
 {
   lib,
-  lib',
   config,
   ...
 }:
@@ -45,13 +44,7 @@ in
       networks = [
         "exposed"
       ];
-    };
-    systemd.services = lib'.mkContainerSystemdService {
-      containerName = "cloudflared";
       tryRestart = false;
-      networks = [
-        "exposed"
-      ];
     };
   };
 }

@@ -2,7 +2,6 @@
 {
   config,
   lib,
-  lib',
   ...
 }:
 
@@ -63,13 +62,7 @@ in
       networks = [
         "arr"
       ];
-    };
-    systemd.services = lib'.mkContainerSystemdService {
-      containerName = "recyclarr";
       tryRestart = false;
-      networks = [
-        "arr"
-      ];
     };
   };
 }

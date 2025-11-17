@@ -1,7 +1,6 @@
 # https://hotio.dev/containers/prowlarr/#starting-the-container
 {
   lib,
-  lib',
   config,
   ...
 }:
@@ -44,13 +43,7 @@ in
       networks = [
         "arr"
       ];
-    };
-    systemd.services = lib'.mkContainerSystemdService {
-      containerName = "prowlarr";
       tryRestart = false;
-      networks = [
-        "arr"
-      ];
     };
   };
 }

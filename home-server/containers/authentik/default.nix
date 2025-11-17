@@ -29,7 +29,7 @@ in
   config = lib.mkIf cfg.enable {
     # Networks
     # Configure networks
-    local.home-server.containers.networks = [
+    virtualisation.oci-containers.networks = [
       { name = "authentik"; }
       {
         # Used by authentik <> jellyfin
