@@ -1,6 +1,5 @@
 {
   lib,
-  lib',
   config,
   ...
 }:
@@ -57,15 +56,7 @@ in
         "exposed"
         "ldap"
       ];
-    };
-    systemd.services = lib'.mkContainerSystemdService {
-      containerName = "authentik-server";
       tryRestart = true;
-      networks = [
-        "authentik"
-        "exposed"
-        "ldap"
-      ];
     };
   };
 }

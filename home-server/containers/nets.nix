@@ -1,7 +1,7 @@
 { ... }:
 
 {
-  local.home-server.containers.networks = [
+  virtualisation.oci-containers.networks = [
     { name = "arr"; }
     { name = "exposed"; }
   ];

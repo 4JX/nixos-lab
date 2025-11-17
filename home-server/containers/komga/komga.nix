@@ -2,7 +2,6 @@
 # https://komga.org/docs/category/installation
 {
   lib,
-  lib',
   config,
   ...
 }:
@@ -49,15 +48,7 @@ in
         "exposed"
         "komga"
       ];
-    };
-    systemd.services = lib'.mkContainerSystemdService {
-      containerName = "komga";
       tryRestart = false;
-      networks = [
-        "arr"
-        "exposed"
-        "komga"
-      ];
     };
   };
 }

@@ -1,7 +1,6 @@
 # https://github.com/wollomatic/socket-proxy
 {
   lib,
-  lib',
   config,
   ...
 }:
@@ -41,13 +40,7 @@ in
       networks = [
         "socket-proxy-dozzle"
       ];
-    };
-    systemd.services = lib'.mkContainerSystemdService {
-      containerName = "dockerproxy-dozzle";
       tryRestart = true;
-      networks = [
-        "dozzle"
-      ];
     };
   };
 }

@@ -1,7 +1,6 @@
 # https://thelounge.chat/docs
 {
   lib,
-  lib',
   config,
   ...
 }:
@@ -24,7 +23,7 @@ in
 
   config = lib.mkIf cfg.enable {
     # Configure networks
-    local.home-server.containers.networks = [
+    virtualisation.oci-containers.networks = [
       { name = "thelounge"; }
     ];
 
@@ -42,13 +41,7 @@ in
       networks = [
         "thelounge"
       ];
-    };
-    systemd.services = lib'.mkContainerSystemdService {
-      containerName = "thelounge";
       tryRestart = false;
-      networks = [
-        "thelounge"
-      ];
     };
   };
 }

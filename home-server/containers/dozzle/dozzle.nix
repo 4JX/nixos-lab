@@ -2,7 +2,6 @@
 # PODMAN: https://github.com/amir20/dozzle?tab=readme-ov-file#installation-on-podman
 {
   lib,
-  lib',
   config,
   ...
 }:
@@ -39,14 +38,7 @@ in
         "dozzle"
         "socket-proxy-dozzle"
       ];
-    };
-    systemd.services = lib'.mkContainerSystemdService {
-      containerName = "dozzle";
       tryRestart = false;
-      networks = [
-        "dozzle"
-        "socket-proxy-dozzle"
-      ];
     };
   };
 }

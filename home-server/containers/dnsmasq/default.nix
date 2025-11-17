@@ -1,6 +1,5 @@
 {
   lib,
-  lib',
   config,
   ...
 }:
@@ -31,7 +30,7 @@ in
     networking.firewall.allowedUDPPorts = [ cfg.wgPort ];
 
     # Configure networks
-    local.home-server.containers.networks = [
+    virtualisation.oci-containers.networks = [
       # HACK: Create a custom network for the wireguard server because for some reason other network subnets
       # become unreachable if the container is just assigned to the existing networks where containers already exist.
       # Use "0" as a prefix to have it get chosen as the one to get an IP from by docker.
@@ -57,13 +56,7 @@ in
       networks = [
         "0wireguard"
       ];
-    };
-    systemd.services = lib'.mkContainerSystemdService {
-      containerName = "dnsmasq";
       tryRestart = false;
-      networks = [
-        "0wireguard"
-      ];
     };
   };
 }

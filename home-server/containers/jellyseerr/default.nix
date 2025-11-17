@@ -1,7 +1,6 @@
 # https://docs.jellyseerr.dev/
 {
   lib,
-  lib',
   config,
   ...
 }:
@@ -64,14 +63,7 @@ in
         "arr"
         "exposed"
       ];
-    };
-    systemd.services = lib'.mkContainerSystemdService {
-      containerName = "jellyseerr";
       tryRestart = false;
-      networks = [
-        "arr"
-        "exposed"
-      ];
     };
   };
 }

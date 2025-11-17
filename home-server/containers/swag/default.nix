@@ -3,7 +3,6 @@
 # https://www.linuxserver.io/blog/zero-trust-hosting-and-reverse-proxy-via-cloudflare-swag-and-authelia
 {
   lib,
-  lib',
   config,
   ...
 }:
@@ -78,13 +77,7 @@ in
       networks = [
         "exposed"
       ];
-    };
-    systemd.services = lib'.mkContainerSystemdService {
-      containerName = "swag";
       tryRestart = false;
-      networks = [
-        "exposed"
-      ];
     };
   };
 }

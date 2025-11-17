@@ -1,7 +1,6 @@
 # https://docs.linuxserver.io/general/swag/#swag
 {
   lib,
-  lib',
   config,
   ...
 }:
@@ -72,18 +71,7 @@ in
         "komga"
         "thelounge"
       ];
-    };
-    systemd.services = lib'.mkContainerSystemdService {
-      containerName = "swag-internal";
       tryRestart = false;
-      networks = [
-        "0wireguard"
-        "arr"
-        "dozzle"
-        "exposed"
-        "komga"
-        "thelounge"
-      ];
     };
   };
 }

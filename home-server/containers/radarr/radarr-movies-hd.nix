@@ -1,7 +1,6 @@
 # https://hotio.dev/containers/radarr/#starting-the-container
 {
   lib,
-  lib',
   config,
   ...
 }:
@@ -51,13 +50,7 @@ in
       networks = [
         "arr"
       ];
-    };
-    systemd.services = lib'.mkContainerSystemdService {
-      containerName = "radarr-movies-hd";
       tryRestart = false;
-      networks = [
-        "arr"
-      ];
     };
   };
 }

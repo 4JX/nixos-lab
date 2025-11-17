@@ -14,7 +14,7 @@ let
   backendBin = lib.getExe pkgs.${backend};
 in
 {
-  _module.args.lib' = {
+  _module.args.lib' = rec {
     mkNetworkService =
       # of type containers.networks
       network: {
@@ -35,6 +35,13 @@ in
         };
       };
 
+    mkNetworkServices =
+      networks:
+      (lib.pipe networks [
+        (builtins.map mkNetworkService)
+        lib.mergeAttrsList
+      ]);
+
     # TODO: make part of mkContainer
     mkContainerSystemdService =
       {
@@ -44,10 +51,15 @@ in
       }:
 
       let
-        networkServiceList = builtins.map (network: "${backend}-network-${network}.service") networks;
+        networkServiceList = lib.pipe networks [
+          # Remove special networks (container:, host:, etc)
+          (networks: builtins.filter (n: (builtins.match "^[[:alnum:]]+:.+" n) == null) networks)
+          (networks: builtins.map (network: "${backend}-network-${network}.service") networks)
+        ];
       in
       {
-        "${backend}-${containerName}" = {
+        name = "${backend}-${containerName}";
+        value = {
           serviceConfig =
             if tryRestart then
               {
@@ -70,5 +82,16 @@ in
           wantedBy = [ rootTargetServiceName ];
         };
       };
+
+    mkContainersSystemdServices =
+      containers:
+      lib.mapAttrs' (
+        name: value:
+        mkContainerSystemdService {
+          containerName = name;
+          inherit (value) tryRestart;
+          inherit (value) networks;
+        }
+      ) containers;
   };
 }

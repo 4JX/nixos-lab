@@ -1,7 +1,6 @@
 # https://readarr.com/
 {
   lib,
-  lib',
   config,
   ...
 }:
@@ -43,13 +42,7 @@ in
       networks = [
         "arr"
       ];
-    };
-    systemd.services = lib'.mkContainerSystemdService {
-      containerName = "readarr";
       tryRestart = false;
-      networks = [
-        "arr"
-      ];
     };
   };
 }

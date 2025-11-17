@@ -1,7 +1,6 @@
 # https://github.com/wollomatic/socket-proxy
 {
   lib,
-  lib',
   config,
   ...
 }:
@@ -47,13 +46,7 @@ in
       networks = [
         "socket-proxy-authentik-worker"
       ];
-    };
-    systemd.services = lib'.mkContainerSystemdService {
-      containerName = "dockerproxy-authentik-worker";
       tryRestart = true;
-      networks = [
-        "socket-proxy-authentik-worker"
-      ];
     };
   };
 }

@@ -3,7 +3,6 @@
 {
   config,
   lib,
-  lib',
   ...
 }:
 
@@ -42,13 +41,7 @@ in
       devices = [
         "/dev/net/tun:/dev/net/tun:rwm"
       ];
-    };
-    systemd.services = lib'.mkContainerSystemdService {
-      containerName = "gluetun";
       tryRestart = false;
-      networks = [
-        "arr"
-      ];
     };
   };
 }
