@@ -40,7 +40,7 @@ in
 
     # Extracted from docker-compose.nix
     virtualisation.oci-containers.containers."dnsmasq" = {
-      image = "4km3/dnsmasq:2.90-r3@sha256:038fa882bdae13d4a93155df2d865ed744a02f34f09631e140a3b91c5b16c54c";
+      image = "4km3/dnsmasq:2.90-r3@sha256:52e25fb2601156ab66f6a0872c180b285df7cafaa41267d8d65689f066490641";
       volumes = [
         "/containers/config/dnsmasq/dnsmasq.conf:/etc/dnsmasq.conf:ro"
       ];
