@@ -1,0 +1,17 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "packageRules": [
+    {
+      "description": ["Beszel Group"],
+      "groupName": "Beszel",
+      "automerge": false,
+      "matchPackageNames": [
+        "{ghcr.io/henrygd/beszel/,henrygd/,docker.io/henrygd/}beszel*"
+      ],
+      "group": {
+        "commitMessageTopic": "{{{groupName}}} group"
+      },
+      "separateMinorPatch": true
+    }
+  ]
+}
