@@ -10,8 +10,10 @@
     ":separateMajorReleases",
     "docker:enableMajor",
     "docker:pinDigests",
+    "mergeConfidence:all-badges",
     "github>4JX/nixos-lab//.github/renovate/autoMerge.json",
     "github>4JX/nixos-lab//.github/renovate/commitMessage.json",
+    "github>4JX/nixos-lab//.github/renovate/groups.json",
     "github>4JX/nixos-lab//.github/renovate/ignore.json",
     "github>4JX/nixos-lab//.github/renovate/labels.json",
     "github>4JX/nixos-lab//.github/renovate/semanticCommits.json"

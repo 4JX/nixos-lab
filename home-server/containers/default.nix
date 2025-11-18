@@ -11,6 +11,7 @@
 
     ./komga
 
+    ./beszel
     ./cloudflared
     ./cross-seed
     ./dnsmasq
