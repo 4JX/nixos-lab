@@ -26,7 +26,7 @@ in
 
     # Extracted from docker-compose.nix
     virtualisation.oci-containers.containers."authentik-server" = {
-      image = "ghcr.io/goauthentik/server:2024.12.5@sha256:717323d68507fb76dd79f8958f42ce57f8ae0c10a55a7807efa1cfec5752b77c";
+      image = "ghcr.io/goauthentik/server:2025.10.2@sha256:8322e449feefcc2416f0401038d5a1a28552c4403b079a59d3b4d978d8f3f530";
       environment = {
         "AUTHENTIK_REDIS__HOST" = "authentik-redis";
         "AUTHENTIK_POSTGRESQL__HOST" = "authentik-postgresql";
