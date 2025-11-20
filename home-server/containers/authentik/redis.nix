@@ -21,7 +21,7 @@ in
   config = lib.mkIf cfg.enable {
     # Extracted from docker-compose.nix
     virtualisation.oci-containers.containers."authentik-redis" = {
-      image = "docker.io/library/redis:alpine@sha256:5013e94192ef18a5d8368179c7522e5300f9265cc339cadac76c7b93303a2752";
+      image = "docker.io/library/redis:alpine@sha256:6cbef353e480a8a6e7f10ec545f13d7d3fa85a212cdcc5ffaf5a1c818b9d3798";
       volumes = [
         "/containers/authentik/redis:/data:rw"
       ];
