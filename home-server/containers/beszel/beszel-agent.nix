@@ -76,6 +76,12 @@ in
         "LISTEN" = if (cfg.enable && beszelEnable) then "/beszel_socket/beszel.sock" else "45876";
       };
       volumes = [
+        # https://www.beszel.dev/guide/environment-variables#data-dir
+        # The agent relies on /proc/sys/kernel/random/boot_id since /etc/machine-id is empty within the container
+        # https://github.com/shirou/gopsutil/blob/82391ff1253250c51db0fe42d400ae8975252ec7/host/host_linux.go#L33
+        # https://github.com/henrygd/beszel/blob/26d367b188e8d73e0737dbd5a27d508207f63917/agent/agent.go#L213
+        # https://github.com/henrygd/beszel/issues/1022
+        "/containers/config/beszel-agent:/var/lib/beszel-agent:rw"
         "${config.sops.secrets."beszel-agent/key".path}:/secrets/key"
         "${config.sops.secrets."beszel-agent/token".path}:/secrets/token"
       ]
