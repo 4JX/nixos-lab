@@ -16,7 +16,7 @@ in
     # TODO: Template generate docker proxy containers as container options
     # TODO: Maybe specify user and group separately in a special arg to handle secrets as well
     virtualisation.oci-containers.containers."dockerproxy-beszel" = {
-      image = "wollomatic/socket-proxy:1.10.0@sha256:3d825f671a5a190741ad6bff645be1061bceb53eaa6517b185de869e226cb779";
+      image = "wollomatic/socket-proxy:1.10.1@sha256:967150d21954992de5a141fc66eb8a392695644fdb2fbb31dfbbdfd3f563ee86";
       volumes = [
         "/var/run/docker.sock:/var/run/docker.sock:ro"
       ];
