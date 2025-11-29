@@ -38,7 +38,7 @@ in
 
     # Extracted from docker-compose.nix
     virtualisation.oci-containers.containers."qbit_manage" = {
-      image = "ghcr.io/stuffanthings/qbit_manage:v4.6.4@sha256:94399ef83005856209dcb61756427f00e4907092b7c44ba8ee8d631c81daef20";
+      image = "ghcr.io/stuffanthings/qbit_manage:v4.6.5@sha256:4f36632a138b4e5aeab3b765b7f389087bfb140c80dbbec1343eca74dc351245";
       environment = {
         "QBT_RUN" = "false";
         "QBT_SCHEDULE" = "1440";
