@@ -25,7 +25,7 @@ in
 
     # Extracted from docker-compose.nix
     virtualisation.oci-containers.containers."authentik-postgresql" = {
-      image = "docker.io/library/postgres:16-alpine@sha256:8b06f24cf57be98a503b65402cc813bb7da1520a6c87cc64a741c4f1f68f1341";
+      image = "docker.io/library/postgres:16-alpine@sha256:a5074487380d4e686036ce61ed6f2d363939ae9a0c40123d1a9e3bb3a5f344b4";
       environmentFiles = [
         config.sops.secrets.authentik-postgresql-env.path
       ];
