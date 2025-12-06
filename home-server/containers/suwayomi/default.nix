@@ -34,7 +34,7 @@ in
 
     # Extracted from docker-compose.nix
     virtualisation.oci-containers.containers."suwayomi" = {
-      image = "ghcr.io/suwayomi/suwayomi-server:v2.1.2031@sha256:0fad003e6ae52d23be202613bd73da43783418b0db92a4e0aa10bce2e7d2f3bf";
+      image = "ghcr.io/suwayomi/suwayomi-server:v2.1.2031@sha256:2dc83ef73645bc31f2513e83576b4103d0895acb35c2457ca225d9c6f673ec6c";
       environment = {
         "DEBUG" = "false";
         "TZ" = config.time.timeZone;
