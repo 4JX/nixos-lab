@@ -31,7 +31,7 @@ in
 
     # Extracted from docker-compose.nix
     virtualisation.oci-containers.containers."sonarr-tv-hd" = {
-      image = "ghcr.io/hotio/sonarr:release-4.0.16.2944@sha256:3a46964eaf39b3c21d161244ea75c3ab4189e3ce6a3c5c2e5f41e2a15c16317c";
+      image = "ghcr.io/hotio/sonarr:release-4.0.16.2944@sha256:600b96a1e334cd740b049b275e25fd557aac4e701041880f6e7e4a386e575f9b";
       environment = {
         "PUID" = mediaUserString;
         "PGID" = mediaGroupString;
