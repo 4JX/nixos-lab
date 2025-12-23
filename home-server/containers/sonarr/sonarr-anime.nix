@@ -32,7 +32,7 @@ in
 
     # Extracted from docker-compose.nix
     virtualisation.oci-containers.containers."sonarr-anime" = {
-      image = "ghcr.io/hotio/sonarr:release-4.0.16.2944@sha256:03afb67ca49f05dce5b5e9c52b62796662d391e2fa8e56fef5652cdd250bc54f";
+      image = "ghcr.io/hotio/sonarr:release-4.0.16.2944@sha256:280fae6adb900d477de15d78507081f0391f9178ac75ceb1a2beb04f16f6b54d";
       environment = {
         "PUID" = mediaUserString;
         "PGID" = mediaGroupString;
