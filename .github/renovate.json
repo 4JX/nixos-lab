@@ -10,6 +10,7 @@
     ":separateMajorReleases",
     "docker:enableMajor",
     "docker:pinDigests",
+    "helpers:pinGitHubActionDigests",
     "mergeConfidence:all-badges",
     "github>4JX/nixos-lab//.github/renovate/autoMerge.json",
     "github>4JX/nixos-lab//.github/renovate/commitMessage.json",
