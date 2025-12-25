@@ -41,7 +41,7 @@ in
 
     # Extracted from docker-compose.nix
     virtualisation.oci-containers.containers."recyclarr" = {
-      image = "ghcr.io/recyclarr/recyclarr:7.4.1@sha256:759540877f95453eca8a26c1a93593e783a7a824c324fbd57523deffb67f48e1";
+      image = "ghcr.io/recyclarr/recyclarr:7.5.2@sha256:2550848d43a453f2c6adf3582f2198ac719f76670691d76de0819053103ef2fb";
       environment = {
         "TZ" = config.time.timeZone;
         # This is a default
