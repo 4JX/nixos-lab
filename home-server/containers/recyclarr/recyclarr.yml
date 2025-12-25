@@ -1,5 +1,5 @@
-# Instance Definition: https://recyclarr.dev/wiki/yaml/config-reference/basic/
-# https://recyclarr.dev/wiki/yaml/secrets-reference/#implicit-url-key
+# Instance Definition: https://recyclarr.dev/reference/configuration/basic/
+# https://recyclarr.dev/reference/configuration/value-substitution/#implicit-url-key
 
 sonarr:
   ###################################################################################################
@@ -32,7 +32,7 @@ sonarr:
       # - template: sonarr-v4-quality-profile-web-1080p-alternative
       - template: sonarr-v4-custom-formats-web-1080p
 
-    # Custom Formats: https://recyclarr.dev/wiki/yaml/config-reference/custom-formats/
+    # Custom Formats: https://recyclarr.dev/reference/configuration/custom-formats/
     custom_formats:
       # Optional
       - trash_ids:
@@ -85,12 +85,12 @@ sonarr:
       # - template: sonarr-v4-quality-profile-web-2160p-alternative
       - template: sonarr-v4-custom-formats-web-2160p
 
-    # Custom Formats: https://recyclarr.dev/wiki/yaml/config-reference/custom-formats/
+    # Custom Formats: https://recyclarr.dev/reference/configuration/custom-formats/
     custom_formats:
       # HDR Formats
       - trash_ids:
           # Comment out the next line if you and all of your users' setups are fully DV compatible
-          # - 9b27ab6498ec0f31a3353992e19434ca # DV (WEBDL)
+          # - 9b27ab6498ec0f31a3353992e19434ca # DV (w/o HDR fallback)
 
           # HDR10+ Boost - Uncomment the HDR10+ Boost line if you want to prefer HDR10+ releases
           # DV Boost - Uncomment the DV Boost line if you want to prefer DV releases
@@ -159,7 +159,7 @@ sonarr:
       - template: sonarr-v4-quality-profile-anime
       - template: sonarr-v4-custom-formats-anime
 
-    # Custom Formats: https://recyclarr.dev/wiki/yaml/config-reference/custom-formats/
+    # Custom Formats: https://recyclarr.dev/reference/configuration/custom-formats/
     custom_formats:
       - trash_ids:
           - 026d5aadd1a6b4e550b134cb6c72b3ca # Uncensored
@@ -215,7 +215,7 @@ radarr:
       - template: radarr-quality-profile-anime
       - template: radarr-custom-formats-anime
 
-    # Custom Formats: https://recyclarr.dev/wiki/yaml/config-reference/custom-formats/
+    # Custom Formats: https://recyclarr.dev/reference/configuration/custom-formats/
     custom_formats:
       # === Movies ===
       # Audio
@@ -317,7 +317,7 @@ radarr:
       - template: radarr-quality-profile-uhd-bluray-web
       - template: radarr-custom-formats-uhd-bluray-web
 
-    # Custom Formats: https://recyclarr.dev/wiki/yaml/config-reference/custom-formats/
+    # Custom Formats: https://recyclarr.dev/reference/configuration/custom-formats/
     custom_formats:
       # Audio
       - trash_ids:
@@ -377,7 +377,7 @@ radarr:
 
       - trash_ids:
           # Comment out the next line if you and all of your users' setups are fully DV compatible
-          # - 923b6abef9b17f937fab56cfcf89e1f1 # DV (WEBDL)
+          # - 923b6abef9b17f937fab56cfcf89e1f1 # DV (w/o HDR fallback)
 
           # HDR10+ Boost - Uncomment the HDR10+ Boost line if you want to prefer HDR10+ releases
           # DV Boost - Uncomment the DV Boost line if you want to prefer DV releases
