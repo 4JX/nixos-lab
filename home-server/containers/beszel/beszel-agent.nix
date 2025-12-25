@@ -60,51 +60,57 @@ in
       gid = generalGroup;
     };
 
-    virtualisation.oci-containers.containers."beszel-agent" = {
-      image =
+    virtualisation.oci-containers.containers."beszel-agent" =
+      (
         if (cfg.gpuMode == "nvidia") then
-          "ghcr.io/henrygd/beszel/beszel-agent-nvidia:0.16.1@sha256:7e0fed9d2f4162b162ce9378bfd8594753929be022392f4e9842db580b40e742"
+          {
+            image = "ghcr.io/henrygd/beszel/beszel-agent-nvidia:0.16.1@sha256:7e0fed9d2f4162b162ce9378bfd8594753929be022392f4e9842db580b40e742";
+          }
         else
-          "ghcr.io/henrygd/beszel/beszel-agent:0.16.1@sha256:fd6e2f8c86f9192b916d44640128ed36030cf2b9aee4ba750df660d929170ca8";
-      environment = {
-        # "LOG_LEVEL" = "debug";
-        "DOCKER_HOST" = "tcp://dockerproxy-beszel:2375";
-        "FILESYSTEM" = cfg.rootFs;
-        "KEY_FILE" = "/secrets/key";
-        "HUB_URL" = "http://beszel:8090";
-        "TOKEN_FILE" = "/secrets/token";
-        "LISTEN" = if (cfg.enable && beszelEnable) then "/beszel_socket/beszel.sock" else "45876";
+          {
+            image = "ghcr.io/henrygd/beszel/beszel-agent:0.16.1@sha256:fd6e2f8c86f9192b916d44640128ed36030cf2b9aee4ba750df660d929170ca8";
+          }
+      )
+      // {
+        environment = {
+          # "LOG_LEVEL" = "debug";
+          "DOCKER_HOST" = "tcp://dockerproxy-beszel:2375";
+          "FILESYSTEM" = cfg.rootFs;
+          "KEY_FILE" = "/secrets/key";
+          "HUB_URL" = "http://beszel:8090";
+          "TOKEN_FILE" = "/secrets/token";
+          "LISTEN" = if (cfg.enable && beszelEnable) then "/beszel_socket/beszel.sock" else "45876";
+        };
+        volumes = [
+          # https://www.beszel.dev/guide/environment-variables#data-dir
+          # The agent relies on /proc/sys/kernel/random/boot_id since /etc/machine-id is empty within the container
+          # https://github.com/shirou/gopsutil/blob/82391ff1253250c51db0fe42d400ae8975252ec7/host/host_linux.go#L33
+          # https://github.com/henrygd/beszel/blob/26d367b188e8d73e0737dbd5a27d508207f63917/agent/agent.go#L213
+          # https://github.com/henrygd/beszel/issues/1022
+          "/containers/config/beszel-agent:/var/lib/beszel-agent:rw"
+          "${config.sops.secrets."beszel-agent/key".path}:/secrets/key"
+          "${config.sops.secrets."beszel-agent/token".path}:/secrets/token"
+        ]
+        ++ (builtins.map (
+          name: "${builtins.getAttr name cfg.monitoredFilesystems}/.beszel:/extra-filesystems/${name}:ro"
+        ) (builtins.attrNames cfg.monitoredFilesystems))
+        ++ lib.optionals (cfg.enable && beszelEnable) [ "/containers/config/beszel/socket:/beszel_socket" ];
+        dependsOn = [
+          "dockerproxy-beszel"
+        ];
+        user = "${generalUserString}:${generalGroupString}";
+        log-driver = "journald";
+        # extraOptions = [
+        #   "--network=host"
+        # ];
+        networks = [
+          "beszel"
+          "socket-proxy-beszel"
+        ];
+        devices = lib.optionals (cfg.gpuMode == "nvidia") [
+          "nvidia.com/gpu=all"
+        ];
+        tryRestart = true;
       };
-      volumes = [
-        # https://www.beszel.dev/guide/environment-variables#data-dir
-        # The agent relies on /proc/sys/kernel/random/boot_id since /etc/machine-id is empty within the container
-        # https://github.com/shirou/gopsutil/blob/82391ff1253250c51db0fe42d400ae8975252ec7/host/host_linux.go#L33
-        # https://github.com/henrygd/beszel/blob/26d367b188e8d73e0737dbd5a27d508207f63917/agent/agent.go#L213
-        # https://github.com/henrygd/beszel/issues/1022
-        "/containers/config/beszel-agent:/var/lib/beszel-agent:rw"
-        "${config.sops.secrets."beszel-agent/key".path}:/secrets/key"
-        "${config.sops.secrets."beszel-agent/token".path}:/secrets/token"
-      ]
-      ++ (builtins.map (
-        name: "${builtins.getAttr name cfg.monitoredFilesystems}/.beszel:/extra-filesystems/${name}:ro"
-      ) (builtins.attrNames cfg.monitoredFilesystems))
-      ++ lib.optionals (cfg.enable && beszelEnable) [ "/containers/config/beszel/socket:/beszel_socket" ];
-      dependsOn = [
-        "dockerproxy-beszel"
-      ];
-      user = "${generalUserString}:${generalGroupString}";
-      log-driver = "journald";
-      # extraOptions = [
-      #   "--network=host"
-      # ];
-      networks = [
-        "beszel"
-        "socket-proxy-beszel"
-      ];
-      devices = lib.optionals (cfg.gpuMode == "nvidia") [
-        "nvidia.com/gpu=all"
-      ];
-      tryRestart = true;
-    };
   };
 }
