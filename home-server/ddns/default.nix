@@ -34,7 +34,9 @@ in
       wants = [ "network-online.target" ];
       after = [ "network-online.target" ];
 
-      startAt = "hourly";
+      # startAt = "hourly";
+      # Every 15 minutes
+      startAt = "*:0/15";
 
       serviceConfig = {
         EnvironmentFile = config.sops.secrets.cloudflare-ddns-env.path;
