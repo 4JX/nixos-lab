@@ -26,7 +26,7 @@ in
   config = lib.mkIf cfg.enable {
     # Extracted from docker-compose.nix
     virtualisation.oci-containers.containers."prowlarr" = {
-      image = "ghcr.io/hotio/prowlarr:release-2.1.5.5216@sha256:c9461e88006cb720c4061bd8982c436d1e8b981dd1ccbec90f6f866aa7f187c1";
+      image = "ghcr.io/hotio/prowlarr:release-2.3.0.5236@sha256:4419f813a717ef46e87bf3a515f22f71856d258a3e551e0f794086d6a3386182";
       environment = {
         "PUID" = mediaUserString;
         "PGID" = mediaGroupString;
