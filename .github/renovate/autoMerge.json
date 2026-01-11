@@ -11,11 +11,19 @@
     },
 
     {
-      "description": "Auto merge patch and digest docker images",
+      "description": "Auto merge patch docker images",
       "matchDatasources": ["docker"],
+      "matchUpdateTypes": ["patch"],
+      "automerge": true,
+      "automergeType": "branch"
+    },
+    {
+      "description": "Auto merge docker digest images daily",
+      "matchDatasources": ["docker"],
+      "matchUpdateTypes": ["digest"],
       "automerge": true,
       "automergeType": "branch",
-      "matchUpdateTypes": ["patch", "digest"]
+      "automergeSchedule": ["* 0-1 * * *"]
     }
   ]
 }
