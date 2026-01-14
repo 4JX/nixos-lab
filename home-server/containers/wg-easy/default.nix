@@ -42,7 +42,7 @@ in
 
     # Extracted from docker-compose.nix
     virtualisation.oci-containers.containers."wg-easy" = {
-      image = "ghcr.io/wg-easy/wg-easy:15.1.0@sha256:bb8152762c36f824eb42bb2f3c5ab8ad952818fbef677d584bc69ec513b251b0";
+      image = "ghcr.io/wg-easy/wg-easy:15.2.1@sha256:4ffc03c35dce5456bbb2fa6b136a1eeb196394548dee0650ae692efdd1062e01";
       environment = {
         # https://wg-easy.github.io/wg-easy/latest/advanced/config/optional-config/
         #  - PORT=51821
