@@ -58,14 +58,15 @@ in
 
     # Extracted from docker-compose.nix
     virtualisation.oci-containers.containers."qbittorrent" = {
-      image = "ghcr.io/hotio/qbittorrent:release-4.6.7@sha256:ea70182af6630465329eebfe64837413ba4e2f0a042bfa4cd487f729db3b967a";
+      image = "ghcr.io/hotio/qbittorrent:release-5.1.4@sha256:39e0de613b0fa1b49298470f10f68303799c16b0b721c4b576a71e14726e988b";
       environment = {
         "PUID" = mediaUserString;
         "PGID" = mediaGroupString;
         "UMASK" = "002";
 
         "TZ" = config.time.timeZone;
-        "WEBUI_PORTS" = "8080/tcp,8080/udp"; # Expose WebUI
+        "WEBUI_PORTS" = "8080/tcp"; # Expose WebUI
+        "LIBTORRENT" = "v2";
 
         # VPN Config
         # https://hotio.dev/containers/qbittorrent/#wireguard
@@ -77,10 +78,9 @@ in
         "VPN_LAN_LEAK_ENABLED" = "false";
         "VPN_EXPOSE_PORTS_ON_LAN" = "8080/tcp";
         "VPN_AUTO_PORT_FORWARD" = "true";
-        "VPN_AUTO_PORT_FORWARD_TO_PORTS" = "";
-        "VPN_KEEP_LOCAL_DNS" = "false";
-        "VPN_FIREWALL_TYPE" = "auto";
+        "VPN_PORT_REDIRECTS" = "";
         "VPN_HEALTHCHECK_ENABLED" = "false";
+        "VPN_NAMESERVERS" = "wg";
 
         "PRIVOXY_ENABLED" = "true";
         "UNBOUND_ENABLED" = "false";
@@ -102,8 +102,6 @@ in
         NET_ADMIN = true;
       };
       extraOptions = [
-        "--dns=1.1.1.1"
-        "--dns=9.9.9.9"
         "--sysctl=net.ipv4.conf.all.src_valid_mark=1"
         "--sysctl=net.ipv6.conf.all.disable_ipv6=1"
       ];
