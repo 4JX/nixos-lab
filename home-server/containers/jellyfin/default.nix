@@ -51,7 +51,7 @@ in
     };
 
     virtualisation.oci-containers.containers."jellyfin" = {
-      image = "ghcr.io/hotio/jellyfin:release-10.11.5@sha256:b80c3f704d9eb48cee71f16cb903ff999cae229ae20bc1625b37361bf1c64662";
+      image = "ghcr.io/hotio/jellyfin:release-10.11.5@sha256:bd3867a9f0d5d640c617519c73b0c9bee43bb430a5d9b53b3f1edfacaa03fcca";
       environment = {
         "PUID" = mediaUserString;
         "PGID" = mediaGroupString;
