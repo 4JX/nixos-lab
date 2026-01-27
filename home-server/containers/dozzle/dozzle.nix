@@ -16,7 +16,7 @@ in
   config = lib.mkIf cfg.enable {
     # Extracted from docker-compose.nix
     virtualisation.oci-containers.containers."dozzle" = {
-      image = "amir20/dozzle:v9.0.2@sha256:bad5ccd44a1bf40492e1142e9ae6fca2c53d197a01fee5ef5d0f6ed45ea21fcb";
+      image = "amir20/dozzle:v9.0.3@sha256:2d59d09503f2c947133a4f231fdeb1f4c99e23aa0d4137f81bb1a6318e0e06cf";
       environment = {
         "DOZZLE_REMOTE_HOST" = "tcp://dockerproxy-dozzle:2375";
       };
