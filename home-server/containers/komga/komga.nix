@@ -28,7 +28,7 @@ in
     # Extracted from docker-compose.nix
     virtualisation.oci-containers.containers."komga" = {
       # https://komga.org/docs/installation/docker#version-tags
-      image = "gotson/komga:1.24.0@sha256:cc270ec253e79c807b762b7c7cffb26d07cef631f62cb4f2ea19cb1070751c79";
+      image = "gotson/komga:1.24.1@sha256:a84a0424e2f8235ba9373ed10b9b903e0feecdbb500a1b4aebac01f08e9e57db";
       environment = {
         "TZ" = config.time.timeZone;
         # https://komga.org/docs/installation/docker#increase-memory-limit
