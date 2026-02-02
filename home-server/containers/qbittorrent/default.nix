@@ -58,7 +58,7 @@ in
 
     # Extracted from docker-compose.nix
     virtualisation.oci-containers.containers."qbittorrent" = {
-      image = "ghcr.io/hotio/qbittorrent:release-5.1.4@sha256:39e0de613b0fa1b49298470f10f68303799c16b0b721c4b576a71e14726e988b";
+      image = "ghcr.io/hotio/qbittorrent:release-5.1.4@sha256:87173753adf1555770dacbd51ec057daafabb6ad9ea1a67ed89d56d66f4f28a0";
       environment = {
         "PUID" = mediaUserString;
         "PGID" = mediaGroupString;
