@@ -15,7 +15,7 @@ in
   config = lib.mkIf cfg.enable {
     # Extracted from docker-compose.nix
     virtualisation.oci-containers.containers."dockerproxy-dozzle" = {
-      image = "wollomatic/socket-proxy:1.10.1@sha256:967150d21954992de5a141fc66eb8a392695644fdb2fbb31dfbbdfd3f563ee86";
+      image = "wollomatic/socket-proxy:1.11.2@sha256:633b8f8178fc7d79c843513424114e31f70e6c4be2b63844cac7702ae0fb89ba";
       volumes = [
         "/var/run/docker.sock:/var/run/docker.sock:ro"
       ];
