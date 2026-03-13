@@ -12,9 +12,9 @@
     ./komga
 
     ./beszel
+    ./blocky
     ./cloudflared
     ./cross-seed
-    ./dnsmasq
     ./dozzle
     ./flaresolverr
     ./recyclarr

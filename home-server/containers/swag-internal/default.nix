@@ -21,6 +21,11 @@ in
       default = hsEnable;
       description = "Whether to enable SWAG-Internal.";
     };
+    containerIp = lib.mkOption {
+      type = lib.types.str;
+      default = "172.31.254.2";
+      description = "The fixed IP address for swag-internal on the 0wireguard network.";
+    };
   };
 
   config = lib.mkIf cfg.enable {
@@ -55,14 +60,13 @@ in
       volumes = [
         "/containers/config/swag-internal:/config:rw"
       ];
-      ports = [
-        "4433:443/tcp"
-        "800:80/tcp"
-      ];
       log-driver = "journald";
       capabilities = {
         NET_ADMIN = true;
       };
+      extraOptions = [
+        "--ip=${cfg.containerIp}"
+      ];
       networks = [
         "0wireguard"
         "arr"

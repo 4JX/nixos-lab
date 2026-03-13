@@ -1,0 +1,36 @@
+# https://0xerr0r.github.io/blocky/latest/
+
+# HaGeZi blocklists overview:
+# - https://github.com/hagezi/dns-blocklists
+# - Light: https://raw.githubusercontent.com/hagezi/dns-blocklists/main/wildcard/light.txt
+# - Normal: https://raw.githubusercontent.com/hagezi/dns-blocklists/main/wildcard/multi.txt
+# - Pro: https://raw.githubusercontent.com/hagezi/dns-blocklists/main/wildcard/pro.txt
+upstreams:
+  init:
+    strategy: fast
+  groups:
+    default:
+      - https://1.1.1.1/dns-query#cloudflare-dns.com
+      - https://1.0.0.1/dns-query#cloudflare-dns.com
+
+blocking:
+  denylists:
+    hagezi:
+      - https://raw.githubusercontent.com/hagezi/dns-blocklists/main/wildcard/multi.txt
+  clientGroupsBlock:
+    default:
+      - hagezi
+  blockType: nxDomain
+  loading:
+    refreshPeriod: 4h
+    strategy: failOnError
+    downloads:
+      timeout: 30s
+      attempts: 5
+      cooldown: 2s
+
+caching:
+  minTime: 5m
+  maxTime: 30m
+  prefetching: true
+  cacheTimeNegative: 30m

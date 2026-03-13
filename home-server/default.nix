@@ -82,6 +82,18 @@ in
                 description = "Subnet of the network user by containers.";
                 example = "172.30.0.0/16";
               };
+              ipRange = mkOption {
+                type = with types; nullOr str;
+                default = null;
+                description = "Dynamic IP range allocated by the network for containers without fixed addresses.";
+                example = "172.30.0.128/25";
+              };
+              gateway = mkOption {
+                type = with types; nullOr str;
+                default = null;
+                description = "Gateway address assigned to the network.";
+                example = "172.30.0.1";
+              };
               internal = mkOption {
                 type = types.bool;
                 default = false;
@@ -95,7 +107,8 @@ in
           {
             name = "mynetwork";
             subnet = "172.30.0.0/16";
-            hostIP = "172.30.0.1";
+            ipRange = "172.30.0.128/25";
+            gateway = "172.30.0.1";
           }
         ];
         description = "List of extra networks created for docker.";

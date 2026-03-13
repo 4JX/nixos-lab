@@ -1,5 +1,4 @@
 # https://github.com/wg-easy/wg-easy
-# Ports are handled in dnsmasq
 {
   lib,
   config,
@@ -10,7 +9,7 @@ let
   cfg = config.local.home-server.wg-easy;
   hsEnable = config.local.home-server.enable;
 
-  # serverPortString = builtins.toString cfg.serverPort;
+  listenPortString = builtins.toString cfg.listenPort;
 in
 {
   options.local.home-server.wg-easy = {
@@ -19,17 +18,28 @@ in
       default = hsEnable;
       description = "Whether to enable wg-easy";
     };
-    # serverPort = lib.mkOption {
-    #   type = lib.types.int;
-    #   default = 54000;
-    #   description = "The port used for connections inside wg-easy.";
-    # };
+    listenPort = lib.mkOption {
+      type = lib.types.int;
+      default = 54000;
+      description = "The host port used for WireGuard connections.";
+    };
   };
 
   config = lib.mkIf cfg.enable {
-    # networking.firewall = {
-    #   allowedUDPPorts = [ cfg.serverPort ];
-    # };
+    networking.firewall.allowedUDPPorts = [ cfg.listenPort ];
+
+    # Configure networks
+    virtualisation.oci-containers.networks = [
+      {
+        # HACK: Create a custom network for the wireguard server because for some reason other network subnets
+        # become unreachable if the container is just assigned to the existing networks where containers already exist.
+        # Use "0" as a prefix to have it get chosen as the one to get an IP from by docker.
+        name = "0wireguard";
+        subnet = "172.31.254.0/24";
+        ipRange = "172.31.254.128/25";
+        gateway = "172.31.254.1";
+      }
+    ];
 
     # https://wg-easy.github.io/wg-easy/v15.0/faq/#cant-initialize-ip6tables-table-nat-table-does-not-exist-do-you-need-to-insmod
     #! Use nftables:
@@ -57,12 +67,12 @@ in
         # See: https://github.com/wg-easy/wg-easy/issues/1919#issuecomment-3318257458
         # "/run/current-system/kernel-modules/lib/modules:/lib/modules:ro"
       ];
-      # ports = [
-      #   "${serverPortString}:51820/udp"
-      #   "54001:51821/tcp"
-      # ];
+      ports = [
+        "${listenPortString}:51820/udp"
+        "54001:51821/tcp"
+      ];
       dependsOn = [
-        "dnsmasq"
+        "blocky"
       ];
       log-driver = "journald";
       capabilities = {
@@ -78,7 +88,7 @@ in
         "--sysctl=net.ipv6.conf.default.forwarding=1"
       ];
       networks = [
-        "container:dnsmasq"
+        "0wireguard"
       ];
       tryRestart = true;
     };

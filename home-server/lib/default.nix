@@ -28,6 +28,8 @@ in
           script = builtins.concatStringsSep " \\\n " (
             [ "${backendBin} network inspect ${network.name} || ${backendBin} network create ${network.name}" ]
             ++ lib.optional (network.subnet != null) "--subnet ${network.subnet}"
+            ++ lib.optional (network.ipRange != null) "--ip-range ${network.ipRange}"
+            ++ lib.optional (network.gateway != null) "--gateway ${network.gateway}"
             ++ lib.optional network.internal "--internal"
           );
           partOf = [ rootTargetServiceName ];
