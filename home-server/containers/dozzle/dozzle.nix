@@ -2,6 +2,7 @@
 # PODMAN: https://github.com/amir20/dozzle?tab=readme-ov-file#installation-on-podman
 {
   lib,
+  lib',
   config,
   ...
 }:
@@ -9,8 +10,7 @@
 let
   cfg = config.local.home-server.dozzle;
 
-  generalUserString = builtins.toString config.users.users.dockergeneral.uid;
-  generalGroupString = builtins.toString config.users.groups.dockergeneral.gid;
+  generalUser = lib'.getUser "dockergeneral" "dockergeneral";
 in
 {
   config = lib.mkIf cfg.enable {
@@ -26,7 +26,7 @@ in
       dependsOn = [
         "dockerproxy-dozzle"
       ];
-      user = "${generalUserString}:${generalGroupString}";
+      user = "${generalUser.uidStr}:${generalUser.gidStr}";
       log-driver = "journald";
       capabilities = {
         ALL = false;

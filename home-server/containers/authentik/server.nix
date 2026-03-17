@@ -1,5 +1,6 @@
 {
   lib,
+  lib',
   config,
   ...
 }:
@@ -21,7 +22,11 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    sops.secrets.authentik-env = secretsFile;
+    sops.secrets = lib'.mkContainerSecret {
+      containerName = "authentik-server";
+      secretName = "authentik-env";
+      inherit (secretsFile) sopsFile;
+    };
 
     # Extracted from docker-compose.nix
     virtualisation.oci-containers.containers."authentik-server" = {

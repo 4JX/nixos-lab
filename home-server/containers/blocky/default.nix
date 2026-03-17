@@ -1,5 +1,6 @@
 {
   lib,
+  lib',
   config,
   ...
 }:
@@ -11,10 +12,7 @@ let
   swagInternalCfg = hsCfg.swag-internal;
   sopsFile = hsCfg.secretsFolder + "/home-server.yaml";
 
-  generalUser = config.users.users.dockergeneral.uid;
-  generalUserString = builtins.toString generalUser;
-  generalGroup = config.users.groups.dockergeneral.gid;
-  generalGroupString = builtins.toString generalGroup;
+  generalUser = lib'.getUser "dockergeneral" "dockergeneral";
 in
 {
   options.local.home-server.blocky = {
@@ -38,11 +36,15 @@ in
       }
     ];
 
-    sops.secrets."blocky/internal-domain" = {
+    sops.secrets = lib'.mkContainerSecret {
+      containerName = "blocky";
+      secretName = "blocky/internal-domain";
       inherit sopsFile;
     };
 
-    sops.templates."blocky-mapping.yml" = {
+    sops.templates = lib'.mkContainerTemplate {
+      containerName = "blocky";
+      templateName = "blocky-mapping.yml";
       content = ''
         customDNS:
           customTTL: 1h
@@ -50,8 +52,8 @@ in
           mapping:
             ${config.sops.placeholder."blocky/internal-domain"}: ${swagInternalCfg.containerIp}
       '';
-      uid = generalUser;
-      gid = generalGroup;
+      inherit (generalUser) uid;
+      inherit (generalUser) gid;
     };
 
     virtualisation.oci-containers.containers."blocky" = {
@@ -64,7 +66,7 @@ in
         "--config"
         "/app/config.d"
       ];
-      user = "${generalUserString}:${generalGroupString}";
+      user = "${generalUser.uidStr}:${generalUser.gidStr}";
       log-driver = "journald";
       extraOptions = [
         "--ip=${cfg.containerIp}"

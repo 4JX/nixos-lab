@@ -2,6 +2,7 @@
 # https://github.com/suwayomi/Suwayomi-Server-docker
 {
   lib,
+  lib',
   config,
   ...
 }:
@@ -10,10 +11,7 @@ let
   cfg = config.local.home-server.suwayomi;
   hsEnable = config.local.home-server.enable;
 
-  mediaUser = config.users.users.dockermedia.uid;
-  mediaGroup = config.users.groups.dockermedia.gid;
-  mediaUserString = builtins.toString mediaUser;
-  mediaGroupString = builtins.toString mediaGroup;
+  mediaUser = lib'.getUser "dockermedia" "dockermedia";
 in
 
 {
@@ -26,10 +24,12 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    sops.secrets.suwayomi-env = {
+    sops.secrets = lib'.mkContainerSecret {
+      containerName = "suwayomi";
+      secretName = "suwayomi-env";
       sopsFile = config.local.home-server.secretsFolder + "/home-server.yaml";
-      uid = mediaUser;
-      gid = mediaGroup;
+      inherit (mediaUser) uid;
+      inherit (mediaUser) gid;
     };
 
     # Extracted from docker-compose.nix
@@ -51,7 +51,7 @@ in
       ports = [
         "4567:4567/tcp"
       ];
-      user = "${mediaUserString}:${mediaGroupString}";
+      user = "${mediaUser.uidStr}:${mediaUser.gidStr}";
       log-driver = "journald";
       networks = [
         "arr"

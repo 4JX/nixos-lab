@@ -2,6 +2,7 @@
 {
   config,
   lib,
+  lib',
   ...
 }:
 
@@ -15,10 +16,7 @@ let
   sonarrEnabled = hsCfg.sonarr.tv-hd.enable || hsCfg.sonarr.anime.enable;
   radarrEnabled = hsCfg.radarr.movies-hd.enable || hsCfg.radarr.movies-uhd.enable;
 
-  mediaUser = config.users.users.dockermedia.uid;
-  mediaGroup = config.users.groups.dockermedia.gid;
-  mediaUserString = builtins.toString mediaUser;
-  mediaGroupString = builtins.toString mediaGroup;
+  mediaUser = lib'.getUser "dockermedia" "dockermedia";
 in
 {
   options.local.home-server.recyclarr = {
@@ -30,13 +28,15 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    sops.secrets.recyclarr = {
+    sops.secrets = lib'.mkContainerSecret {
+      containerName = "recyclarr";
+      secretName = "recyclarr";
       sopsFile = hsCfg.secretsFolder + "/recyclarr.yaml";
       # Serve the whole YAML file
       key = "";
       # The container will also run as the same user/group
-      uid = mediaUser;
-      gid = mediaGroup;
+      inherit (mediaUser) uid;
+      inherit (mediaUser) gid;
     };
 
     # Extracted from docker-compose.nix
@@ -57,7 +57,7 @@ in
         "sonarr-tv-hd"
         "sonarr-anime"
       ];
-      user = "${mediaUserString}:${mediaGroupString}";
+      user = "${mediaUser.uidStr}:${mediaUser.gidStr}";
       log-driver = "journald";
       networks = [
         "arr"

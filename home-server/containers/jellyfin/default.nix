@@ -5,6 +5,7 @@
 # https://github.com/NixOS/nixpkgs/blob/40916ded4ad5fe4bcc18963217c3a026db505c7f/nixos/modules/services/misc/jellyfin.nix#L27-L63
 {
   lib,
+  lib',
   config,
   ...
 }:
@@ -18,8 +19,7 @@ let
   inherit (cfg.firewall) port;
   portString = builtins.toString port;
 
-  mediaUserString = builtins.toString config.users.users.dockermedia.uid;
-  mediaGroupString = builtins.toString config.users.groups.dockermedia.gid;
+  mediaUser = lib'.getUser "dockermedia" "dockermedia";
 in
 {
   options = {
@@ -53,8 +53,8 @@ in
     virtualisation.oci-containers.containers."jellyfin" = {
       image = "ghcr.io/hotio/jellyfin:release-10.11.7@sha256:937b6e32b49d57b7e7291799537a4f22b5e05d1af5a463a096eab50277440f87";
       environment = {
-        "PUID" = mediaUserString;
-        "PGID" = mediaGroupString;
+        "PUID" = mediaUser.uidStr;
+        "PGID" = mediaUser.gidStr;
         "UMASK" = "002";
         "TZ" = config.time.timeZone;
       };

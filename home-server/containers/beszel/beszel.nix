@@ -1,6 +1,7 @@
 # https://github.com/wollomatic/socket-proxy
 {
   lib,
+  lib',
   config,
   ...
 }:
@@ -10,8 +11,7 @@ let
   agentEnable = config.local.home-server.beszel-agent.enable;
   hsEnable = config.local.home-server.enable;
 
-  generalUserString = builtins.toString config.users.users.dockergeneral.uid;
-  generalGroupString = builtins.toString config.users.groups.dockergeneral.gid;
+  generalUser = lib'.getUser "dockergeneral" "dockergeneral";
 in
 {
   options = {
@@ -32,7 +32,7 @@ in
       ports = [
         "8100:8090/tcp"
       ];
-      user = "${generalUserString}:${generalGroupString}";
+      user = "${generalUser.uidStr}:${generalUser.gidStr}";
       log-driver = "journald";
       networks = [
         "beszel"

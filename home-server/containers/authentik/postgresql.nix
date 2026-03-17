@@ -1,5 +1,6 @@
 {
   lib,
+  lib',
   config,
   ...
 }:
@@ -21,7 +22,11 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    sops.secrets.authentik-postgresql-env = secretsFile;
+    sops.secrets = lib'.mkContainerSecret {
+      containerName = "authentik-postgresql";
+      secretName = "authentik-postgresql-env";
+      inherit (secretsFile) sopsFile;
+    };
 
     # Extracted from docker-compose.nix
     virtualisation.oci-containers.containers."authentik-postgresql" = {

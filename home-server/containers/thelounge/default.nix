@@ -1,6 +1,7 @@
 # https://thelounge.chat/docs
 {
   lib,
+  lib',
   config,
   ...
 }:
@@ -9,8 +10,7 @@ let
   cfg = config.local.home-server.thelounge;
   hsEnable = config.local.home-server.enable;
 
-  generalUserString = builtins.toString config.users.users.dockergeneral.uid;
-  generalGroupString = builtins.toString config.users.groups.dockergeneral.gid;
+  generalUser = lib'.getUser "dockergeneral" "dockergeneral";
 in
 {
   options.local.home-server.thelounge = {
@@ -36,7 +36,7 @@ in
       ports = [
         "9010:9000/tcp"
       ];
-      user = "${generalUserString}:${generalGroupString}";
+      user = "${generalUser.uidStr}:${generalUser.gidStr}";
       log-driver = "journald";
       networks = [
         "thelounge"

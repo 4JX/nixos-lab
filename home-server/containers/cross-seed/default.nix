@@ -1,6 +1,7 @@
 # https://www.cross-seed.org/docs
 {
   lib,
+  lib',
   config,
   ...
 }:
@@ -9,10 +10,7 @@ let
   cfg = config.local.home-server.cross-seed;
   hsEnable = config.local.home-server.enable;
 
-  mediaUser = config.users.users.dockermedia.uid;
-  mediaGroup = config.users.groups.dockermedia.gid;
-  mediaUserString = builtins.toString mediaUser;
-  mediaGroupString = builtins.toString mediaGroup;
+  mediaUser = lib'.getUser "dockermedia" "dockermedia";
 in
 {
   options.local.home-server.cross-seed = {
@@ -24,11 +22,13 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    sops.secrets.cross-seed-config = {
+    sops.secrets = lib'.mkContainerSecret {
+      containerName = "cross-seed";
+      secretName = "cross-seed-config";
       sopsFile = config.local.home-server.secretsFolder + "/cross-seed-config.js";
       format = "binary";
-      uid = mediaUser;
-      gid = mediaGroup;
+      inherit (mediaUser) uid;
+      inherit (mediaUser) gid;
     };
 
     # Extracted from docker-compose.nix
@@ -44,7 +44,7 @@ in
         "2468:2468/tcp"
       ];
       cmd = [ "daemon" ];
-      user = "${mediaUserString}:${mediaGroupString}";
+      user = "${mediaUser.uidStr}:${mediaUser.gidStr}";
       log-driver = "journald";
       networks = [
         "arr"

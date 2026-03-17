@@ -1,6 +1,7 @@
 # https://hotio.dev/containers/radarr/#starting-the-container
 {
   lib,
+  lib',
   config,
   ...
 }:
@@ -9,8 +10,7 @@ let
   cfg = config.local.home-server.radarr.movies-uhd;
   hsEnable = config.local.home-server.enable;
 
-  mediaUserString = builtins.toString config.users.users.dockermedia.uid;
-  mediaGroupString = builtins.toString config.users.groups.dockermedia.gid;
+  mediaUser = lib'.getUser "dockermedia" "dockermedia";
 in
 {
   options = {
@@ -34,8 +34,8 @@ in
     virtualisation.oci-containers.containers."radarr-movies-uhd" = {
       image = "ghcr.io/hotio/radarr:release-6.1.1.10360@sha256:a0378fd5be0d23e23eea5f183e12619d2c1d74f70e5dc4a124c315343595f2ae";
       environment = {
-        "PUID" = mediaUserString;
-        "PGID" = mediaGroupString;
+        "PUID" = mediaUser.uidStr;
+        "PGID" = mediaUser.gidStr;
         "UMASK" = "002";
         "TZ" = config.time.timeZone;
       };

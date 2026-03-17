@@ -1,6 +1,7 @@
 # https://github.com/StuffAnThings/qbit_manage/wiki
 {
   lib,
+  lib',
   config,
   ...
 }:
@@ -10,10 +11,7 @@ let
   hsCfg = config.local.home-server;
   hsEnable = hsCfg.enable;
 
-  mediaUser = config.users.users.dockermedia.uid;
-  mediaGroup = config.users.groups.dockermedia.gid;
-  mediaUserString = builtins.toString mediaUser;
-  mediaGroupString = builtins.toString mediaGroup;
+  mediaUser = lib'.getUser "dockermedia" "dockermedia";
 in
 {
   options = {
@@ -25,13 +23,15 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    sops.secrets.qbit_manage = {
+    sops.secrets = lib'.mkContainerSecret {
+      containerName = "qbit_manage";
+      secretName = "qbit_manage";
       sopsFile = hsCfg.secretsFolder + "/qbit_manage.yml";
       # Serve the whole YAML file
       key = "";
 
-      uid = mediaUser;
-      gid = mediaGroup;
+      inherit (mediaUser) uid;
+      inherit (mediaUser) gid;
       # Read+Write needed by qbit_manage
       mode = "0600";
     };
@@ -68,7 +68,7 @@ in
       dependsOn = [
         "qbittorrent"
       ];
-      user = "${mediaUserString}:${mediaGroupString}";
+      user = "${mediaUser.uidStr}:${mediaUser.gidStr}";
       log-driver = "journald";
       networks = [
         "arr"

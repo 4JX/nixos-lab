@@ -1,6 +1,7 @@
 # https://docs.jellyseerr.dev/
 {
   lib,
+  lib',
   config,
   ...
 }:
@@ -13,8 +14,7 @@ let
   inherit (cfg.firewall) port;
   portString = builtins.toString port;
 
-  mediaUserString = builtins.toString config.users.users.dockermedia.uid;
-  mediaGroupString = builtins.toString config.users.groups.dockermedia.gid;
+  mediaUser = lib'.getUser "dockermedia" "dockermedia";
 in
 {
   options = {
@@ -57,7 +57,7 @@ in
       ports = [
         "${portString}:5055/tcp"
       ];
-      user = "${mediaUserString}:${mediaGroupString}";
+      user = "${mediaUser.uidStr}:${mediaUser.gidStr}";
       log-driver = "journald";
       networks = [
         "arr"

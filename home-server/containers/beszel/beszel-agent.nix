@@ -1,6 +1,7 @@
 # https://github.com/wollomatic/socket-proxy
 {
   lib,
+  lib',
   config,
   ...
 }:
@@ -10,10 +11,7 @@ let
   beszelEnable = config.local.home-server.beszel.enable;
   hsEnable = config.local.home-server.enable;
 
-  generalUser = config.users.users.dockergeneral.uid;
-  generalUserString = builtins.toString generalUser;
-  generalGroup = config.users.groups.dockergeneral.gid;
-  generalGroupString = builtins.toString generalGroup;
+  generalUser = lib'.getUser "dockergeneral" "dockergeneral";
 in
 {
   options = {
@@ -49,16 +47,20 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    sops.secrets."beszel-agent/key" = {
-      sopsFile = config.local.home-server.secretsFolder + "/home-server.yaml";
-      uid = generalUser;
-      gid = generalGroup;
-    };
-    sops.secrets."beszel-agent/token" = {
-      sopsFile = config.local.home-server.secretsFolder + "/home-server.yaml";
-      uid = generalUser;
-      gid = generalGroup;
-    };
+    sops.secrets = lib'.mkContainerSecrets "beszel-agent" [
+      {
+        secretName = "beszel-agent/key";
+        sopsFile = config.local.home-server.secretsFolder + "/home-server.yaml";
+        inherit (generalUser) uid;
+        inherit (generalUser) gid;
+      }
+      {
+        secretName = "beszel-agent/token";
+        sopsFile = config.local.home-server.secretsFolder + "/home-server.yaml";
+        inherit (generalUser) uid;
+        inherit (generalUser) gid;
+      }
+    ];
 
     virtualisation.oci-containers.containers."beszel-agent" =
       (
@@ -98,7 +100,7 @@ in
         dependsOn = [
           "dockerproxy-beszel"
         ];
-        user = "${generalUserString}:${generalGroupString}";
+        user = "${generalUser.uidStr}:${generalUser.gidStr}";
         log-driver = "journald";
         # extraOptions = [
         #   "--network=host"

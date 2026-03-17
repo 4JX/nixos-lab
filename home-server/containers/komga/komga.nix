@@ -2,6 +2,7 @@
 # https://komga.org/docs/category/installation
 {
   lib,
+  lib',
   config,
   ...
 }:
@@ -10,8 +11,7 @@ let
   cfg = config.local.home-server.komga;
   hsEnable = config.local.home-server.enable;
 
-  mediaUserString = builtins.toString config.users.users.dockermedia.uid;
-  mediaGroupString = builtins.toString config.users.groups.dockermedia.gid;
+  mediaUser = lib'.getUser "dockermedia" "dockermedia";
 in
 {
   options = {
@@ -41,7 +41,7 @@ in
       ports = [
         "25600:25600/tcp"
       ];
-      user = "${mediaUserString}:${mediaGroupString}";
+      user = "${mediaUser.uidStr}:${mediaUser.gidStr}";
       log-driver = "journald";
       networks = [
         "arr"

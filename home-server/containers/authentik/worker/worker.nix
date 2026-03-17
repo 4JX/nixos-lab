@@ -1,5 +1,6 @@
 {
   lib,
+  lib',
   config,
   ...
 }:
@@ -9,12 +10,18 @@ let
 
   secretsFile.sopsFile = config.local.home-server.secretsFolder + "/home-server.yaml";
 
-  authUserString = builtins.toString config.users.users.dockerauth.uid;
-  authGroupString = builtins.toString config.users.groups.dockerauth.gid;
+  authUser = lib'.getUser "dockerauth" "dockerauth";
 in
 {
   config = lib.mkIf cfg.enable {
-    sops.secrets.authentik-env = secretsFile;
+    sops.secrets = lib'.mkContainerSecret {
+      containerName = "authentik-worker";
+      secretName = "authentik-env";
+      restartUnits = [
+        (lib'.mkContainerServiceName "authentik-server")
+      ];
+      inherit (secretsFile) sopsFile;
+    };
 
     # Extracted from docker-compose.nix
     virtualisation.oci-containers.containers."authentik-worker" = {
@@ -41,7 +48,7 @@ in
         "authentik-postgresql"
         "authentik-redis"
       ];
-      user = "${authUserString}:${authGroupString}";
+      user = "${authUser.uidStr}:${authUser.gidStr}";
       log-driver = "journald";
       networks = [
         "authentik"

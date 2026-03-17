@@ -1,5 +1,6 @@
 {
   lib,
+  lib',
   config,
   pkgs,
   ...
@@ -21,7 +22,9 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    sops.secrets.cloudflare-ddns-env = {
+    sops.secrets = lib'.mkContainerSecret {
+      containerName = "cloudflare-ddns";
+      secretName = "cloudflare-ddns-env";
       inherit sopsFile;
     };
 

@@ -1,6 +1,7 @@
 # https://hotio.dev/containers/qbittorrent/#starting-the-container
 {
   lib,
+  lib',
   config,
   ...
 }:
@@ -13,10 +14,7 @@ let
   inherit (cfg.firewall) incomingPort;
   incomingPortString = builtins.toString incomingPort;
 
-  mediaUser = config.users.users.dockermedia.uid;
-  mediaGroup = config.users.groups.dockermedia.gid;
-  mediaUserString = builtins.toString mediaUser;
-  mediaGroupString = builtins.toString mediaGroup;
+  mediaUser = lib'.getUser "dockermedia" "dockermedia";
 in
 {
   options = {
@@ -43,11 +41,13 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    sops.secrets.qbit-wg0 = {
+    sops.secrets = lib'.mkContainerSecret {
+      containerName = "qbittorrent";
+      secretName = "qbit-wg0";
       sopsFile = config.local.home-server.secretsFolder + "/qbit-wg0.conf";
       format = "binary";
-      uid = mediaUser;
-      gid = mediaGroup;
+      inherit (mediaUser) uid;
+      inherit (mediaUser) gid;
     };
 
     # Open up a port for qbittorrent
@@ -60,8 +60,8 @@ in
     virtualisation.oci-containers.containers."qbittorrent" = {
       image = "ghcr.io/hotio/qbittorrent:release-5.1.4@sha256:b547db036748d449c5cbd31635dc3b695ccc70424775c44ea91df18bd1da1ea4";
       environment = {
-        "PUID" = mediaUserString;
-        "PGID" = mediaGroupString;
+        "PUID" = mediaUser.uidStr;
+        "PGID" = mediaUser.gidStr;
         "UMASK" = "002";
 
         "TZ" = config.time.timeZone;

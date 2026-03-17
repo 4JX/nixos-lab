@@ -15,11 +15,75 @@ let
 in
 {
   _module.args.lib' = rec {
+    # Returns the name of the systemd service for a given container.
+    mkContainerServiceName = containerName: "${backend}-${containerName}.service";
+
+    # Returns { uid, gid, uidStr, gidStr } for a given user/group name,
+    getUser =
+      userName: groupName:
+      let
+        inherit (config.users.users.${userName}) uid;
+        inherit (config.users.groups.${groupName}) gid;
+      in
+      {
+        inherit uid gid;
+        uidStr = builtins.toString uid;
+        gidStr = builtins.toString gid;
+      };
+
+    mkContainerSecret =
+      {
+        containerName,
+        secretName,
+        ...
+      }@secret:
+      {
+        "${secretName}" =
+          (builtins.removeAttrs secret [
+            "containerName"
+            "secretName"
+            "restartUnits"
+          ])
+          // {
+            restartUnits = lib.unique (
+              (secret.restartUnits or [ ]) ++ [ (mkContainerServiceName containerName) ]
+            );
+          };
+      };
+
+    mkContainerSecrets =
+      containerName: secrets:
+      lib.mergeAttrsList (
+        builtins.map (secret: mkContainerSecret ({ inherit containerName; } // secret)) secrets
+      );
+
+    # Like mkContainerSecret but for sops.templates. Auto-adds restartUnits
+    # for the container so secret template changes trigger a container restart.
+    mkContainerTemplate =
+      {
+        containerName,
+        templateName,
+        ...
+      }@template:
+      {
+        "${templateName}" =
+          (builtins.removeAttrs template [
+            "containerName"
+            "templateName"
+            "restartUnits"
+          ])
+          // {
+            restartUnits = lib.unique (
+              (template.restartUnits or [ ]) ++ [ (mkContainerServiceName containerName) ]
+            );
+          };
+      };
+
     mkNetworkService =
       # of type containers.networks
       network: {
         "${backend}-network-${network.name}" = {
-          path = [ pkgs.docker ];
+          path = [ pkgs.${backend} ];
           serviceConfig = {
             Type = "oneshot";
             RemainAfterExit = true;
@@ -44,7 +108,6 @@ in
         lib.mergeAttrsList
       ]);
 
-    # TODO: make part of mkContainer
     mkContainerSystemdService =
       {
         containerName,

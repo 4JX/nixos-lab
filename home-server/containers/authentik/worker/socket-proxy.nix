@@ -1,6 +1,7 @@
 # https://github.com/wollomatic/socket-proxy
 {
   lib,
+  lib',
   config,
   ...
 }:
@@ -8,7 +9,7 @@
 let
   cfg = config.local.home-server.authentik.worker;
 
-  socketUserString = builtins.toString config.users.users.dockersocket.uid;
+  socketUser = lib'.getUser "dockersocket" "dockersocket";
   dockerGroupString = builtins.toString config.users.groups.docker.gid;
 in
 {
@@ -35,7 +36,7 @@ in
         "-stoponwatchdog"
         "-shutdowngracetime=10"
       ];
-      user = "${socketUserString}:${dockerGroupString}";
+      user = "${socketUser.uidStr}:${dockerGroupString}";
       log-driver = "journald";
       capabilities = {
         ALL = false;

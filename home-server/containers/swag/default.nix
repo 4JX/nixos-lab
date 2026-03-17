@@ -3,6 +3,7 @@
 # https://www.linuxserver.io/blog/zero-trust-hosting-and-reverse-proxy-via-cloudflare-swag-and-authelia
 {
   lib,
+  lib',
   config,
   ...
 }:
@@ -11,10 +12,7 @@ let
   cfg = config.local.home-server.swag;
   hsEnable = config.local.home-server.enable;
 
-  proxyUser = config.users.users.dockerproxy.uid;
-  proxyGroup = config.users.groups.dockerproxy.gid;
-  proxyUserString = builtins.toString proxyUser;
-  proxyGroupString = builtins.toString proxyGroup;
+  proxyUser = lib'.getUser "dockerproxy" "dockerproxy";
 in
 {
   options.local.home-server.swag = {
@@ -26,18 +24,20 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    sops.secrets.swag-env = {
+    sops.secrets = lib'.mkContainerSecret {
+      containerName = "swag";
+      secretName = "swag-env";
       sopsFile = config.local.home-server.secretsFolder + "/home-server.yaml";
-      uid = proxyUser;
-      gid = proxyGroup;
+      inherit (proxyUser) uid;
+      inherit (proxyUser) gid;
     };
 
     # Extracted from docker-compose.nix
     virtualisation.oci-containers.containers."swag" = {
       image = "lscr.io/linuxserver/swag:5.5.0@sha256:460cbd5419964ccba158073206bc0d0fcdd86f0eb2bc2f3d3ded6fae2b915acd";
       environment = {
-        "PUID" = proxyUserString;
-        "PGID" = proxyGroupString;
+        "PUID" = proxyUser.uidStr;
+        "PGID" = proxyUser.gidStr;
         "TZ" = config.time.timeZone;
         # - URL=
         "SUBDOMAINS" = "wildcard";

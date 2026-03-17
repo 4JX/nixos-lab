@@ -3,6 +3,7 @@
 {
   config,
   lib,
+  lib',
   ...
 }:
 
@@ -20,7 +21,11 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    sops.secrets.gluetun-env = secretsFile;
+    sops.secrets = lib'.mkContainerSecret {
+      containerName = "gluetun";
+      secretName = "gluetun-env";
+      inherit (secretsFile) sopsFile;
+    };
 
     # Extracted from docker-compose.nix
     virtualisation.oci-containers.containers."gluetun" = {

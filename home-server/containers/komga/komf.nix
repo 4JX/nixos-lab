@@ -2,6 +2,7 @@
 # https://github.com/Snd-R/komf-userscript
 {
   lib,
+  lib',
   config,
   ...
 }:
@@ -10,10 +11,7 @@ let
   cfg = config.local.home-server.komf;
   hsEnable = config.local.home-server.enable;
 
-  mediaUser = config.users.users.dockermedia.uid;
-  mediaGroup = config.users.groups.dockermedia.gid;
-  mediaUserString = builtins.toString mediaUser;
-  mediaGroupString = builtins.toString mediaGroup;
+  mediaUser = lib'.getUser "dockermedia" "dockermedia";
 in
 {
   options = {
@@ -27,12 +25,14 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    sops.secrets.komf = {
+    sops.secrets = lib'.mkContainerSecret {
+      containerName = "komf";
+      secretName = "komf";
       sopsFile = config.local.home-server.secretsFolder + "/komf-application.yml";
       # Serve the whole YAML file
       key = "";
-      uid = mediaUser;
-      gid = mediaGroup;
+      inherit (mediaUser) uid;
+      inherit (mediaUser) gid;
     };
 
     # Extracted from docker-compose.nix
@@ -51,7 +51,7 @@ in
       ports = [
         "8085:8085/tcp"
       ];
-      user = "${mediaUserString}:${mediaGroupString}";
+      user = "${mediaUser.uidStr}:${mediaUser.gidStr}";
       log-driver = "journald";
       networks = [
         "komga"

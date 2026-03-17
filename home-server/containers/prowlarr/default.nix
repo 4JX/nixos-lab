@@ -1,6 +1,7 @@
 # https://hotio.dev/containers/prowlarr/#starting-the-container
 {
   lib,
+  lib',
   config,
   ...
 }:
@@ -9,8 +10,7 @@ let
   cfg = config.local.home-server.prowlarr;
   hsEnable = config.local.home-server.enable;
 
-  mediaUserString = builtins.toString config.users.users.dockermedia.uid;
-  mediaGroupString = builtins.toString config.users.groups.dockermedia.gid;
+  mediaUser = lib'.getUser "dockermedia" "dockermedia";
 in
 {
   options = {
@@ -28,8 +28,8 @@ in
     virtualisation.oci-containers.containers."prowlarr" = {
       image = "ghcr.io/hotio/prowlarr:release-2.3.0.5236@sha256:02e472dec7a97d079f63bb9eab6799c4ca9b5e8687286e55794faa7e57944b9a";
       environment = {
-        "PUID" = mediaUserString;
-        "PGID" = mediaGroupString;
+        "PUID" = mediaUser.uidStr;
+        "PGID" = mediaUser.gidStr;
         "UMASK" = "002";
         "TZ" = config.time.timeZone;
       };

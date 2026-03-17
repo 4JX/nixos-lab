@@ -1,6 +1,7 @@
 # https://hotio.dev/containers/sonarr/#starting-the-container
 {
   lib,
+  lib',
   config,
   ...
 }:
@@ -9,8 +10,7 @@ let
   cfg = config.local.home-server.sonarr.anime;
   hsEnable = config.local.home-server.enable;
 
-  mediaUserString = builtins.toString config.users.users.dockermedia.uid;
-  mediaGroupString = builtins.toString config.users.groups.dockermedia.gid;
+  mediaUser = lib'.getUser "dockermedia" "dockermedia";
 in
 {
   options = {
@@ -34,8 +34,8 @@ in
     virtualisation.oci-containers.containers."sonarr-anime" = {
       image = "ghcr.io/hotio/sonarr:release-4.0.17.2952@sha256:150b7e9f796982e8a8097cf6f55583cffa3bb4f3e2ffa4de803e1ce1482a88f5";
       environment = {
-        "PUID" = mediaUserString;
-        "PGID" = mediaGroupString;
+        "PUID" = mediaUser.uidStr;
+        "PGID" = mediaUser.gidStr;
         "UMASK" = "002";
         "TZ" = config.time.timeZone;
       };
