@@ -117,18 +117,31 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    environment.systemPackages = [
-      pkgs.docker-compose
+    environment.systemPackages =
+      lib.optional (cfg.backend == "docker") pkgs.docker-compose
+      ++ lib.optional (
+        cfg.backend == "podman" && builtins.hasAttr "podman-compose" pkgs
+      ) pkgs."podman-compose";
+
+    virtualisation = lib.mkMerge [
+      {
+        oci-containers.backend = cfg.backend;
+      }
+      (lib.mkIf (cfg.backend == "docker") {
+        docker = {
+          enable = true;
+          autoPrune.enable = true;
+        };
+      })
+      (lib.mkIf (cfg.backend == "podman") {
+        podman = {
+          enable = true;
+          autoPrune.enable = true;
+          dockerCompat = true;
+          defaultNetwork.settings.dns_enabled = true;
+        };
+      })
     ];
-
-    virtualisation.oci-containers.backend = cfg.backend;
-
-    # Runtime
-    # TODO: Select backend
-    virtualisation.docker = {
-      enable = true;
-      autoPrune.enable = true;
-    };
 
     systemd.services =
       # Container services
