@@ -17,6 +17,10 @@ name: "Renovate"
         description: Renovate version
         default: latest
         required: false
+      force:
+        description: Renovate force config as JSON
+        default: "{}"
+        required: false
   schedule:
     # Run every hour
     - cron: "0 * * * *"
@@ -46,6 +50,7 @@ env:
   WORKFLOW_RENOVATE_DRY_RUN: false
   WORKFLOW_RENOVATE_LOG_LEVEL: debug
   WORKFLOW_RENOVATE_VERSION: latest
+  WORKFLOW_RENOVATE_FORCE: "{}"
 
 jobs:
   renovate:
@@ -70,9 +75,11 @@ jobs:
         run: |
           echo "RENOVATE_DRY_RUN=${RENOVATE_DRY_RUN}" >> "${GITHUB_ENV}"
           echo "LOG_LEVEL=${LOG_LEVEL}" >> "${GITHUB_ENV}"
+          echo "RENOVATE_FORCE=${RENOVATE_FORCE}" >> "${GITHUB_ENV}"
         env:
           RENOVATE_DRY_RUN: ${{ github.event.inputs.dryRun || env.WORKFLOW_RENOVATE_DRY_RUN }}
           LOG_LEVEL: ${{ github.event.inputs.logLevel || env.WORKFLOW_RENOVATE_LOG_LEVEL }}
+          RENOVATE_FORCE: ${{ github.event.inputs.force || env.WORKFLOW_RENOVATE_FORCE }}
 
       - name: Renovate
         uses: renovatebot/github-action@3633cede7d4d4598438e654eac4a695e46004420 # v46.1.7
