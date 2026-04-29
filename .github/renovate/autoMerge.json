@@ -23,7 +23,7 @@
       "matchUpdateTypes": ["digest"],
       "automerge": true,
       "automergeType": "branch",
-      "automergeSchedule": ["* 0-1 * * *"]
+      "schedule": ["* 0-5 * * *"]
     }
   ]
 }
