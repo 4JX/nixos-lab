@@ -82,7 +82,7 @@ jobs:
           RENOVATE_FORCE: ${{ github.event.inputs.force || env.WORKFLOW_RENOVATE_FORCE }}
 
       - name: Renovate
-        uses: renovatebot/github-action@3633cede7d4d4598438e654eac4a695e46004420 # v46.1.7
+        uses: renovatebot/github-action@f66d8679fcfcfa051abde6e7a623007173bf5164 # v46.1.12
         with:
           configurationFile: "${{ env.RENOVATE_ONBOARDING_CONFIG_FILE_NAME }}"
           token: "${{ steps.app-token.outputs.token }}"
