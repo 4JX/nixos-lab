@@ -16,7 +16,7 @@ in
   config = lib.mkIf cfg.enable {
     # TODO: Template generate docker proxy containers as container options
     virtualisation.oci-containers.containers."dockerproxy-beszel" = {
-      image = "wollomatic/socket-proxy:1.10.1@sha256:967150d21954992de5a141fc66eb8a392695644fdb2fbb31dfbbdfd3f563ee86";
+      image = "wollomatic/socket-proxy:1.12.0@sha256:a522d93fc041d15e79ce3179ffbfb74ceb3ca417133f74bb0ae3c0386bd103ca";
       volumes = [
         "/var/run/docker.sock:/var/run/docker.sock:ro"
       ];
