@@ -12,7 +12,6 @@ sonarr:
     # api_key: Put your API key here
 
     delete_old_custom_formats: true
-    replace_existing_custom_formats: true
 
     # Media Naming Configuration
     media_naming:
@@ -57,7 +56,7 @@ sonarr:
 
   ###################################################################################################
   # Recyclarr Configuration Template: WEB-2160p (V4)                                                #
-  # Updated: 2025-08-28                                                                             #
+  # Updated: 2025-09-07                                                                             #
   # https://github.com/recyclarr/config-templates/blob/master/sonarr/templates/web-2160p-v4.yml     #
   ###################################################################################################
   sonarr-tv-uhd:
@@ -65,7 +64,6 @@ sonarr:
     # api_key: Put your API key here
 
     delete_old_custom_formats: true
-    replace_existing_custom_formats: true
 
     # Media Naming Configuration
     media_naming:
@@ -141,7 +139,6 @@ sonarr:
     # api_key: 8f9b610cebc14cfcb824dbf82d238027
 
     delete_old_custom_formats: true
-    replace_existing_custom_formats: true
 
     # Media Naming Configuration
     media_naming:
@@ -195,7 +192,6 @@ radarr:
     # api_key: b1e91a595f1142b984ff69632666c030
 
     delete_old_custom_formats: true
-    replace_existing_custom_formats: true
 
     media_naming:
       folder: jellyfin-imdb
@@ -296,7 +292,7 @@ radarr:
 
   ###################################################################################################
   # Recyclarr Configuration Template: UHD Bluray + WEB                                              #
-  # Updated: 2025-08-28                                                                             #
+  # Updated: 2025-09-07                                                                            #
   # https://github.com/recyclarr/config-templates/blob/master/radarr/templates/uhd-bluray-web.yml   #
   ###################################################################################################
   radarr-movies-uhd:
@@ -304,7 +300,6 @@ radarr:
     # api_key: Put your API key here
 
     delete_old_custom_formats: true
-    replace_existing_custom_formats: true
 
     media_naming:
       folder: jellyfin-imdb
