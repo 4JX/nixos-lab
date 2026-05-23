@@ -32,7 +32,7 @@ in
 
     # Extracted from docker-compose.nix
     virtualisation.oci-containers.containers."radarr-movies-hd" = {
-      image = "ghcr.io/hotio/radarr:release-6.1.1.10360@sha256:56382e2f450c2417af10f6c559f8cd033f05e261bb83f42427ed0d9f398aee45";
+      image = "ghcr.io/hotio/radarr:release-6.1.1.10360@sha256:2849abc11de8a9b114d3eebeb4f7c6835da97c524db0fd83abb69b7cfa5eac2f";
       environment = {
         "PUID" = mediaUser.uidStr;
         "PGID" = mediaUser.gidStr;
