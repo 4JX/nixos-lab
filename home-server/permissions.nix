@@ -79,6 +79,23 @@
         };
       };
 
+      # /containers/auth: shared auth service data
+      "/containers/auth" = {
+        d = {
+          mode = "2770";
+          user = config.users.users.dockerauth.name;
+          group = config.users.groups.dockerauth.name;
+        };
+      };
+
+      "/containers/auth/lldap" = {
+        d = {
+          mode = "2770";
+          user = config.users.users.dockerauth.name;
+          group = config.users.groups.dockerauth.name;
+        };
+      };
+
       # /containers/authentik: dedicated Authentik area
       "/containers/authentik" = {
         d = {

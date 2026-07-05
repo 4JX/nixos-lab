@@ -4,6 +4,8 @@
   imports = [
     ./nets.nix
 
+    ./lldap
+
     ./authentik
 
     ./radarr

@@ -6,7 +6,6 @@
 }:
 
 let
-  hsEnable = config.local.home-server.enable;
   cfg = config.local.home-server.authentik;
 in
 {
@@ -21,21 +20,15 @@ in
   options = {
     local.home-server.authentik.enable = lib.mkOption {
       type = lib.types.bool;
-      default = hsEnable;
+      default = false;
       description = "Whether to enable Authentik.";
     };
   };
 
   config = lib.mkIf cfg.enable {
-    # Networks
     # Configure networks
     virtualisation.oci-containers.networks = [
       { name = "authentik"; }
-      {
-        # Used by authentik <> jellyfin
-        name = "ldap";
-        internal = true;
-      }
     ];
   };
 }
