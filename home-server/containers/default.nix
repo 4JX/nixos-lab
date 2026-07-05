@@ -22,7 +22,6 @@
     ./recyclarr
     ./gluetun
     ./jellyfin
-    ./jellyseerr
     ./prowlarr
     ./qbit_manage
     ./qbittorrent

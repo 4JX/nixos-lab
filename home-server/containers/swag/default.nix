@@ -59,12 +59,12 @@ in
       volumes = [
         "/containers/config/swag:/config:rw"
         # https://jellyfin.org/docs/general/networking/fail2ban/
-        "/containers/config/jellyseerr/logs:/jellyseerr:ro"
+        "/containers/config/jellyfin/log:/jellyfin:ro"
         # https://docs.overseerr.dev/extending-overseerr/fail2ban
         # This blog provides a pre-made hybrid filter for fail2ban that works with both overseerr and jellyseerr
         # Pretty easy to arrive at it, but it's convenient
         # https://zzuo123.github.io/blog/securing-server/
-        "/containers/config/jellyfin/log:/jellyfin:ro"
+        # "/containers/config/jellyseerr/logs:/jellyseerr:ro"
       ];
       ports = [
         "443:443/tcp"
