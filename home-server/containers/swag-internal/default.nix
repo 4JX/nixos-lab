@@ -74,6 +74,7 @@ in
         "dozzle"
         "exposed"
         "komga"
+        "lldap"
         "thelounge"
       ];
       tryRestart = false;
