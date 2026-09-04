@@ -29,7 +29,7 @@ in
 
     # Extracted from docker-compose.nix
     virtualisation.oci-containers.containers."thelounge" = {
-      image = "ghcr.io/thelounge/thelounge:4.4.3@sha256:9a7ca90fb5e2c9d86910497f3fa40d4fff3372a63b5e2b4eca1674a1f9a7e958";
+      image = "ghcr.io/thelounge/thelounge:4.5.2@sha256:3cc53915661c923e89769f61185db89ad7a2ab682d1fe20b48e8ab287fd753d3";
       volumes = [
         "/containers/config/thelounge:/var/opt/thelounge:rw"
       ];
