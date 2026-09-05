@@ -24,7 +24,7 @@ in
 
   config = lib.mkIf cfg.enable {
     virtualisation.oci-containers.containers."beszel" = {
-      image = "ghcr.io/henrygd/beszel/beszel:0.18.7@sha256:5b583633750cae65a9c1ab399c4c0eed229666ad74e103801724e3bc465338b8";
+      image = "ghcr.io/henrygd/beszel/beszel:0.19.0@sha256:53493d0e7b8ad4178cb157463c2e8eab33e9c84c74d81563b456bd1640f63c4f";
       volumes = [
         "/containers/config/beszel/data:/beszel_data"
       ]
