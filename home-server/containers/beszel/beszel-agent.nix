@@ -66,11 +66,11 @@ in
       (
         if (cfg.gpuMode == "nvidia") then
           {
-            image = "ghcr.io/henrygd/beszel/beszel-agent-nvidia:0.18.7@sha256:0b9f052038855f1ee7ee5eab1ab5540b141b184454923606171185d84ad69f68";
+            image = "ghcr.io/henrygd/beszel/beszel-agent-nvidia:0.21.1@sha256:b394ca0e451946de5595ae38ab3dbbb2c3390e4c04fb1f4b82ad8768bb8d19be";
           }
         else
           {
-            image = "ghcr.io/henrygd/beszel/beszel-agent:0.18.7@sha256:41252f7c7adf0b53ee1d72cbe2e3ea7adc7fffd357ff54bf2bd0c59d166e30c9";
+            image = "ghcr.io/henrygd/beszel/beszel-agent:0.21.1@sha256:cb6868012964d7a68debaa2c84bb72285e5f08531e81f506bd4c493bf052e41c";
           }
       )
       // {
