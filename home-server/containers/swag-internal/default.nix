@@ -70,7 +70,6 @@ in
       networks = [
         "0wireguard"
         "arr"
-        "beszel"
         "dozzle"
         "exposed"
         "komga"

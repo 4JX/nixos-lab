@@ -13,7 +13,6 @@
 
     ./komga
 
-    ./beszel
     ./blocky
     ./cloudflared
     ./cross-seed
