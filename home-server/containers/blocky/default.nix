@@ -57,7 +57,7 @@ in
     };
 
     virtualisation.oci-containers.containers."blocky" = {
-      image = "spx01/blocky:v0.35.0@sha256:4f165b63db0d76c96ecc47c7a8f57caeedc003a912bdce29abb0e283ce02e16b";
+      image = "spx01/blocky:v0.37.0@sha256:d9b6344d7c8f3fe577a47bc97b523faa116f7ea8a8901bfaf800a4dbdce64c96";
       volumes = [
         "${./blocky-base.yml}:/app/config.d/00-base.yml:ro"
         "${config.sops.templates."blocky-mapping.yml".path}:/app/config.d/10-mapping.yml:ro"
