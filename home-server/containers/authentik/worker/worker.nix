@@ -25,7 +25,7 @@ in
 
     # Extracted from docker-compose.nix
     virtualisation.oci-containers.containers."authentik-worker" = {
-      image = "ghcr.io/goauthentik/server:2024.12.5@sha256:717323d68507fb76dd79f8958f42ce57f8ae0c10a55a7807efa1cfec5752b77c";
+      image = "ghcr.io/goauthentik/server:2026.8.7@sha256:1675a017c46ba7f4f15333aeafeeb64538c581673bcbcd36af872cdf7de4e7f7";
       environment = {
         "DOCKER_HOST" = "tcp://dockerproxy-authentik-worker:2375";
         "AUTHENTIK_REDIS__HOST" = "authentik-redis";
